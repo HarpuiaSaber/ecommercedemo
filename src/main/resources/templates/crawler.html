@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crawler Tiki Product</title>
+</head>
+<body>
+<input placeholder="fill id product with character , at first and between 2 product" id="listId">
+<button onclick ="crawler()">Crawler</button>
+</body>
+<script>
+function crawler(){
+    var product;
+    var listId = document.getElementById("listId").value.split(",");
+    var l = listId.length;
+    var i = 0;
+    var loop;
+
+    loop = setInterval(() => {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+               product = this.responseText;
+            }
+        };
+        xhttp.open("GET", "https://tiki.vn/api/v2/products/"+listId[i]+"?platform=web&include=tag,images,gallery,promotions,badges,stock_item,variants,product_links,discount_tag,ranks,breadcrumbs,top_features,cta_desktop", true);
+        xhttp.send();
+         //call server save product
+        setTimeout(function () {
+            var xhttp2 = new XMLHttpRequest();
+            xhttp2.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                }
+            };
+            xhttp2.open("POST", "http://localhost:8080/api/admin/product/add", true);
+            xhttp2.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+            xhttp2.send(product);
+        }, 500)
+        i++;
+         if (i == l) {
+             clearInterval(loop);
+         }
+    },1000);
+}
+</script>
+</html>
