@@ -17,7 +17,7 @@ public class ApiConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatcher("/api/**").authorizeRequests()
                 .antMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/api/seller/**").hasAnyAuthority("SELLER", "ADMIN")
-                .antMatchers("/api/user/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/api/customer/**").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .and()
                 .httpBasic()
                 .and()

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -19,6 +20,40 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductDao productDao;
+
+    @Autowired
+    private ProductImageDao productImageDao;
+
+    @Autowired
+    private SpecificationDao specificationDao;
+
+    @Autowired
+    private AttributeDao attributeDao;
+
+    @Override
+    public void delete(Long id) throws InternalServerException {
+        Product old = productDao.getById(id);
+        if (old != null) {
+            //delete image
+            List<ProductImage> images = old.getImages();
+            for (ProductImage image : images) {
+                productImageDao.delete(image);
+            }
+            //delete specification
+            List<Specification> specifications = old.getSpecifications();
+            for (Specification specification : specifications) {
+                //delete attribute
+                List<Attribute> attributes = specification.getAttributes();
+                for (Attribute attribute : attributes) {
+                    attributeDao.delete(attribute);
+                }
+                specificationDao.delete(specification);
+            }
+            productDao.delete(old);
+        } else {
+            throw new InternalServerException("Sản phẩm không tồn tại!!!");
+        }
+    }
 
     @Override
     public ProductDto getById(Long id) throws InternalServerException {
@@ -38,8 +73,13 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(String.join("\n", dto.getTop_features()));
         product.setQuantity(1000);
         //set category
-        product.setCategory(new Category(2L));
+        product.setCategory(new Category(37L));
         productDao.add(product);
 
+    }
+
+    @Override
+    public List<Long> getAllId() {
+        return productDao.getAllId();
     }
 }

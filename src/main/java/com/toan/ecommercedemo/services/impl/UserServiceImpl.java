@@ -6,10 +6,7 @@ import com.toan.ecommercedemo.enums.Gender;
 import com.toan.ecommercedemo.enums.Role;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.UserPrincipal;
-import com.toan.ecommercedemo.model.dto.AddUserDto;
-import com.toan.ecommercedemo.model.dto.TikiSellerDto;
-import com.toan.ecommercedemo.model.dto.UpdateUserDto;
-import com.toan.ecommercedemo.model.dto.ViewUserDto;
+import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.model.search.UserSearch;
 import com.toan.ecommercedemo.services.UserService;
 import com.toan.ecommercedemo.utils.DateTimeUtils;
@@ -133,6 +130,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             dto.setId(seller.getId());
         } else {
             dto.setId(oldSeller.getId());
+        }
+    }
+
+    @Override
+    public void addCustommerFromTiki(TikiCustomerDto dto) {
+        User oldCustomer = userDao.getById(dto.getId());
+        if (oldCustomer == null) {
+            User customer = new User();
+            customer.setId(dto.getId());
+            customer.setName(dto.getName());
+            customer.setRole(Role.CUSTOMER);
+            customer.setEnabled(true);
+            userDao.add(customer);
+            dto.setId(customer.getId());
+        } else {
+            dto.setId(oldCustomer.getId());
         }
     }
 }

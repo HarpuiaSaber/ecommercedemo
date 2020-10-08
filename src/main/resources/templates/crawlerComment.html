@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Crawler Product Tiki</title>
+</head>
+<body>
+<label>Product Id</label>
+<input th:value="${listId}" id="listId">
+<button onclick="crawler()">Crawler</button>
+</body>
+<script>
+function crawler(){
+    var listId = document.getElementById("listId").value.split(",");
+    var l = listId.length;
+    var i = 0;
+    var loop;
+
+    loop = setInterval(() => {
+        var product;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+               product = this.responseText;
+               var xhttp2 = new XMLHttpRequest();
+                xhttp2.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                    }
+                };
+                xhttp2.open("POST", "http://localhost:8080/api/admin/comment/add", true);
+                xhttp2.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+                xhttp2.send(product);
+            }
+        };
+        xhttp.open("GET", "https://tiki.vn/api/v2/reviews?product_id="+listId[i]+"&page=1&limit=1000", true);
+        xhttp.send();
+        i++;
+         if (i == l) {
+             clearInterval(loop);
+         }
+    },1500);
+}
+</script>
+</html>

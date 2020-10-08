@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import javax.sql.DataSource;
 
@@ -70,7 +70,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/seller/**").hasAnyAuthority("SELLER", "ADMIN")
-                .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/customer/**").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .and()
                 .formLogin().loginPage("/login")
                 .usernameParameter("username")

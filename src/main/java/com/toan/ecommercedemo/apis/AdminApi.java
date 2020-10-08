@@ -7,6 +7,8 @@ import com.toan.ecommercedemo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "", maxAge = -1)
@@ -31,6 +33,12 @@ public class AdminApi {
 
     @Autowired
     private AttributeService attributeService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private CommentImageService commentImageService;
 
     @PostMapping("/addUser")
     @ResponseBody
@@ -59,10 +67,25 @@ public class AdminApi {
         }
     }
 
+    @PostMapping("/comment/add")
+    @ResponseBody
+    public void addComment(@RequestBody TikiCommentDto dto) {
+        for (TikiCommentDataDto dataDto : dto.getData()) {
+            userService.addCustommerFromTiki(dataDto.getCreated_by());
+            commentService.addFromTiki(dataDto);
+            commentImageService.addFromTiki(dataDto);
+        }
+    }
+
     @GetMapping("/product")
     @ResponseBody
     public ProductDto getProductById(@RequestParam long id) throws InternalServerException {
         return productService.getById(id);
+    }
+
+    @DeleteMapping("/product/delete")
+    public void deleteProduct(@RequestParam long id) throws InternalServerException {
+        productService.delete(id);
     }
 
 }

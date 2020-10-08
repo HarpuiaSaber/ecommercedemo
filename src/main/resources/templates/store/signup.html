@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="store/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Signup | E-Shopper</title>
+    <script th:src="@{/management/vendor/jquery-3.2.1.min.js}"></script>
+</head><!--/head-->
+
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <script>
+			$(function () {
+				$("#dob").datetimepicker({
+					format: 'd/m/Y',
+					timepicker: true
+				});
+			});
+
+    </script>
+    <section id="form"><!--form-->
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-sm-offset-2">
+                    <div class="login-form"><!--login form-->
+                        <h2>Đăng ký tài khoản khách hàng</h2>
+                        <form id="formsignup">
+                            <div class="col-sm-4">
+                                <input type="text" placeholder="Họ tên" name="name"/>
+                                <input type="text" placeholder="Số điện thoại" name="phone"/>
+                                <input readonly="true" placeholder="Ngày sinh" name="dob" id="dob"/>
+                                <input type="text" placeholder="Email" name="email"/>
+                                <label>Giới tính</label>
+                                <span>
+                            <label for="gender2" style="margin-right: 10px;margin-left: 10px;"><input type="radio"
+                                                                                                      id="gender1"
+                                                                                                      name="gender"
+                                                                                                      value="0" checked>Nam</label>
+                            <label for="gender1" style="margin-right: 10px;margin-left: 10px;">
+                            <input type="radio" id="gender2" name="gender" value="1">Nữ</label>
+                            </span>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="Username" placeholder="Tên truy nhập" name="username"/>
+                                <input type="Password" placeholder="Mật khẩu" name="password"/>
+                                <button id="signup" type="button" class="btn btn-default">Đăng ký</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><!--/login form-->
+    </section><!--/form-->
+    <script>
+			var formData;
+			var userDto = {};
+
+			$('#signup').on('click', function () {
+			    formData = $('#formsignup').serializeArray();
+			    userDto.name = formData[0].value;
+				userDto.phone = formData[1].value;
+				userDto.dob = formData[2].value;
+				userDto.email = formData[3].value;
+				userDto.gender = formData[4].value;
+				userDto.username = formData[5].value;
+				userDto.password = formData[6].value;
+				$.ajax({
+					url: "/api/createCustomer",
+					type: 'POST',
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify(userDto),
+					success: function (data) {
+						alert("Đăng ký thành công, vui lòng đăng nhập");
+						window.location="/login";
+					},
+					error: function (data) {
+						alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+					}
+				});
+			});
+
+
+
+
+
+    </script>
+</div>
+</body>
+</html>

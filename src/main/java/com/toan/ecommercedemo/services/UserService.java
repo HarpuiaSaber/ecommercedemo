@@ -1,10 +1,7 @@
 package com.toan.ecommercedemo.services;
 
 import com.toan.ecommercedemo.exceptions.InternalServerException;
-import com.toan.ecommercedemo.model.dto.AddUserDto;
-import com.toan.ecommercedemo.model.dto.TikiSellerDto;
-import com.toan.ecommercedemo.model.dto.UpdateUserDto;
-import com.toan.ecommercedemo.model.dto.ViewUserDto;
+import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.model.search.UserSearch;
 
 import java.util.List;
@@ -21,4 +18,6 @@ public interface UserService {
     public List<ViewUserDto> search(UserSearch search);
 
     public void addSellerFromTiki(TikiSellerDto dto);
+
+    public void addCustommerFromTiki(TikiCustomerDto dto);
 }

@@ -221,7 +221,7 @@ a#scrollUp i{
 
 
 .header-bottom {
-  padding-bottom: 30px;
+  padding-bottom: 15px;
   padding-top: 30px;
 }
 
@@ -290,13 +290,13 @@ ul.sub-menu {
 	position: absolute;
 	top: 30px;
 	left: 0;
-	background: rgba(0, 0, 0, 0.6);
+	background: #40403E;
 	list-style: none;
 	padding: 0;
 	margin: 0;
 	width: 220px;
-	-webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
-	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
 	display: none;
 	z-index: 999;
 }
@@ -1427,8 +1427,8 @@ h2.title {
 
 #form {
   display: block;
-  margin-bottom: 185px;
-  margin-top: 185px;
+  margin-bottom: 100px;
+  margin-top: 30px;
   overflow: hidden;
 }
 
@@ -1443,11 +1443,18 @@ h2.title {
 .login-form h2, .signup-form h2 {
   color: #696763;
   font-family: 'Roboto', sans-serif;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 300;
   margin-bottom: 30px;
 }
 
+.login-form p, .signup-form p {
+  color: #3a3836;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 15px;
+}
 
 .login-form form input, .signup-form form input {
   background: #F0F0E9;
@@ -1455,10 +1462,10 @@ h2.title {
   color: #696763;
   display: block;
   font-family: 'Roboto', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 300;
-  height: 40px;
-  margin-bottom: 10px;
+  height: 50px;
+  margin-bottom: 15px;
   outline: medium none;
   padding-left: 10px;
   width: 100%;
@@ -1486,11 +1493,13 @@ h2.title {
   color: #FFFFFF;
   display: block;
   font-family: 'Roboto', sans-serif;
-  padding: 6px 25px;
+  padding: 12px 25px;
+  font-size: 16px;
+  width: 100%;
 }
 
 .login-form label{
-
+  font-size: 16px;
 }
 
 
@@ -1501,6 +1510,7 @@ h2.title {
   margin-bottom: 0;
   outline: medium none;
   padding-left: 0;
+  font-size: 16px;
 }
 
 

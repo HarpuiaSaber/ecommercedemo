@@ -15,7 +15,7 @@ public class Attribute extends Auditable implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "value", length = 1500)
+    @Column(name = "value", length = 2000)
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)

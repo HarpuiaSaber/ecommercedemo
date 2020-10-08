@@ -10,10 +10,10 @@ public class Product extends Auditable implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 500)
     private String name;
 
     @Column(name = "unit_price")
@@ -133,11 +133,11 @@ public class Product extends Auditable implements Serializable {
         this.specifications = specifications;
     }
 
-//    public List<ProductImage> getImages() {
-//        return images;
-//    }
-//
-//    public void setImages(List<ProductImage> images) {
-//        this.images = images;
-//    }
+    public List<ProductImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImage> images) {
+        this.images = images;
+    }
 }

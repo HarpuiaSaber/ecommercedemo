@@ -17,7 +17,7 @@ public class Comment extends Auditable implements Serializable {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 2000)
     private String content;
 
     @Column(name = "rating")
@@ -33,6 +33,19 @@ public class Comment extends Auditable implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @Column(name = "helpful_number")
+    private Integer helpfulNumber;
+
+    @Column(name = "not_helpful_number")
+    private Integer notHelpfulNumber;
+
+    public Comment() {
+    }
+
+    public Comment(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
@@ -88,5 +101,21 @@ public class Comment extends Auditable implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Integer getHelpfulNumber() {
+        return helpfulNumber;
+    }
+
+    public void setHelpfulNumber(Integer helpfulNumber) {
+        this.helpfulNumber = helpfulNumber;
+    }
+
+    public Integer getNotHelpfulNumber() {
+        return notHelpfulNumber;
+    }
+
+    public void setNotHelpfulNumber(Integer notHelpfulNumber) {
+        this.notHelpfulNumber = notHelpfulNumber;
     }
 }

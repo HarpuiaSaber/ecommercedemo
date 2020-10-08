@@ -21,8 +21,8 @@ public class GeneralController {
         return "store/login";
     }
 
-    @GetMapping("/admin/crawler")
+    @GetMapping("/signup")
     public String crawler() {
-        return "crawler";
+        return "store/signup";
     }
 }
