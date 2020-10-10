@@ -11,11 +11,15 @@ public class ViewContactDto implements Serializable {
 
     private String phone;
 
-    private String description;
-
     private String address;
 
     private String location;
+
+    private String provinceId;
+
+    private String districtId;
+
+    private String villageId;
 
     private Long customerId;
 
@@ -43,14 +47,6 @@ public class ViewContactDto implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getAddress() {
@@ -83,5 +79,29 @@ public class ViewContactDto implements Serializable {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getVillageId() {
+        return villageId;
+    }
+
+    public void setVillageId(String villageId) {
+        this.villageId = villageId;
     }
 }

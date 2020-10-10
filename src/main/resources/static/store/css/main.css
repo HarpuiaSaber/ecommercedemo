@@ -251,23 +251,30 @@ a#scrollUp i{
 	background:none;
 	color:#fdb45e;
 }
-
+.search_box{
+  margin: 20px;
+}
 .search_box input {
   background: #F0F0E9;
   border: medium none;
-  color: #B2B2B2;
+  color: black;
   font-family: 'roboto';
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 300;
-  height: 35px;
+  height: 45px;
   outline: medium none;
   padding-left: 10px;
-  width: 155px;
-  background-image: url(../images/home/searchicon.png);
-  background-repeat: no-repeat;
-  background-position: 130px;
+  width: 800px;
 }
-
+.search_box button{
+  background:#FE980F;
+  color: white;
+  font-size: 16px;
+  border: 0 none;
+  border-radius: 0;
+  height: 45px;
+  width: 45px;
+}
 
 /*  Dropdown menu*/
 
@@ -664,7 +671,7 @@ ul.sub-menu {
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
   font-weight: 700;
-  margin: 0 auto 30px;
+  margin: 5px auto 30px;
   text-align: center;
   text-transform: uppercase;
   position: relative;
@@ -719,6 +726,10 @@ h2.title:before{
   border: 0 none;
   color: #FFFFFF;
   padding: 5px 20px;
+}
+
+.category-products .panel :hover{
+  background-color: #FDB45E;
 }
 
 .category-products .panel-default .panel-heading .panel-title a {
@@ -838,8 +849,8 @@ h2.title {
   color: #FE980F;
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
-  font-weight: 700;
-  margin: 0 15px;
+  font-weight: 700px;
+  margin: 5px 15px;
   text-transform: uppercase;
   margin-bottom: 30px;
   position: relative;
@@ -2405,7 +2416,12 @@ h2.title {
   background:#FE980F;
   border: 0 none;
   border-radius: 0;
-  margin-top: 16px;
+  height: 45px;
+}
+
+.btn.btn-primary2 {
+  background:#007bff;
+  color: white;
 }
 
 .blank-arrow {

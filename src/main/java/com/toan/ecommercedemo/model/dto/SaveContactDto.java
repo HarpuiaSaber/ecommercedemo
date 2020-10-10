@@ -13,8 +13,6 @@ public class SaveContactDto implements Serializable {
 
     private String phone;
 
-    private String description;
-
     private String address;
 
     private String villageId;
@@ -43,14 +41,6 @@ public class SaveContactDto implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getAddress() {

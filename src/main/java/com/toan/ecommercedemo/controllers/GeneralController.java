@@ -22,7 +22,12 @@ public class GeneralController {
     }
 
     @GetMapping("/signup")
-    public String crawler() {
+    public String signup() {
         return "store/signup";
+    }
+
+    @GetMapping("/search")
+    public String search() {
+        return "store/search";
     }
 }

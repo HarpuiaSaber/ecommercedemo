@@ -4,12 +4,14 @@ import com.toan.ecommercedemo.daos.*;
 import com.toan.ecommercedemo.entities.*;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.dto.*;
+import com.toan.ecommercedemo.model.search.ProductSearch;
 import com.toan.ecommercedemo.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,6 +61,29 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto getById(Long id) throws InternalServerException {
         Product entity = productDao.getById(id);
         return modelMapper.map(entity, ProductDto.class);
+    }
+
+    @Override
+    public List<ShortProductDto> searchWithPaging(ProductSearch search) {
+        List<Product> entities = productDao.searchWithPaging(search);
+        List<ShortProductDto> dtos = new ArrayList<>();
+        for (Product entity : entities) {
+            ShortProductDto dto = modelMapper.map(entity, ShortProductDto.class);
+            List<ProductImage> imageEntities = entity.getImages();
+            List<ProductImageDto> imageDtos = new ArrayList<>();
+            for (ProductImage imageEntity : imageEntities) {
+                ProductImageDto imageDto = modelMapper.map(imageEntity, ProductImageDto.class);
+                imageDtos.add(imageDto);
+            }
+            dto.setImages(imageDtos);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    @Override
+    public Long totalRecord(ProductSearch search) {
+        return productDao.totalRecord(search);
     }
 
     @Override

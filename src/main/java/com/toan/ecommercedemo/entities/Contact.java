@@ -18,9 +18,6 @@ public class Contact extends Auditable implements Serializable {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "address")
     private String address;
 
@@ -30,7 +27,7 @@ public class Contact extends Auditable implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
-    private User custommer;
+    private User customer;
 
     public Long getId() {
         return id;
@@ -56,14 +53,6 @@ public class Contact extends Auditable implements Serializable {
         this.phone = phone;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -80,11 +69,11 @@ public class Contact extends Auditable implements Serializable {
         this.village = village;
     }
 
-    public User getCustommer() {
-        return custommer;
+    public User getCustomer() {
+        return customer;
     }
 
-    public void setCustommer(User custommer) {
-        this.custommer = custommer;
+    public void setCustomer(User customer) {
+        this.customer = customer;
     }
 }

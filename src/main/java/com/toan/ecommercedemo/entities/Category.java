@@ -27,6 +27,9 @@ public class Category extends Auditable implements Serializable {
     @OneToMany(mappedBy = "parentCategory", fetch = FetchType.EAGER)
     private List<Category> childrenCategory;
 
+    @Column(name = "is_leaf")
+    private Boolean isleaf;
+
     public Category() {
     }
 

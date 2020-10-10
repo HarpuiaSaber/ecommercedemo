@@ -24,7 +24,7 @@ public class ContactDaoImpl extends BaseDaoImpl<Contact, Long> implements Contac
 
         // from and join entity
         Root<Contact> root = criteriaQuery.from(Contact.class);
-        Join<Contact, User> user = root.join("user");
+        Join<Contact, User> user = root.join("customer");
         // add predicate
         List<Predicate> predicates = new ArrayList<>();
         if (userId != null) {
