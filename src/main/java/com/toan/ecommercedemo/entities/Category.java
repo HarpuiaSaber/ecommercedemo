@@ -24,11 +24,14 @@ public class Category extends Auditable implements Serializable {
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory", fetch = FetchType.EAGER)
-    private List<Category> childrenCategory;
+//    @OneToMany(mappedBy = "parentCategory", fetch = FetchType.EAGER)
+//    private List<Category> childrenCategory;
 
     @Column(name = "is_leaf")
-    private Boolean isleaf;
+    private Boolean isLeaf;
+
+    @Column(name = "root_id")
+    private Long root;
 
     public Category() {
     }
@@ -61,11 +64,27 @@ public class Category extends Auditable implements Serializable {
         this.parentCategory = parentCategory;
     }
 
-    public List<Category> getChildrenCategory() {
-        return childrenCategory;
+//    public List<Category> getChildrenCategory() {
+//        return childrenCategory;
+//    }
+//
+//    public void setChildrenCategory(List<Category> childrenCategory) {
+//        this.childrenCategory = childrenCategory;
+//    }
+
+    public Boolean getLeaf() {
+        return isLeaf;
     }
 
-    public void setChildrenCategory(List<Category> childrenCategory) {
-        this.childrenCategory = childrenCategory;
+    public void setLeaf(Boolean leaf) {
+        isLeaf = leaf;
+    }
+
+    public Long getRoot() {
+        return root;
+    }
+
+    public void setRoot(Long root) {
+        this.root = root;
     }
 }

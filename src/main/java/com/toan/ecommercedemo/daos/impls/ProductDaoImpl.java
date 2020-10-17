@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -24,6 +25,64 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         String hql = "SELECT p.id FROM Product p";
         Query query = entityManager.createQuery(hql);
         return query.getResultList();
+    }
+
+    @Override
+    public List<Product> searchAll(ProductSearch search) {
+        // create returns the data type of critetia query
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+
+        // from and join entity
+        Root<Product> root = criteriaQuery.from(Product.class);
+        Join<Product, Category> category = root.join("category");
+        Join<Product, Brand> brand = root.join("brand");
+
+        // add predicate
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        if (search.getCategoryId() != null) {
+            Predicate predicate = criteriaBuilder.equal(category.get("root"), search.getCategoryId());
+            predicates.add(predicate);
+        }
+        if (search.getBrandId() != null) {
+            Predicate predicate = criteriaBuilder.equal(brand.get("id"), search.getBrandId());
+            predicates.add(predicate);
+        }
+        if (StringUtils.isNotBlank(search.getName())) {
+            Predicate predicate = criteriaBuilder.like(root.get("name"), "%" + search.getName() + "%");
+            predicates.add(predicate);
+        }
+        if (search.getFromPrice() != null) {
+            Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("unitPrice"),
+                    search.getFromPrice());
+            predicates.add(predicate);
+        }
+        if (search.getToPrice() != null) {
+            Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("unitPrice"),
+                    search.getToPrice());
+            predicates.add(predicate);
+        }
+        if (StringUtils.isNotBlank(search.getFromDate())) {
+            try {
+                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("createdDate"),
+                        DateTimeUtils.parseDate(search.getFromDate(), DateTimeUtils.DD_MM_YYYY));
+                predicates.add(predicate);
+            } catch (RuntimeException ignored) {
+            }
+        }
+        if (StringUtils.isNotBlank(search.getToDate())) {
+            try {
+                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("createdDate"),
+                        DateTimeUtils.parseDate(search.getToDate(), DateTimeUtils.DD_MM_YYYY));
+                predicates.add(predicate);
+            } catch (RuntimeException ignored) {
+            }
+        }
+        criteriaQuery.where(predicates.toArray(new Predicate[]{}));
+
+        // create query
+        TypedQuery<Product> typedQuery = entityManager.createQuery(criteriaQuery.select(root));
+        return typedQuery.getResultList();
     }
 
     @Override
@@ -40,10 +99,10 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         // add predicate
         List<Predicate> predicates = new ArrayList<Predicate>();
         if (search.getCategoryId() != null) {
-            Predicate predicate = criteriaBuilder.equal(category.get("id"), search.getCategoryId());
+            Predicate predicate = criteriaBuilder.equal(category.get("root"), search.getCategoryId());
             predicates.add(predicate);
         }
-        if (search.getCategoryId() != null) {
+        if (search.getBrandId() != null) {
             Predicate predicate = criteriaBuilder.equal(brand.get("id"), search.getBrandId());
             predicates.add(predicate);
         }
@@ -80,7 +139,8 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
 
         // order
-        criteriaQuery.orderBy(criteriaBuilder.desc(root.get("createdDate")));
+        criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.size(root.<Collection>get("comments"))), criteriaBuilder.desc(root.get("createdDate")));
+        //criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.size(root.<Collection>get("comments"))));
 
         // paging
         // create query
@@ -107,10 +167,10 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         // add predicate
         List<Predicate> predicates = new ArrayList<Predicate>();
         if (search.getCategoryId() != null) {
-            Predicate predicate = criteriaBuilder.equal(category.get("id"), search.getCategoryId());
+            Predicate predicate = criteriaBuilder.equal(category.get("root"), search.getCategoryId());
             predicates.add(predicate);
         }
-        if (search.getCategoryId() != null) {
+        if (search.getBrandId() != null) {
             Predicate predicate = criteriaBuilder.equal(brand.get("id"), search.getBrandId());
             predicates.add(predicate);
         }

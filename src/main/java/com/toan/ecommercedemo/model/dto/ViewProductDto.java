@@ -1,60 +1,41 @@
-package com.toan.ecommercedemo.entities;
+package com.toan.ecommercedemo.model.dto;
 
-import javax.persistence.*;
+import com.toan.ecommercedemo.entities.Brand;
+import com.toan.ecommercedemo.entities.Category;
+import com.toan.ecommercedemo.entities.Shop;
+
 import java.io.Serializable;
 import java.util.List;
 
-@Entity
-@Table(name = "product")
-public class Product extends Auditable implements Serializable {
+public class ViewProductDto implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 500)
     private String name;
 
-    @Column(name = "unit_price")
     private Double unitPrice;
 
-    @Column(name = "unit_price_usd")
     private Double unitPriceUSD;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "description", length = 2000)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
+    private String brand;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shop_id")
-    private Shop shop;
+    private String shop;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<Specification> specifications;
+    private List<SpecificationDto> specifications;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<ProductImage> images;
+    private List<String> images;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private List<Comment> comments;
+    private Double ratting;
 
-    public Product() {
-    }
-
-    public Product(Long id) {
-        this.id = id;
-    }
+    private long totalComment;
 
     public Long getId() {
         return id;
@@ -112,43 +93,51 @@ public class Product extends Auditable implements Serializable {
         this.category = category;
     }
 
-    public Brand getBrand() {
+    public String getBrand() {
         return brand;
     }
 
-    public void setBrand(Brand brand) {
+    public void setBrand(String brand) {
         this.brand = brand;
     }
 
-    public Shop getShop() {
+    public String getShop() {
         return shop;
     }
 
-    public void setShop(Shop shop) {
+    public void setShop(String shop) {
         this.shop = shop;
     }
 
-    public List<Specification> getSpecifications() {
+    public List<SpecificationDto> getSpecifications() {
         return specifications;
     }
 
-    public void setSpecifications(List<Specification> specifications) {
+    public void setSpecifications(List<SpecificationDto> specifications) {
         this.specifications = specifications;
     }
 
-    public List<ProductImage> getImages() {
+    public List<String> getImages() {
         return images;
     }
 
-    public void setImages(List<ProductImage> images) {
+    public void setImages(List<String> images) {
         this.images = images;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public Double getRatting() {
+        return ratting;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setRatting(Double ratting) {
+        this.ratting = ratting;
+    }
+
+    public long getTotalComment() {
+        return totalComment;
+    }
+
+    public void setTotalComment(long totalComment) {
+        this.totalComment = totalComment;
     }
 }

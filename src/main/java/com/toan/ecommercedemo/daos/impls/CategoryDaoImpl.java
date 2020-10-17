@@ -36,4 +36,28 @@ public class CategoryDaoImpl extends BaseDaoImpl<Category, Long> implements Cate
 
         return typedQuery.getResultList();
     }
+
+    @Override
+    public List<Category> getChildenCategory(Long parentId) {
+        // create returns the data type of critetia query
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Category> criteriaQuery = criteriaBuilder.createQuery(Category.class);
+
+        // from and join entity
+        Root<Category> root = criteriaQuery.from(Category.class);
+        Join<Category, Category> parent = root.join("parentCategory");
+
+        // add predicate
+        List<Predicate> predicates = new ArrayList<>();
+        if (parentId != null) {
+            Predicate predicate = criteriaBuilder.equal(parent.get("id"), parentId);
+            predicates.add(predicate);
+        }
+        criteriaQuery.where(predicates.toArray(new Predicate[]{}));
+
+        // create query
+        TypedQuery<Category> typedQuery = entityManager.createQuery(criteriaQuery.select(root));
+
+        return typedQuery.getResultList();
+    }
 }

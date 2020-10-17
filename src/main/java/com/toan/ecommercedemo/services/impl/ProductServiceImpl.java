@@ -6,6 +6,7 @@ import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.model.search.ProductSearch;
 import com.toan.ecommercedemo.services.ProductService;
+import com.toan.ecommercedemo.utils.Constants;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,9 +59,57 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto getById(Long id) throws InternalServerException {
+    public ViewProductDto getById(Long id) {
         Product entity = productDao.getById(id);
-        return modelMapper.map(entity, ProductDto.class);
+        ViewProductDto dto = modelMapper.map(entity, ViewProductDto.class);
+        dto.setBrand(entity.getBrand().getName());
+        dto.setShop(entity.getShop().getName());
+        List<ProductImage> imageEntities = entity.getImages();
+        List<String> imageDtos = new ArrayList<>();
+        for (ProductImage imageEntity : imageEntities) {
+            if (imageEntity.getFromTiki())
+                imageDtos.add(imageEntity.getPath());
+            else {
+                imageDtos.add(Constants.baseUrl + imageEntity.getPath());
+            }
+        }
+        dto.setImages(imageDtos);
+        List<Specification> specificationEntities = entity.getSpecifications();
+        List<SpecificationDto> specificationDtos = new ArrayList<SpecificationDto>();
+        for (Specification specificationEntity : specificationEntities) {
+            SpecificationDto specificationDto = new SpecificationDto();
+            specificationDto.setId(specificationEntity.getId());
+            specificationDto.setName(specificationEntity.getName());
+            List<Attribute> attributeEntities = specificationEntity.getAttributes();
+            List<AttributeDto> attributeDtos = new ArrayList<AttributeDto>();
+            for (Attribute attributeEntity : attributeEntities) {
+                AttributeDto attributeDto = new AttributeDto();
+                attributeDto.setId(attributeEntity.getId());
+                attributeDto.setName(attributeEntity.getName());
+                attributeDto.setValue(attributeEntity.getValue());
+                attributeDtos.add((attributeDto));
+            }
+            specificationDto.setAttributes(attributeDtos);
+            specificationDtos.add(specificationDto);
+        }
+        return dto;
+    }
+
+    @Override
+    public CartProductDto getCartProductById(Long id) {
+        Product entity = productDao.getById(id);
+        CartProductDto dto = modelMapper.map(entity, CartProductDto.class);
+        List<ProductImage> imageEntities = entity.getImages();
+        List<String> imageDtos = new ArrayList<>();
+        for (ProductImage imageEntity : imageEntities) {
+            if (imageEntity.getFromTiki())
+                imageDtos.add(imageEntity.getPath());
+            else {
+                imageDtos.add(Constants.baseUrl + imageEntity.getPath());
+            }
+        }
+        dto.setImages(imageDtos);
+        return dto;
     }
 
     @Override
@@ -70,12 +119,27 @@ public class ProductServiceImpl implements ProductService {
         for (Product entity : entities) {
             ShortProductDto dto = modelMapper.map(entity, ShortProductDto.class);
             List<ProductImage> imageEntities = entity.getImages();
-            List<ProductImageDto> imageDtos = new ArrayList<>();
+            List<String> imageDtos = new ArrayList<>();
             for (ProductImage imageEntity : imageEntities) {
-                ProductImageDto imageDto = modelMapper.map(imageEntity, ProductImageDto.class);
-                imageDtos.add(imageDto);
+                if (imageEntity.getFromTiki())
+                    imageDtos.add(imageEntity.getPath());
+                else {
+                    imageDtos.add(Constants.baseUrl + imageEntity.getPath());
+                }
             }
             dto.setImages(imageDtos);
+            List<Comment> comments = entity.getComments();
+            if (comments.size() > 0) {
+                dto.setTotalComment(comments.size());
+                int sumRating = 0;
+                for (Comment comment : comments) {
+                    sumRating += comment.getRating();
+                }
+                dto.setRating(sumRating / comments.size());
+            } else {
+                dto.setRating(0);
+                dto.setTotalComment(0);
+            }
             dtos.add(dto);
         }
         return dtos;

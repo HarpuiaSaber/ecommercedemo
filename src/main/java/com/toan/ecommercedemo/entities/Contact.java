@@ -29,6 +29,13 @@ public class Contact extends Auditable implements Serializable {
     @JoinColumn(name = "customer_id")
     private User customer;
 
+    public Contact() {
+    }
+
+    public Contact(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

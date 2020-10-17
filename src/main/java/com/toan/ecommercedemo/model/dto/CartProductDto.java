@@ -3,7 +3,7 @@ package com.toan.ecommercedemo.model.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class ShortProductDto implements Serializable {
+public class CartProductDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -14,10 +14,6 @@ public class ShortProductDto implements Serializable {
     private double unitPrice;
 
     private double unitPriceUSD;
-
-    private double rating;
-
-    private long totalComment;
 
     private List<String> images;
 
@@ -51,22 +47,6 @@ public class ShortProductDto implements Serializable {
 
     public void setUnitPriceUSD(double unitPriceUSD) {
         this.unitPriceUSD = unitPriceUSD;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public long getTotalComment() {
-        return totalComment;
-    }
-
-    public void setTotalComment(long totalComment) {
-        this.totalComment = totalComment;
     }
 
     public List<String> getImages() {

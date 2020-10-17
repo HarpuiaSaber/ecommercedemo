@@ -1,8 +1,8 @@
 package com.toan.ecommercedemo.services;
 
-import com.toan.ecommercedemo.entities.Product;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
-import com.toan.ecommercedemo.model.dto.ProductDto;
+import com.toan.ecommercedemo.model.dto.CartProductDto;
+import com.toan.ecommercedemo.model.dto.ViewProductDto;
 import com.toan.ecommercedemo.model.dto.ShortProductDto;
 import com.toan.ecommercedemo.model.dto.TikiProductDto;
 import com.toan.ecommercedemo.model.search.ProductSearch;
@@ -16,7 +16,9 @@ public interface ProductService {
 //
     public void delete(Long id) throws InternalServerException;
 
-    public ProductDto getById(Long id) throws InternalServerException;
+    public ViewProductDto getById(Long id);
+
+    public CartProductDto getCartProductById(Long id);
 
     public List<ShortProductDto> searchWithPaging(ProductSearch search);
 

@@ -1,17 +1,26 @@
-package com.toan.ecommercedemo.model.dto;
+package com.toan.ecommercedemo.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
-public class ViewCategoryDto implements Serializable {
-
+@Entity
+@Table(name = "payment")
+public class Payment extends Auditable implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
-    private List<ViewCategoryDto> children;
+    public Payment() {
+    }
+
+    public Payment(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
@@ -27,13 +36,5 @@ public class ViewCategoryDto implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<ViewCategoryDto> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<ViewCategoryDto> children) {
-        this.children = children;
     }
 }

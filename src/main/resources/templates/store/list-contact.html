@@ -180,14 +180,14 @@
                                                 <label class="col-sm-3 form-label">Tên người nhận</label>
                                                 <div class="col-sm-9">
                                                     <input required="required" class="form-control" type="text"
-                                                           name="name" id="name"/>
+                                                           name="name" id="name2"/>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-3 form-label">Số điện thoại</label>
                                                 <div class="col-sm-9">
                                                     <input required="required" class="form-control" type="text"
-                                                           name="phone" id="phone"/>
+                                                           name="phone" id="phone2"/>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -215,14 +215,14 @@
                                                 <label class="col-sm-3 form-label">Địa chỉ cụ thể</label>
                                                 <div class="col-sm-9">
                                                     <input required="required" class="form-control" type="text"
-                                                           name="phone" id="address"/>
+                                                           name="phone" id="address2"/>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-sm-3"></div>
                                                 <div class="form-group col-sm-9">
                                                     <div>
-                                                        <button id="addButton" type="submit" style="width: 60%;"
+                                                        <button id="eidtButton" type="submit" style="width: 60%;"
                                                                 class="btn btn-primary2 waves-effect waves-light">Xác
                                                             nhận
                                                         </button>
@@ -248,7 +248,7 @@
     </section>
     <script type="text/javascript" th:inline="javascript">
 
-    var getAllProvince = [[@{/api/location/getAllProvince}]]
+        var getAllProvince = [[@{/api/location/getAllProvince}]]
 			var getDistrictByProvince = [[@{/api/location/getDistrictByProvince}]]
 			var getVillageByDistrict = [[@{/api/location/getVillageByDistrict}]]
 
@@ -552,7 +552,7 @@
 				 {
 					"render": function ( data, type, row ) {
 						 var content = '<div class="table-data-feature"> <button class="btn btn-primary2 waves-effect waves-light" data-placement="top" data-toggle="modal" data-target="#edit-contact" data-json="' + encodeURI(JSON.stringify(row)) +'"><i class="fa fa-edit"></i> Chỉnh sửa</button>'
-		                    +'&emsp;<button class="btn btn-danger waves-effect waves-light" data-placement="top" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-minus"></i> Xóa</button></div>';
+		                    +'&emsp;<button class="btn btn-danger waves-effect waves-light" data-placement="top" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-times"></i> Xóa</button></div>';
 				         return content;
 	                 },
 	                 "orderable": false,
@@ -594,12 +594,12 @@
 			    var jsonStr = $(e.relatedTarget).data('json');
 			  	var row = JSON.parse(decodeURI(jsonStr));
 			    //populate the textbox
-			  	 $("#edit-contact #name").val(row.name);
-			  	 $("#edit-contact #phone").val(row.phone);
+			  	 $("#edit-contact #name2").val(row.name);
+			  	 $("#edit-contact #phone2").val(row.phone);
 				 $("#edit-contact #province2").val(row.provinceId);
 				 $("#edit-contact #district2").val(row.districtId);
 				 $("#edit-contact #village2").val(row.villageId);
-				 $("#edit-contact #address").val(row.address);
+				 $("#edit-contact #address2").val(row.address);
 			});
 		///handle submit form on dialog
           $("#add-contact form").submit(function (e) {

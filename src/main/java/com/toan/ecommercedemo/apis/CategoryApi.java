@@ -1,6 +1,6 @@
 package com.toan.ecommercedemo.apis;
 
-import com.toan.ecommercedemo.model.dto.ViewCategoryDto;
+import com.toan.ecommercedemo.model.dto.CategoryDto;
 import com.toan.ecommercedemo.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class CategoryApi {
 
     @GetMapping("/getAll")
     @ResponseBody
-    public List<ViewCategoryDto> getAll() {
+    public List<CategoryDto> getAll() {
         return categoryService.getParentCategory();
     }
 }

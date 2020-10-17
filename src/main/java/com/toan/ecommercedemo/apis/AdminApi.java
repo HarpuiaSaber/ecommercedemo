@@ -1,13 +1,10 @@
 package com.toan.ecommercedemo.apis;
 
-import com.toan.ecommercedemo.entities.Product;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -79,7 +76,7 @@ public class AdminApi {
 
     @GetMapping("/product")
     @ResponseBody
-    public ProductDto getProductById(@RequestParam long id) throws InternalServerException {
+    public ViewProductDto getProductById(@RequestParam long id) throws InternalServerException {
         return productService.getById(id);
     }
 

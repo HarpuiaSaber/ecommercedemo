@@ -27,6 +27,28 @@
     <link rel="apple-touch-icon-precomposed" th:href="@{/store/images/ico/apple-touch-icon-57-precomposed.png}">
 </head>
 <body>
+<script>
+  function formatNumber(value) {
+    return String(value).replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function formatNumberWithNegativeSign(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function getOnlyDigit(value) {
+    return String(value).replace(/[^0-9]/g, "");
+  }
+
+  function parseNumber() {
+    $('input.number').each(function (index, value) {
+      $(this).val(function (index, value) {
+        return getOnlyDigit(value);
+      });
+    });
+    return true;
+  }
+</script>
 <div class="page-wrapper">
     <div th:replace="store/common/header::header"></div>
     <div class="page-content--bgf7">
@@ -69,32 +91,6 @@
       });
     });
   });
-
-  function formatNumber(value) {
-    return String(value).replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
-
-  function formatNumberWithNegativeSign(value) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
-
-  function getOnlyDigit(value) {
-    return String(value).replace(/[^0-9]/g, "");
-  }
-
-  function parseNumber() {
-    $('input.number').each(function (index, value) {
-      $(this).val(function (index, value) {
-        return getOnlyDigit(value);
-      });
-    });
-    return true;
-  }
-
-
-
-
-
 </script>
 </body>
 </html>

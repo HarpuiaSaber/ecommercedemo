@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="store/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Sản phẩm</title>
+    <script th:src="@{/store/js/jquery.js}"></script>
+</head><!--/head-->
+
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 padding-right">
+                    <div class="product-details"><!--product-details-->
+                        <div class="col-sm-5">
+                            <div class="view-product">
+                                <img th:src="${product.images[0]}" alt=""/>
+                            </div>
+                            <div id="similar-product" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="item active">
+                                        <a th:each="image : ${product.images}"><img th:src="${image}" alt=""> </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="product-information"><!--/product-information-->
+                                <img src="images/product-details/new.jpg" class="newarrival" alt=""/>
+                                <h2 th:text="${product.name}"></h2>
+                                <img th:src="@{/store/images/product-details/rating.png}" alt=""/>
+                                <br/>
+                                <label>Thương hiệu:</label>&nbsp;<span><p th:text="${product.brand}"></p></span>
+                                <hr/>
+                                <span>
+									<span th:text="${#numbers.formatDecimal(product.unitPrice, 0, 'POINT', 0, 'POINT') +'đ'}"></span>
+                                </span>
+                                <hr/>
+                                <p th:utext="${'&bull;&nbsp;'+#strings.replace(product.description,'&#10;','&lt;br&gt;&bull;&nbsp;')}"></p>
+                                <hr/>
+                                <b>Kho:</b> <span><p th:text="${product.quantity}"></p></span>
+                                &nbsp;&nbsp;&nbsp;
+                                <span>
+                                <label>Số lượng:</label>
+                                    <button id="sub">-</button>
+                                <input id="quantity" type="text" value="1" min="1"/>
+                                    <button id="add">+</button>
+                                </span>
+                                <button id="addToCart" type="button" class="btn btn-fefault cart"
+                                        th:value="${product.id}">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    Thêm vào giỏ hàng
+                                </button>
+                                <br/>
+                                <b>Shop:</b> <span><p th:text="${product.shop}"></p></span>
+                                <a href=""><img th:src="@{/store/images/product-details/share.png}"
+                                                class="share img-responsive"
+                                                alt=""/></a>
+
+                            </div><!--/product-information-->
+                        </div>
+                    </div><!--/product-details-->
+
+                    <div class="category-tab shop-details-tab"><!--category-tab-->
+                        <div class="col-sm-12">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#details" data-toggle="tab">Chi tiết</a></li>
+                                <li><a href="#companyprofile" data-toggle="tab">Nhà bán</a></li>
+                                <li><a href="#reviews" data-toggle="tab">Đánh giá</a></li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="details">
+                                <table class="table table-condensed">
+                                    <tbody th:each="specification : ${product.specifications}">
+                                    <tr><td style="background-color:#FE980F" th:text="${specification.name}"></td></tr>
+                                    <tr th:each="attribute : ${specification.attributes}">
+                                        <td style="padding: 10px; background-color:rgb(239, 239, 239);" th:utext="${attribute.name}"></td>
+                                        <td style="padding: 10px;" th:utext="${attribute.value}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="tab-pane fade" id="companyprofile">
+
+                            </div>
+
+                            <div class="tab-pane fade" id="reviews">
+                                <div class="col-sm-12">
+                                    <ul>
+                                        <li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>
+                                        <li><a href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
+                                        <li><a href=""><i class="fa fa-calendar-o"></i>31 DEC 2014</a></li>
+                                    </ul>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis
+                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                                        dolore eu fugiat nulla pariatur.</p>
+                                    <p><b>Write Your Review</b></p>
+
+                                    <form action="#">
+										<span>
+											<input type="text" placeholder="Your Name"/>
+											<input type="email" placeholder="Email Address"/>
+										</span>
+                                        <textarea name=""></textarea>
+                                        <b>Rating: </b> <img src="images/product-details/rating.png" alt=""/>
+                                        <button type="button" class="btn btn-default pull-right">
+                                            Submit
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--/category-tab-->
+                    <div class="modal fade" id="notice" tabindex="-1"
+                         role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">Thêm vào giỏ hàng</div>
+                                <div class="modal-body">Thêm thành công</div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Để sau
+                                    </button>
+                                    <a th:href="@{/customer/cart}" class="btn btn-danger btn-ok" style="color: white;">Xem
+                                        giỏ hàng và thanh
+                                        toán</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript" th:inline="javascript">
+        var addURL = [[@{/api/customer/cart/add}]];
+        $("#add").click(function() {
+            var newQty = +($("#quantity").val()) + 1;
+            $("#quantity").val(newQty);
+        });
+        $("#sub").click(function() {
+            var newQty = +($("#quantity").val()) - 1;
+            if(newQty < 1)newQty = 1;
+            $("#quantity").val(newQty);
+        });
+        $("#addToCart").click(function() {
+            $.ajax({
+                  url: addURL+"?productId="+$(this).val()+"&quantity="+$("#quantity").val(),
+                  type: 'GET',
+                  processData: false,
+                  success: function () {
+                     $('#notice').modal('show');
+                  },
+                  error: function (data) {
+                       alert("Không thêm được");
+                  }
+              });
+        });
+
+    </script>
+</div>
+</body>
+</html>

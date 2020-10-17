@@ -31,24 +31,48 @@
         <div class="header-middle"><!--header-middle-->
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-2">
                         <div class="logo pull-left">
                             <a th:href="@{/home}"><img th:src="@{/store/images/home/logo.png}" alt=""/></a>
                         </div>
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-7">
+                        <div class="search_box">
+                            <form th:action="@{/search}" method="GET">
+                                <select id="cate" name="categoryId" class="pull-left">
+                                    <option value="" selected>Tất cả</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}"></option>
+                                </select>
+                                <input id ="name" type="text" placeholder="Search" name="name" class="pull-left"/>
+                                <button><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
                         <div class="shop-menu pull-right">
                             <ul sec:authorize="isAnonymous()" class="nav navbar-nav">
                                 <li><a th:href="@{/login}"><i class="fa fa-sign-in"></i> Đăng nhập</a></li>
                                 <li><a th:href="@{/signup}"><i class="fa fa-plus"></i> Đăng ký</a></li>
                             </ul>
                             <ul sec:authorize="isAuthenticated()" class="nav navbar-nav">
-                                <li><a sec:authentication="principal.name" th:href="@{/customer/profile}"><i
-                                        class="fa fa-user"></i> </a></li>
+                                <li><a th:href="@{/customer/profile}"><b sec:authentication="principal.name"></b> <i class='fa fa-angle-down'></i></a>
+                                    <ul role="menu" class="shop-menu">
+                                        <li><i class="fa fa-user"></i><a th:href="@{/customer/profile}"> Thông tin cá
+                                            nhân</a></li>
+                                        <li><i class="fa fa-crosshairs"></i><a th:href="@{/customer/contact}"> Theo dõi
+                                            đơn hàng</a></li>
+                                        <li><i class="fa fa-book"></i><a th:href="@{/customer/contact}"> Sổ địa
+                                            chỉ</a></li>
+                                        <li><i class="fa fa-comment"></i><a th:href="@{/customer/comment}"> Nhận xét sản
+                                            phẩm</a></li>
+                                        <li><i class="fa fa-sign-out"></i><a th:href="@{/logout}"> Đăng xuất</a></li>
+                                    </ul>
+                                </li>
                                 <li><a th:href="@{/customer/order}"><i class="fa fa-crosshairs"></i> Đơn
                                     hàng</a></li>
                                 <li><a th:href="@{/customer/cart}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
-                                <li><a th:href="@{/logout}"><i class="fa fa-sign-out"></i> Đăng xuất</a></li>
                             </ul>
                         </div>
                     </div>
@@ -59,37 +83,42 @@
         <div class="header-bottom"><!--header-bottom-->
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-9">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                                    data-target=".navbar-collapse">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                        </div>
-                        <div class="mainmenu pull-left">
-                            <ul class="nav navbar-nav collapse navbar-collapse">
-                                <li><a th:href="@{/home}" class="active">Trang chủ</a></li>
-                                <li sec:authorize="isAuthenticated()" class="dropdown"><a>Tài khoản<i
-                                        class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a th:href="@{/customer/cart}">Giỏ hàng</a></li>
-                                        <li><a th:href="@{/customer/profile}">Thông tin cá nhân</a></li>
-                                        <li><a th:href="@{/customer/order}">Theo dõi đơn hàng</a></li>
-                                        <li><a th:href="@{/customer/contact}">Sổ địa chỉ</a></li>
-                                        <li><a th:href="@{/customer/comment}">Nhận xét sản phẩm</a></li>
-                                        <li><a th:href="@{/logout}">Đăng xuất</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="contact-us.html">Kênh người bán</a></li>
-                                <li><a href="contact-us.html">Liên hệ</a></li>
-                            </ul>
-                        </div>
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="mainmenu pull-left">
+                        <ul class="nav navbar-nav collapse navbar-collapse">
+                            <li><a><i class="fa fa-list"></i> Danh mục sản phẩm<i class="fa fa-angle-down"></i></a>
+                                <ul role="menu" class="sub-menu">
+                                    <li th:each="category : ${categories}">
+                                        <a th:href="|/search?categoryId=${category.id}|"
+                                           th:text="${category.name}"></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="contact-us.html">Kênh người bán</a></li>
+                            <li><a href="contact-us.html">Liên hệ</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div><!--/header-bottom-->
     </header><!--/header-->
+    <script>
+        var nameL = $("#name").width();
+        var selectL = $("#cate").width();
+        $("#cate").on('change', function() {
+            var l = $("#cate option:selected").text().length;
+            if( l < 9) l = l * 12;
+            else if(l < 20) l = l * 10;
+            else l = l * 8;
+            $("#cate").width(l);
+            $("#name").width(nameL - l + selectL);
+        });
+    </script>
 </div>

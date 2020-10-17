@@ -2,7 +2,7 @@ package com.toan.ecommercedemo.services.impl;
 
 import com.toan.ecommercedemo.daos.CategoryDao;
 import com.toan.ecommercedemo.entities.Category;
-import com.toan.ecommercedemo.model.dto.ViewCategoryDto;
+import com.toan.ecommercedemo.model.dto.CategoryDto;
 import com.toan.ecommercedemo.services.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +22,22 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryDao categoryDao;
 
     @Override
-    public List<ViewCategoryDto> getParentCategory() {
+    public List<CategoryDto> getParentCategory() {
         List<Category> entities = categoryDao.getParentCategory();
-        List<ViewCategoryDto> dtos = new ArrayList<ViewCategoryDto>();
+        List<CategoryDto> dtos = new ArrayList<CategoryDto>();
         for (Category entity : entities) {
-            ViewCategoryDto dto = new ViewCategoryDto();
-            dto.setId(entity.getId());
-            dto.setName(entity.getName());
-            List<Category> children = entity.getChildrenCategory();
-            List<ViewCategoryDto> childrendto = new ArrayList<ViewCategoryDto>();
-            for (Category child : children) {
-                ViewCategoryDto childdto = new ViewCategoryDto();
-                childdto.setId(child.getId());
-                childdto.setName(child.getName());
-                childrendto.add(childdto);
-            }
-            dto.setChildren(childrendto);
+            CategoryDto dto = modelMapper.map(entity, CategoryDto.class);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    @Override
+    public List<CategoryDto> getChildrenCategory(Long parentId) {
+        List<Category> entities = categoryDao.getChildenCategory(parentId);
+        List<CategoryDto> dtos = new ArrayList<CategoryDto>();
+        for (Category entity : entities) {
+            CategoryDto dto = modelMapper.map(entity, CategoryDto.class);
             dtos.add(dto);
         }
         return dtos;

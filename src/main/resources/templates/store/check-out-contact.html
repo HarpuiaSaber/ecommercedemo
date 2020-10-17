@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Đặt hàng và thanh toán | E-Shopper</title>
+    <link rel="shortcut icon" th:href="@{/store/images/favicon.png}" type="image/png"/>
+    <link th:href="@{/store/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/store/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/store/css/prettyPhoto.css}" rel="stylesheet">
+    <link th:href="@{/store/css/price-range.css}" rel="stylesheet">
+    <link th:href="@{/store/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/store/css/main.css}" rel="stylesheet">
+    <link th:href="@{/store/css/responsive.css}" rel="stylesheet">
+    <link th:href="@{/management/css/jquery.datetimepicker.css}" rel="stylesheet" media="all">
+
+
+    <script th:src="@{/management/vendor/jquery-3.2.1.min.js}"></script>
+    <script th:src="@{/management/vendor/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/management/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+    <script th:src="@{/management/vendor/datatables/dataTables.checkboxes.min.js}"></script>
+    <link th:href="@{/management/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" media="all"/>
+    <link th:href="@{/management/vendor/datatables/dataTables.checkboxes.css}" rel="stylesheet" media="all"/>
+</head><!--/head-->
+
+<body>
+<script>
+  function formatNumber(value) {
+    return String(value).replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function formatNumberWithNegativeSign(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function getOnlyDigit(value) {
+    return String(value).replace(/[^0-9]/g, "");
+  }
+
+  function parseNumber() {
+    $('input.number').each(function (index, value) {
+      $(this).val(function (index, value) {
+        return getOnlyDigit(value);
+      });
+    });
+    return true;
+  }
+</script>
+<header id="header"><!--header-->
+    <div class="header_top"><!--header_top-->
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="contactinfo">
+                        <ul class="nav nav-pills">
+                            <li><a href="#"><i class="fa fa-phone"></i> +84 32 92 80 808</a></li>
+                            <li><a href="#"><i class="fa fa-envelope"></i> ztoan11120@gmail.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="social-icons pull-right">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/header_top-->
+
+    <div class="header-middle"><!--header-middle-->
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="logo pull-left">
+                        <a th:href="@{/home}"><img th:src="@{/store/images/home/logo.png}" alt=""/></a>
+                    </div>
+                </div>
+                <div class="progress" style="height: 30px; width: 40%">
+                    <div class="progress-bar" role="progressbar" style="width: 100%; font-size: 16px;"
+                         aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Chọn địa chỉ giao hàng
+                    </div>
+                </div>
+                <div class="progress" style="height: 30px; width: 40%">
+                    <div class="progress-bar" role="progressbar" style="width: 100%; font-size: 16px; color: black; background-color: #f5f5f5;"
+                         aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Đặt hàng và thanh toán
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/header-middle-->
+</header><!--/header-->
+<section id="cart_items">
+    <div class="container">
+        <div class="step-one">
+            <h2 class="heading">Chọn địa chỉ giao hàng</h2>
+        </div>
+        <button class="btn btn-success"
+                data-toggle="modal" data-target="#add-contact">
+            <i class="fa fa-plus"></i>Thêm mới
+        </button>
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2" id="datatable">
+                <thead>
+                <tr>
+                    <th>Địa chỉ</th>
+                    <th>Hành động</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="confirm-delete" tabindex="-1"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">Xoá địa chỉ</div>
+                <div class="modal-body">Bạn muốn xoá địa chỉ này?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Không
+                    </button>
+                    <a class="btn btn-danger btn-ok" style="color: white;">Xóa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="add-contact" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span th:remove="tag">Thêm địa chỉ</span>
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <form id="from-add">
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Tên người nhận</label>
+                            <div class="col-sm-9">
+                                <input required="required" class="form-control" type="text"
+                                       name="name" id="name"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Số điện thoại</label>
+                            <div class="col-sm-9">
+                                <input required="required" class="form-control" type="text"
+                                       name="phone" id="phone"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Tỉnh/Thành phố</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="province" name="province">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Quận/Huyện</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="district" name="district">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Xã</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="village" name="village">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Địa chỉ cụ thể</label>
+                            <div class="col-sm-9">
+                                <input required="required" class="form-control" type="text"
+                                       name="phone" id="address"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3"></div>
+                            <div class="form-group col-sm-9">
+                                <div>
+                                    <button id="addButton" type="submit" style="width: 60%;"
+                                            class="btn btn-success waves-effect waves-light">Thêm
+                                    </button>
+                                    <button type="reset"
+                                            class="btn btn-warning waves-effect waves-light">Đặt lại
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-danger waves-effect waves-light"
+                                            data-dismiss="modal">Hủy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="edit-contact" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span th:remove="tag">Thêm địa chỉ</span>
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <form id="from-edit">
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Tên người nhận</label>
+                            <div class="col-sm-9">
+                                <input required="required" class="form-control" type="text"
+                                       name="name" id="name2"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Số điện thoại</label>
+                            <div class="col-sm-9">
+                                <input required="required" class="form-control" type="text"
+                                       name="phone" id="phone2"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Tỉnh/Thành phố</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="province2" name="province2">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Quận/Huyện</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="district2" name="district2">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Xã</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="village2" name="village2">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-label">Địa chỉ cụ thể</label>
+                            <div class="col-sm-9">
+                                <input required="required" class="form-control" type="text"
+                                       name="phone" id="address2"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3"></div>
+                            <div class="form-group col-sm-9">
+                                <div>
+                                    <button id="eidtButton" type="submit" style="width: 60%;"
+                                            class="btn btn-primary2 waves-effect waves-light">Xác
+                                        nhận
+                                    </button>
+                                    <button type="reset"
+                                            class="btn btn-warning waves-effect waves-light">Đặt lại
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-danger waves-effect waves-light"
+                                            data-dismiss="modal">Hủy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--[if lt IE 9]>
+<script th:src="@{/store/js/html5shiv.js}"></script>
+<script th:src="@{/store/js/respond.min.js}"></script>
+
+<![endif]-->
+<script th:src="@{/store/js/bootstrap.min.js}"></script>
+<script th:src="@{/store/js/jquery.scrollUp.min.js}"></script>
+<script th:src="@{/store/js/price-range.js}"></script>
+<script th:src="@{/store/js/jquery.prettyPhoto.js}"></script>
+<script th:src="@{/store/js/main.js}"></script>
+<script th:src="@{/management/js/jquery.datetimepicker.full.js}"></script>
+<script>
+  $.datetimepicker.setLocale('vi');
+  $(function () {
+    $('input.number').keyup(function (event) {
+
+      // skip for arrow keys
+      if (event.which >= 37 && event.which <= 40)
+        return;
+
+      // format number
+      $(this).val(function (index, value) {
+        return formatNumber(value);
+      });
+    });
+    $('input.number').each(function (index, value) {
+      $(this).val(function (index, value) {
+        return formatNumber(value);
+      });
+    });
+  });
+
+</script>
+<script type="text/javascript" th:inline="javascript">
+
+        var getAllProvince = [[@{/api/location/getAllProvince}]]
+			var getDistrictByProvince = [[@{/api/location/getDistrictByProvince}]]
+			var getVillageByDistrict = [[@{/api/location/getVillageByDistrict}]]
+
+			var province = $('#province');
+			var district = $('#district');
+			var village = $('#village');
+
+			$("#add-contact").ready(function () {
+				$.ajax({
+					url: getAllProvince,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					success: function (data) {
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							province.append($option);
+						}
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+				$.ajax({
+					url: getDistrictByProvince,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					data: { "provinceId": "01" },
+					success: function (data) {
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							district.append($option);
+						}
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+				$.ajax({
+					url: getVillageByDistrict,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					data: { "districtId": "001" },
+					success: function (data) {
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							village.append($option);
+						}
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+			});
+			province.on('change', function () {
+				$.ajax({
+					url: getDistrictByProvince,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					data: { "provinceId": province.val() },
+					success: function (data) {
+						district.empty();
+						village.empty();
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							district.append($option);
+						}
+						$.ajax({
+							url: getVillageByDistrict,
+							type: 'GET',
+							dataType: "json",
+							contentType: "application/json",
+							data: { "districtId": data[0].id },
+							success: function (data) {
+								village.empty();
+								for (var i = 0; i < data.length; i++) {
+									var $option = $("<option/>", {
+										value: data[i].id,
+										text: data[i].name
+									});
+									village.append($option);
+								}
+							},
+							error: function () {
+								alert("Loi xay ra");
+							}
+						});
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+			});
+			district.on('change', function () {
+				$.ajax({
+					url: getVillageByDistrict,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					data: { "districtId": district.val() },
+					success: function (data) {
+						village.empty();
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							village.append($option);
+						}
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+			});
+
+            var province2 = $('#province2');
+			var district2 = $('#district2');
+			var village2 = $('#village2');
+
+            $("#edit-contact").ready(function () {
+				$.ajax({
+					url: getAllProvince,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					success: function (data) {
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							province2.append($option);
+						}
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+				$.ajax({
+					url: getDistrictByProvince,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					data: { "provinceId": province2.val() },
+					success: function (data) {
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							district2.append($option);
+						}
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+				$.ajax({
+					url: getVillageByDistrict,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					data: { "districtId": district2.val() },
+					success: function (data) {
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							village2.append($option);
+						}
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+			});
+			province2.on('change', function () {
+				$.ajax({
+					url: getDistrictByProvince,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					data: { "provinceId": province2.val() },
+					success: function (data) {
+						district2.empty();
+						village2.empty();
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							district2.append($option);
+						}
+						$.ajax({
+							url: getVillageByDistrict,
+							type: 'GET',
+							dataType: "json",
+							contentType: "application/json",
+							data: { "districtId": data[0].id },
+							success: function (data) {
+								village2.empty();
+								for (var i = 0; i < data.length; i++) {
+									var $option = $("<option/>", {
+										value: data[i].id,
+										text: data[i].name
+									});
+									village2.append($option);
+								}
+							},
+							error: function () {
+								alert("Loi xay ra");
+							}
+						});
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+			});
+			district2.on('change', function () {
+				$.ajax({
+					url: getVillageByDistrict,
+					type: 'GET',
+					dataType: "json",
+					contentType: "application/json",
+					data: { "districtId": district2.val() },
+					success: function (data) {
+						village2.empty();
+						for (var i = 0; i < data.length; i++) {
+							var $option = $("<option/>", {
+								value: data[i].id,
+								text: data[i].name
+							});
+							village2.append($option);
+						}
+					},
+					error: function () {
+						alert("Loi xay ra");
+					}
+				});
+			});
+
+		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
+		var url = [[@{/api/customer/getContact}]];
+		var addURL = [[@{/api/customer/addContact}]];
+		var editURL = [[@{/api/customer/editContact}]];
+		var delURL = [[@{/api/customer/deleteContact}]];
+
+		var id = "";
+		var table;
+		$(document).ready(function () {
+			table = $('#datatable').DataTable({
+				"ordering": false,
+				"searching": false,
+				"paging": false,
+				"destroy": true,
+				"info": false,
+				"autoWidth": false,
+				"processing": true,
+				"serverSide": true,
+				"oLanguage": {
+                    "sEmptyTable": "Không tìm thấy kết quả"
+                },
+				"ajax": {
+					type: "GET",
+					url: url,
+					dataType: "json",
+					contentType: "application/json",
+					data: null,
+					error: function (data) {
+						alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+					}
+				},
+				"columns": [
+					{ "data": function (data, type, dataToSet) {
+                        return "<li>Tên: " + data.name + "</li><br/><li>Số điện thoại: " + data.phone + "</li></br><li>Địa chỉ: " + data.address + ", " + data.location + "</li>";
+                    }, className: "text-left"},
+					{ "data": "id", className: "text-center" },
+				],
+				"createdRow": function (row, data, index) {
+					$(row).addClass('tr-shadow');
+				},
+				columnDefs:[
+				 {
+					"render": function ( data, type, row ) {
+						 var content = '<div class="table-data-feature"><a href="/customer/check-out-payment?contactId='+row.id+'"><button class="btn btn-success waves-effect waves-light"><i class="fa fa-check"></i> Giao đến địa chỉ này</button></a>'
+						    +'&emsp;<button class="btn btn-primary2 waves-effect waves-light" data-placement="top" data-toggle="modal" data-target="#edit-contact" data-json="' + encodeURI(JSON.stringify(row)) +'"><i class="fa fa-edit"></i> Chỉnh sửa</button>'
+		                    +'&emsp;<button class="btn btn-danger waves-effect waves-light" data-placement="top" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-times"></i> Xóa</button></div>';
+				         return content;
+	                 },
+	                 "orderable": false,
+   	                "targets": 1
+	                }
+				],
+				"language": {
+					"url": vietnameseUrl,
+				},
+				"initComplete": function (settings, json) {
+				},
+				"drawCallback": function () {
+					table.rows().every(function () {
+						this.nodes().to$().after('<tr class="spacer"></tr>')
+					})
+				}
+			});
+		});
+		$('#datatable').on( 'click', 'tbody tr', function () {
+			var data = table.row($(this)).data();
+			id = data.id;
+			 if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+		});
+		$('#confirm-delete').on('click', '.btn-ok', function(e) {
+			  	var $modalDiv = $(e.delegateTarget);
+			  	$.ajax({
+					type: "DELETE",
+					url: delURL +"?id=" + id,
+					success: function(){
+                        $modalDiv.modal('hide');
+                         table.draw();
+					},
+					error: function (data) {
+						$modalDiv.find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');
+					}
+				});
+			});
+		$('#edit-contact').on('show.bs.modal', function(e) {
+			    //get data-id attribute of the clicked element
+			    var jsonStr = $(e.relatedTarget).data('json');
+			  	var row = JSON.parse(decodeURI(jsonStr));
+			    //populate the textbox
+			  	 $("#edit-contact #name2").val(row.name);
+			  	 $("#edit-contact #phone2").val(row.phone);
+				 $("#edit-contact #province2").val(row.provinceId);
+				 $("#edit-contact #district2").val(row.districtId);
+				 $("#edit-contact #village2").val(row.villageId);
+				 $("#edit-contact #address2").val(row.address);
+			});
+		///handle submit form on dialog
+          $("#add-contact form").submit(function (e) {
+              e.preventDefault();
+              var saveContactDto={};
+             var formData = $('#add-contact form').serializeArray();
+			    saveContactDto.name = formData[0].value;
+				saveContactDto.phone = formData[1].value;
+				saveContactDto.villageId = formData[4].value;
+				saveContactDto.address = formData[5].value;;
+              $.ajax({
+                  url: addURL,
+                  type: 'POST',
+                  dataType: "json",
+                  cache: false,
+                  contentType: "application/json",
+                  processData: false,
+                  data: JSON.stringify(saveContactDto),
+                  success: function () {
+                      $('#add-contact').modal('hide');
+                      table.draw();
+                  },
+                  error: function (data) {
+                      alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+                  }
+              });
+              });
+         $("#edit-contact form").submit(function (e) {
+              e.preventDefault();
+              var saveContactDto={};
+             var formData = $('#edit-contact form').serializeArray();
+             saveContactDto.id = id;
+			    saveContactDto.name = formData[0].value;
+				saveContactDto.phone = formData[1].value;
+				saveContactDto.villageId = formData[4].value;
+				saveContactDto.address = formData[5].value;;
+              $.ajax({
+                  url: editURL,
+                  type: 'POST',
+                  dataType: "json",
+                  cache: false,
+                  contentType: "application/json",
+                  processData: false,
+                  data: JSON.stringify(saveContactDto),
+                  success: function () {
+                      $('#edit-contact').modal('hide');
+                      table.draw();
+                  },
+                  error: function (data) {
+                      alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+                  }
+              });
+          });
+</script>
+</body>
+</html>
