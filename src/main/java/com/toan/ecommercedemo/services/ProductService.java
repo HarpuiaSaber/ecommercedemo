@@ -1,10 +1,7 @@
 package com.toan.ecommercedemo.services;
 
 import com.toan.ecommercedemo.exceptions.InternalServerException;
-import com.toan.ecommercedemo.model.dto.CartProductDto;
-import com.toan.ecommercedemo.model.dto.ViewProductDto;
-import com.toan.ecommercedemo.model.dto.ShortProductDto;
-import com.toan.ecommercedemo.model.dto.TikiProductDto;
+import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.model.search.ProductSearch;
 
 import java.util.List;
@@ -27,4 +24,10 @@ public interface ProductService {
     public void addFromTiki(TikiProductDto dto);
 
     public List<Long> getAllId();
+
+    public List<CommentProductDto> getCustomerProductWithoutComment(Long customerId, Integer start, Integer length);
+
+    public Long countCustomerProductWithoutComment(Long customerId);
+
+    public List<ShortProductDto> getCustomerProductInComment(Long customerId);
 }

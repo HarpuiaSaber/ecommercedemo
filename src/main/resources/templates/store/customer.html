@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="store/common/template"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Thông tin cá nhân</title>
+    <script th:src="@{/store/js/jquery.js}"></script>
+</head>
+<!--/head-->
+
+<body>
+    <div layout:fragment="content" th:remove="tag">
+        <script>
+            $(function () {
+                $("#dob").datetimepicker({
+                    format: 'd/m/Y',
+                    timepicker: true
+                });
+            });
+        </script>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="left-sidebar">
+                            <h2 sec:authentication="principal.name"></h2>
+                            <div class="panel-group category-products" id="accordian">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <ul class="nav nav-pills nav-stacked list-group">
+                                            <a th:href="@{/customer/profile}">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center active">
+                                                    <h4 class="panel-title"><i class="fa fa-user"></i> Thông tin cá nhân</h4>
+                                                </li>
+                                            </a>
+                                            <a th:href="@{/customer/order}">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <h4 class="panel-title"><i class="fa fa-crosshairs"></i> Theo dõi đơn hàng</h4>
+                                                </li>
+                                            </a>
+                                            <a th:href="@{/customer/contact}">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <h4 class="panel-title"> <i class="fa fa-book"></i> Sổ địa chỉ</h4>
+                                                </li>
+                                            </a>
+                                            <a th:href="@{/customer/comment}">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <h4 class="panel-title"> <i class="fa fa-comment"></i> Nhận xét sản phẩm</h4>
+                                                </li>
+                                            </a>
+                                            <a th:href="@{/logout}">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <h4 class="panel-title"> <i class="fa fa-sign-out"></i> Đăng xuất</h4>
+                                                </li>
+                                            </a>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-9 padding-right">
+                        <div class="features_items">
+                            <!--features_items-->
+                            <h2 class="title text-center">Thông tin cá nhân</h2>
+                            <div class="login-form">
+                                <!--login form-->
+                                <form id="formsignup">
+                                    <div class="col-sm-6">
+                                        <input type="text" placeholder="Họ tên" name="name"
+                                            th:value="${customer.name}" />
+                                        <input type="text" placeholder="Số điện thoại" name="phone"
+                                            th:value="${customer.phone}" />
+                                        <input readonly="true" placeholder="Ngày sinh" name="dob" id="dob"
+                                            th:value="${customer.dob}" />
+                                        <input type="text" placeholder="Email" name="email"
+                                            th:value="${customer.email}" />
+                                        <label>Giới tính</label>
+                                        <span th:if="${customer.gender == 0}">
+                                            <label style="margin-right: 10px;margin-left: 10px;">
+                                                <input type="radio" name="gender" value="0"
+                                                       checked>Nam</label>
+                                            <label style="margin-right: 10px;margin-left: 10px;">
+                                                <input type="radio" name="gender" value="1">Nữ</label>
+                                        </span>
+                                        <span th:if="${customer.gender == 1}">
+                                            <label style="margin-right: 10px;margin-left: 10px;">
+                                                <input type="radio" name="gender" value="0"
+                                                       checked>Nam</label>
+                                            <label style="margin-right: 10px;margin-left: 10px;">
+                                                <input type="radio" name="gender" value="1" checked>Nữ</label>
+                                        </span>
+                                        <button id="signup" type="button" class="btn btn-default">Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script type="text/javascript" th:inline="javascript">
+            var formData;
+            var userDto = {};
+
+            $('#signup').on('click', function () {
+                formData = $('#formsignup').serializeArray();
+                userDto.name = formData[0].value;
+                userDto.phone = formData[1].value;
+                userDto.dob = formData[2].value;
+                userDto.email = formData[3].value;
+                userDto.gender = formData[4].value;
+                userDto.id=[[${customer.id}]];
+                $.ajax({
+                    url: "/api/customer/updateProfile",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(userDto),
+                    success: function (data) {
+                        alert("Cập nhật thành công");
+                    },
+                    error: function (data) {
+                        alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>

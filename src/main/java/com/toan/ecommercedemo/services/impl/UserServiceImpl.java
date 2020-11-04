@@ -71,8 +71,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void update(UpdateUserDto dto) throws InternalServerException {
         User old = userDao.getById(dto.getId());
+        String username = old.getUsername();
+        String password = old.getPassword();
         if (old != null) {
             old = modelMapper.map(dto, User.class);
+            old.setUsername(username);
+            old.setPassword(password);
             old.setGender(Gender.valueOf(dto.getGender()));
             userDao.update(old);
         } else {
@@ -98,7 +102,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             dto.setId(entity.getId());
             dto.setDob(DateTimeUtils.formatDate(entity.getDob(), DateTimeUtils.DD_MM_YYYY));
             dto.setEmail(entity.getEmail());
-            dto.setGender(entity.getGender());
+            dto.setGender(entity.getGender().getValue());
             dto.setName(entity.getName());
             dto.setPhone(entity.getPhone());
             dto.setRole(entity.getRole());

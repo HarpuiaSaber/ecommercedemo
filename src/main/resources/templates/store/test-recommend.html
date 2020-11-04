@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="store/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Tìm kiếm</title>
+    <script th:src="@{/store/js/jquery.js}"></script>
+</head><!--/head-->
+
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <section id="slider"><!--slider-->
+        <div class="pull-right" style="display: inline-flex;">
+            <p>Sắp xếp theo: </p>
+            <select style="display: inline-block;">
+                <option>Giá thấp lên cao</option>
+                <option>Giá cao xuống thấp</option>
+                <option>Số sao đánh giá</option>
+                <option>Mới nhất</option>
+            </select>
+        </div>
+    </section><!--/slider-->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        <h2>Danh mục</h2>
+                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <ul class="nav nav-pills nav-stacked list-group">
+                                        <a th:each="category : ${childrenCategory}"
+                                           th:href="|/search?categoryId=${category.id}|">
+                                            <li th:classappend="${categoryId == category.id} ? 'list-group-item d-flex justify-content-between align-items-center active' : 'list-group-item d-flex justify-content-between align-items-center'">
+                                                <h4 th:text="${category.name}" class="panel-title"></h4>
+                                            </li>
+                                            <ul th:if="${category.children != null}" class="list-group"
+                                                style="padding-left: 15px;">
+                                                <a th:each="child : ${category.children}"
+                                                   th:href="|/search?categoryId=${child.id}|">
+                                                    <li th:text="${child.name}"
+                                                        th:classappend="${categoryId == child.id} ? 'list-group-item d-flex justify-content-between align-items-center active' : 'list-group-item d-flex justify-content-between align-items-center'"></li>
+                                                </a>
+                                            </ul>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div><!--/category-products-->
+
+                        <div class="price-range"><!--price-range-->
+                            <h2>Giá</h2>
+                            <input type="text" placeholder="Từ(đ)" id="fromPrice"
+                                   th:value="${#numbers.formatDecimal(fromPrice, 0, 'POINT', 0, 'POINT')}">
+                            <span> - </span>
+                            <input type="text" placeholder="Đến(đ)" id="toPrice"
+                                   th:value="${#numbers.formatDecimal(toPrice, 0, 'POINT', 0, 'POINT')}">
+                            <a id="searchPrice" class="btn btn-primary"
+                               style="display: flex;justify-content: center;align-items: center;width: 45%;margin-top: 10px;">OK</a>
+                        </div><!--/price-range-->
+
+                        <div class="brands_products"><!--brands_products-->
+                            <h2>Thương hiệu</h2>
+                            <div class="brands-name">
+                                <ul class="nav nav-pills nav-stacked list-group" id="brand">
+                                </ul>
+                            </div>
+                        </div><!--/brands_products-->
+
+                        <div class="shipping text-center"><!--shipping-->
+                            <img th:src="@{store/images/home/shipping.jpg}" alt=""/>
+                        </div><!--/shipping-->
+
+                    </div>
+                </div>
+
+                <div class="col-sm-9 padding-right">
+                    <div class="tab-content">
+                        <h2>Đã comment</h2>
+                        <div class="product-card" th:each="product : ${products1}">
+                            <div class="product-image-wrapper">
+                                <div class="single-products">
+                                    <a th:href="|/product/${product.id}|">
+                                        <div class="productinfo">
+                                            <img th:src="${product.image}" alt=""/>
+                                            <p th:text="${#strings.abbreviate(product.name, 50)} "></p>
+                                            <h2 th:text="${#numbers.formatDecimal(product.unitPrice, 0, 'POINT', 0, 'POINT') +'đ'}"></h2>
+                                            <span style="display: flex; align-items: baseline;">
+                                                <p th:text="${product.rating}"></p>
+                                                &nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                           viewBox="0 0 32 32"><path fill="#FDD835" fill-rule="evenodd"
+                                                                                     stroke="#FFB500" stroke-width="1.5"
+                                                                                     d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path></svg>
+                                            </span>
+                                            <p th:text="${product.totalComment} + ' nhận xét'"></p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <hr>
+                        <h2>Recommend</h2>
+                        <div class="product-card" th:each="product : ${products2}">
+                            <div class="product-image-wrapper">
+                                <div class="single-products">
+                                    <a th:href="|/product/${product.id}|">
+                                        <div class="productinfo">
+                                            <img th:src="${product.image}" alt=""/>
+                                            <p th:text="${#strings.abbreviate(product.name, 50)} "></p>
+                                            <h2 th:text="${#numbers.formatDecimal(product.unitPrice, 0, 'POINT', 0, 'POINT') +'đ'}"></h2>
+                                            <span style="display: flex; align-items: baseline;">
+                                                <p th:text="${product.rating}"></p>
+                                                &nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                           viewBox="0 0 32 32"><path fill="#FDD835" fill-rule="evenodd"
+                                                                                     stroke="#FFB500" stroke-width="1.5"
+                                                                                     d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path></svg>
+                                            </span>
+                                            <p th:text="${product.totalComment} + ' nhận xét'"></p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

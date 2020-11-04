@@ -1,14 +1,15 @@
 package com.toan.ecommercedemo.daos.impls;
 
 import com.toan.ecommercedemo.daos.ProductDao;
-import com.toan.ecommercedemo.entities.Brand;
-import com.toan.ecommercedemo.entities.Category;
-import com.toan.ecommercedemo.entities.Product;
+import com.toan.ecommercedemo.entities.*;
+import com.toan.ecommercedemo.entities.Order;
+import com.toan.ecommercedemo.enums.ProductStatus;
 import com.toan.ecommercedemo.model.search.ProductSearch;
 import com.toan.ecommercedemo.utils.DateTimeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
@@ -37,15 +38,21 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         Root<Product> root = criteriaQuery.from(Product.class);
         Join<Product, Category> category = root.join("category");
         Join<Product, Brand> brand = root.join("brand");
+        Join<Product, Shop> shop = root.join("shop");
 
         // add predicate
         List<Predicate> predicates = new ArrayList<Predicate>();
-        if (search.getCategoryId() != null) {
-            Predicate predicate = criteriaBuilder.equal(category.get("root"), search.getCategoryId());
+        List<Long> categoryIds = search.getCategoryIds();
+        if (categoryIds != null && categoryIds.size() > 0) {
+            Predicate predicate = category.get("id").in(categoryIds);
             predicates.add(predicate);
         }
         if (search.getBrandId() != null) {
             Predicate predicate = criteriaBuilder.equal(brand.get("id"), search.getBrandId());
+            predicates.add(predicate);
+        }
+        if (search.getShopId() != null) {
+            Predicate predicate = criteriaBuilder.equal(shop.get("id"), search.getShopId());
             predicates.add(predicate);
         }
         if (StringUtils.isNotBlank(search.getName())) {
@@ -77,6 +84,10 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
                 predicates.add(predicate);
             } catch (RuntimeException ignored) {
             }
+        }
+        if (search.getStatus() != null) {
+            Predicate predicate = criteriaBuilder.equal(root.get("status"), ProductStatus.valueOf(search.getStatus()));
+            predicates.add(predicate);
         }
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
 
@@ -95,15 +106,21 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         Root<Product> root = criteriaQuery.from(Product.class);
         Join<Product, Category> category = root.join("category");
         Join<Product, Brand> brand = root.join("brand");
+        Join<Product, Shop> shop = root.join("shop");
 
         // add predicate
         List<Predicate> predicates = new ArrayList<Predicate>();
-        if (search.getCategoryId() != null) {
-            Predicate predicate = criteriaBuilder.equal(category.get("root"), search.getCategoryId());
+        List<Long> categoryIds = search.getCategoryIds();
+        if (categoryIds != null && categoryIds.size() > 0) {
+            Predicate predicate = category.get("id").in(categoryIds);
             predicates.add(predicate);
         }
         if (search.getBrandId() != null) {
             Predicate predicate = criteriaBuilder.equal(brand.get("id"), search.getBrandId());
+            predicates.add(predicate);
+        }
+        if (search.getShopId() != null) {
+            Predicate predicate = criteriaBuilder.equal(shop.get("id"), search.getShopId());
             predicates.add(predicate);
         }
         if (StringUtils.isNotBlank(search.getName())) {
@@ -135,6 +152,10 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
                 predicates.add(predicate);
             } catch (RuntimeException ignored) {
             }
+        }
+        if (search.getStatus() != null) {
+            Predicate predicate = criteriaBuilder.equal(root.get("status"), ProductStatus.valueOf(search.getStatus()));
+            predicates.add(predicate);
         }
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
 
@@ -163,15 +184,21 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         Root<Product> root = criteriaQuery.from(Product.class);
         Join<Product, Category> category = root.join("category");
         Join<Product, Brand> brand = root.join("brand");
+        Join<Product, Shop> shop = root.join("shop");
 
         // add predicate
         List<Predicate> predicates = new ArrayList<Predicate>();
-        if (search.getCategoryId() != null) {
-            Predicate predicate = criteriaBuilder.equal(category.get("root"), search.getCategoryId());
+        List<Long> categoryIds = search.getCategoryIds();
+        if (categoryIds != null && categoryIds.size() > 0) {
+            Predicate predicate = category.get("id").in(categoryIds);
             predicates.add(predicate);
         }
         if (search.getBrandId() != null) {
             Predicate predicate = criteriaBuilder.equal(brand.get("id"), search.getBrandId());
+            predicates.add(predicate);
+        }
+        if (search.getShopId() != null) {
+            Predicate predicate = criteriaBuilder.equal(shop.get("id"), search.getShopId());
             predicates.add(predicate);
         }
         if (StringUtils.isNotBlank(search.getName())) {
@@ -204,9 +231,83 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
             } catch (RuntimeException ignored) {
             }
         }
+        if (search.getStatus() != null) {
+            Predicate predicate = criteriaBuilder.equal(root.get("status"), ProductStatus.valueOf(search.getStatus()));
+            predicates.add(predicate);
+        }
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
 
         TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery.select(criteriaBuilder.count(root)));
         return typedQuery.getSingleResult();
+    }
+
+    @Override
+    public List<Product> getCustomerProductWithoutComment(Long customerId, Integer start, Integer length) {
+        String hql = "SELECT p FROM Item i " +
+                "JOIN i.order o " +
+                "JOIN o.customer c " +
+                "JOIN i.product p " +
+                "WHERE c.id = :customerId " +
+                "AND o.status = 3" +
+                "AND p.id NOT IN " +
+                "(SELECT c.product.id FROM Comment c " +
+                "WHERE c.customer.id = :customerId) " +
+                "GROUP BY p.id";
+        Query query = entityManager.createQuery(hql);
+        query.setParameter("customerId", customerId);
+        query.setFirstResult(start);
+        query.setMaxResults(length);
+        return query.getResultList();
+    }
+
+    @Override
+    public Long countCustomerProductWithoutComment(Long customerId) {
+        String hql = "SELECT COUNT(p) FROM Item i " +
+                "JOIN i.order o " +
+                "JOIN o.customer c " +
+                "JOIN i.product p " +
+                "WHERE c.id = :customerId " +
+                "AND o.status = 3" +
+                "AND p.id NOT IN " +
+                "(SELECT c.product.id FROM Comment c " +
+                "WHERE c.customer.id = :customerId) " +
+                "GROUP BY p.id";
+        Query query = entityManager.createQuery(hql);
+        query.setParameter("customerId", customerId);
+        try {
+            return (Long) query.getSingleResult();
+        } catch (NoResultException e) {
+            return 0L;
+        }
+
+    }
+
+    @Override
+    public List<Product> getCustomerProductInComment(Long userId) {
+        // create returns the data type of critetia query
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+
+        // from and join entity
+        Root<Comment> root = criteriaQuery.from(Comment.class);
+        Join<Comment, Product> product = root.join("product");
+        Join<Comment, User> customer = root.join("customer");
+
+        // add predicate
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        if (userId != null) {
+            Predicate predicate = criteriaBuilder.equal(customer.get("id"), userId);
+            predicates.add(predicate);
+        }
+        criteriaQuery.where(predicates.toArray(new Predicate[]{}));
+
+        // order
+        //criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.size(root.<Collection>get("comments"))), criteriaBuilder.desc(root.get("createdDate")));
+        //criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.size(root.<Collection>get("comments"))));
+
+        // paging
+        // create query
+        TypedQuery<Product> typedQuery = entityManager.createQuery(criteriaQuery.select(product));
+        return typedQuery.getResultList();
     }
 }

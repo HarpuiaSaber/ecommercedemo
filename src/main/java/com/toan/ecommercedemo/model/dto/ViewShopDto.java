@@ -7,9 +7,19 @@ public class ViewShopDto implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
 
+    private String logo;
+
     private String name;
 
-    private SellerDto seller;
+    private String createdDate;
+
+    private long totalComment;
+
+    private long totalProduct;
+
+    private double rating;
+
+    private String description;
 
     public Long getId() {
         return id;
@@ -17,6 +27,14 @@ public class ViewShopDto implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public String getName() {
@@ -27,11 +45,43 @@ public class ViewShopDto implements Serializable {
         this.name = name;
     }
 
-    public SellerDto getSeller() {
-        return seller;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSeller(SellerDto seller) {
-        this.seller = seller;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public long getTotalComment() {
+        return totalComment;
+    }
+
+    public void setTotalComment(long totalComment) {
+        this.totalComment = totalComment;
+    }
+
+    public long getTotalProduct() {
+        return totalProduct;
+    }
+
+    public void setTotalProduct(long totalProduct) {
+        this.totalProduct = totalProduct;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

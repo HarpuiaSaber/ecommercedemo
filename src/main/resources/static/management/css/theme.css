@@ -48,12 +48,6 @@ Notes:	decreasing heading by 0.4em with every subsequent heading level
     box-sizing: border-box;
 }
 
-
-.md-outline.select-wrapper+label {
-top: .5em !important;
-z-index: 2 !important;
-}
-
 ul {
     margin: 0;
 }
@@ -281,8 +275,17 @@ section {
 /*Page Objects*/
 .page-wrapper {
     overflow: hidden;
+    background: #e5e5e5;
+    padding-bottom: 8vh;
 }
 
+@media (max-width: 991px) {
+    .page-wrapper {
+    overflow: auto;
+    background: #e5e5e5;
+    padding-bottom: 12vh;
+}
+}
 .page-container {
     background: #e5e5e5;
     padding-left: 300px;
@@ -313,13 +316,14 @@ section {
 }
 
 .main-content {
-    padding-top: 116px;
+    padding-top: 20px;
     min-height: 100vh;
 }
 
 @media (max-width: 991px) {
     .main-content {
         padding-top: 50px;
+	padding-bottom: 100px;
     }
 }
 
@@ -333,7 +337,7 @@ section {
 }
 
 .login-wrap {
-    max-width: 540px;
+    max-width: 450px;
     padding-top: 8vh;
     margin: 0 auto;
 }
@@ -361,7 +365,7 @@ section {
 }
 
 .login-checkbox > label > a {
-    color: #ff2e44;
+    color: #0066c0;
 }
 
 @media (max-width: 991px) {
@@ -385,7 +389,7 @@ section {
     padding: 30px 30px 20px;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
-    border-radius: 2px;
+    border-radius: 4px;
 }
 
 .social-login-content {
@@ -401,7 +405,7 @@ section {
 }
 
 .register-link > p > a {
-    color: #ff2e44;
+    color: #0066c0;
 }
 
 .fontawesome-list-wrap {
@@ -1095,7 +1099,7 @@ section {
 
 .au-checkmark {
     position: absolute;
-    top: -10px;
+    top: 0;
     left: 0;
     height: 22px;
     width: 22px;
@@ -1178,7 +1182,7 @@ section {
 
 /* ----- Header ----- */
 .header-desktop {
-    background: #f5f5f5;
+    background: #50b28a;
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
@@ -1413,7 +1417,6 @@ section {
 
 .account-item .image > img {
     width: 100%;
-    height: 100%;
 }
 
 .account-item > .content {
@@ -1584,7 +1587,7 @@ section {
 }
 
 .menu-sidebar .logo {
-    background: #f5f5f5;
+    background-color: #333;
     height: 75px;
     padding: 0 35px;
     display: -webkit-box;
@@ -1600,7 +1603,6 @@ section {
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
-    border-right: 1px solid #e5e5e5;
     position: relative;
     z-index: 3;
 }
@@ -1616,33 +1618,38 @@ section {
 
 .menu-sidebar__content {
     position: relative;
+    background-color: #131921;
     height: -webkit-calc(100vh - 75px);
     height: -moz-calc(100vh - 75px);
     height: calc(100vh - 75px);
 }
 
 .navbar-sidebar {
-    padding: 35px;
+    padding-top: 25px;
+    padding-bottom: 35px;
+    padding-left: 25px;
+    padding-right: 10px;
     padding-bottom: 0;
 }
 
 .navbar-sidebar .navbar__list li a {
-    display: block;
-    color: #555;
-    font-size: 16px;
+    display: flex;
+    align-items: center;
+    color: #50b28a;
+    font-size: 15px;
     padding: 15px 0;
 }
 
 .navbar-sidebar .navbar__list li a i {
-    margin-right: 19px;
+    margin-right: 15px;
 }
 
 .navbar-sidebar .navbar__list li a:hover {
-    color: #4272d7;
+    color: #FE980F;
 }
 
 .navbar-sidebar .navbar__list li.active > a {
-    color: #4272d7;
+    color: #FE980F;
 }
 
 .has-sub {
@@ -3144,7 +3151,7 @@ section {
 @media (min-width: 992px) and (max-width: 1519px) {
     .overview-item {
         padding-left: 15px;
-        padding-right: 15px;
+        padding-right: 10px;
     }
 }
 
@@ -3167,9 +3174,33 @@ section {
 }
 
 .overview-item--c4 {
-    background-image: -moz-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -webkit-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -ms-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
+    background-image: -moz-linear-gradient(90deg, #45b649 0%, #d6e112 100%);
+    background-image: -webkit-linear-gradient(90deg, #45b649 0%, #d6e112 100%);
+    background-image: -ms-linear-gradient(90deg, #45b649 0%, #d6e112 100%);
+}
+
+.overview-item--c11 {
+    background-color: #ffc107;
+}
+
+.overview-item--c12 {
+    background-color: #4272d7;
+}
+
+.overview-item--c13 {
+    background-color: #28a747;
+}
+
+.overview-item--c14 {
+    background-color: #11998e;
+}
+
+.overview-item--c15 {
+    background-color: #fc466b;
+}
+
+.overview-item--c16 {
+    background-color: #ff6a00;
 }
 
 .overview-box .icon {
@@ -3213,8 +3244,8 @@ section {
 }
 
 .overview-box .text span {
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: 17px;
+    color: rgb(0 0 0 / 75%);
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -4252,7 +4283,7 @@ section {
 
 .table-earning tbody td {
     color: #808080;
-    padding: 12px 40px;
+    padding: 12px 20px;
     white-space: nowrap;
 }
 
@@ -4480,17 +4511,18 @@ section {
 }
 
 .table-data2 {
-    border-collapse: collapse!important;
+    border-collapse: collapse;
     overflow: visible;
 }
 
-.table-data2.table thead th, .table-data2.table tfoot th {
-    font-size: 12px;
-    color: #555;
+.table-data2.table thead th {
+    background-color: #131921;
+    color: #FE980F;
+    font-size: 14px;
     text-transform: uppercase;
     border: none;
     font-weight: 600;
-    vertical-align: middle;
+    vertical-align: top;
     padding: 10px;
 }
 
@@ -4509,7 +4541,7 @@ section {
     -webkit-border-bottom-left-radius: 3px;
     -moz-border-radius-bottomleft: 3px;
     border-bottom-left-radius: 3px;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 .table-data2.table tbody tr td:first-child .au-checkbox {
@@ -4612,7 +4644,7 @@ section {
     -webkit-justify-content: flex-end;
     -moz-box-pack: end;
     -ms-flex-pack: end;
-    justify-content: flex-start;
+    justify-content: flex-end;
 }
 
 .table-data-feature .item {
@@ -4669,12 +4701,13 @@ section {
 }
 
 .table-data3 thead tr th {
-    font-size: 16px;
-    color: #fff;
+    background-color: #131921;
+    color: #FE980F;
+    font-size: 14px;
     font-weight: 400;
     text-transform: capitalize;
-    padding: 18px 40px;
     padding-right: 10px;
+    border-radius: 4px;
 }
 
 .table-data3 thead tr th:first-child {
@@ -5003,8 +5036,8 @@ section {
 .statistic__item .icon {
     display: inline-block;
     position: absolute;
-    bottom: -50px;
-    right: -7px;
+    bottom: -45px;
+    right: -10px;
 }
 
 .statistic__item .icon i {
@@ -5051,7 +5084,7 @@ section {
 }
 
 .statistic2 .statistic__item .desc {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgb(0 0 0 / 60%);
 }
 
 /* ----- Progress ----- */
@@ -14643,13 +14676,4 @@ section {
 
 .vue-lists ul, .vue-lists ol {
     padding-left: 30px;
-}
-tbody td.details-control {
-    background: url('../images/details_open.png') no-repeat left center;
-    cursor: pointer;
-    padding-left: 25px !important;
-}
-tbody tr.shown td.details-control {
-    background: url('../images/details_close.png') no-repeat left center;
-    padding-left: 25px !important;
 }

@@ -131,7 +131,6 @@
             </div>
             <div class="col-sm-3">
                 <div id="contact" class="chose_area">
-                    <input hidden th:value="${contact.id}"/>
                     <li th:text="'Tên: ' + ${contact.name}"></li>
                     <li th:text="'Số điện thoại: ' + ${contact.phone}"></li>
                     <li th:text="'Địa chỉ: ' + ${contact.location}"></li>
@@ -152,7 +151,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">Tạo đơn hàng thành công</div>
-                <div class="modal-body">Vui lòng chờ xác nhận từ người bán! Tự động chuyển về trang chủ sau 3s</div>
+                <div class="modal-body">Vui lòng chờ xác nhận từ người bán! Hệ thống tự động chuyển về trang chủ</div>
                 <div class="modal-footer">
                     <a th:href="@{/home}"class="btn btn-primary2 btn-ok" style="color: white;">OK</a>
                 </div>
@@ -295,7 +294,7 @@
               e.preventDefault();
              var orderDto={};
              orderDto.paymentId=$("#payment li input[name='paymentMethod']").val();
-             orderDto.contactId=$("#contact input").val();
+             orderDto.contactId=[[${contact.id}]];
               $.ajax({
                   url: orderURL,
                   type: 'POST',
@@ -306,9 +305,9 @@
                   data: JSON.stringify(orderDto),
                   success: function () {
                       $('#notice').modal('show');
-                      setTimeout(function(){
-                        window.location = window.location.hostname+ ":8080/home"
-                      },3000);
+                      setTimeout
+                      window.location = window.location.hostname+ ":8080/home"
+
                   },
                   error: function (data) {
                       $modalDiv.find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');

@@ -75,7 +75,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage("/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .loginProcessingUrl("/auth").defaultSuccessUrl("/home").failureUrl("/login?e=1")
+                .loginProcessingUrl("/auth").defaultSuccessUrl("/home-direction").failureUrl("/login?e=1")
                 .and()
                 .rememberMe().rememberMeCookieName("app-remember-me")
                 .tokenValiditySeconds(2592000).tokenRepository(persistentTokenRepository())

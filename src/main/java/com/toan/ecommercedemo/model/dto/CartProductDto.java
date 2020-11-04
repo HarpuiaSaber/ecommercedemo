@@ -15,6 +15,8 @@ public class CartProductDto implements Serializable {
 
     private double unitPriceUSD;
 
+    private long shopId;
+
     private List<String> images;
 
     public long getId() {
@@ -55,5 +57,13 @@ public class CartProductDto implements Serializable {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(long shopId) {
+        this.shopId = shopId;
     }
 }

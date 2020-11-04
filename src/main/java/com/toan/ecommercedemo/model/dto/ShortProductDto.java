@@ -1,7 +1,6 @@
 package com.toan.ecommercedemo.model.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class ShortProductDto implements Serializable {
 
@@ -19,7 +18,7 @@ public class ShortProductDto implements Serializable {
 
     private long totalComment;
 
-    private List<String> images;
+    private String image;
 
     public long getId() {
         return id;
@@ -69,11 +68,11 @@ public class ShortProductDto implements Serializable {
         this.totalComment = totalComment;
     }
 
-    public List<String> getImages() {
-        return images;
+    public String getImage() {
+        return image;
     }
 
-    public void setImages(List<String> images) {
-        this.images = images;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

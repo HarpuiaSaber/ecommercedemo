@@ -1,5 +1,6 @@
 package com.toan.ecommercedemo.services.impl;
 
+import com.google.common.base.Strings;
 import com.toan.ecommercedemo.daos.ShopDao;
 import com.toan.ecommercedemo.entities.Contact;
 import com.toan.ecommercedemo.entities.Shop;
@@ -7,6 +8,7 @@ import com.toan.ecommercedemo.entities.User;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.services.ShopService;
+import com.toan.ecommercedemo.utils.Constants;
 import com.toan.ecommercedemo.utils.DateTimeUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,11 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     private ShopDao shopDao;
 
-
     @Override
     public void add(SaveShopDto dto) throws InternalServerException {
-        //check sellerId ???
         Shop shop = modelMapper.map(dto, Shop.class);
         shop.setId(null);
+        shop.setFromTiki(false);
         shopDao.add(shop);
         dto.setId(shop.getId());
     }
@@ -37,7 +38,15 @@ public class ShopServiceImpl implements ShopService {
     public void update(SaveShopDto dto) throws InternalServerException {
         Shop old = shopDao.getById(dto.getId());
         if (old != null) {
-            old = modelMapper.map(dto, Shop.class);
+            if (!old.getSeller().getId().equals(dto.getSellerId())){
+                throw new InternalServerException("Shop không phải của bạn");
+            }
+            if (!Strings.isNullOrEmpty(dto.getLogo())) {
+                old.setLogo(dto.getLogo());
+            }
+            if (!Strings.isNullOrEmpty(dto.getDescription())) {
+                old.setDescription(dto.getDescription());
+            }
             shopDao.update(old);
         } else {
             throw new InternalServerException("Shop không tồn tại");
@@ -61,14 +70,56 @@ public class ShopServiceImpl implements ShopService {
             ViewShopDto dto = new ViewShopDto();
             dto.setId(entity.getId());
             dto.setName(entity.getName());
-            User sellerEntity = entity.getSeller();
-            SellerDto sellerDto = new SellerDto();
-            sellerDto.setId(sellerEntity.getId());
-            sellerDto.setDob(DateTimeUtils.formatDate(sellerEntity.getDob(), DateTimeUtils.DD_MM_YYYY));
+            dto.setDescription(entity.getDescription());
+            dto.setCreatedDate(DateTimeUtils.formatDate(entity.getCreatedDate(), DateTimeUtils.DD_MM_YYYY));
+            if (entity.getFromTiki())
+                dto.setLogo(entity.getLogo());
+            else {
+                dto.setLogo(Constants.baseUrl + Constants.folderImage + Constants.folderShop + entity.getLogo());
+            }
+            dto.setTotalProduct(shopDao.getTotalProduct(entity.getId(), 2));
+            long totalComment = shopDao.getTotalComment(entity.getId());
+            if (totalComment > 0) {
+                dto.setTotalComment(totalComment);
+                dto.setRating((double) Math.round((double) shopDao.getTotalRating(entity.getId()) / totalComment * 10) / 10);
+            } else {
+                dto.setTotalComment(0);
+                dto.setRating(0);
+            }
             return dto;
         } else {
             throw new InternalServerException("Shop không tồn tại");
         }
+    }
+
+    @Override
+    public ViewShopDto getOfSeller(Long sellerId) {
+        Shop entity = shopDao.getOfSeller(sellerId);
+        ViewShopDto dto = new ViewShopDto();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setDescription(entity.getDescription());
+        dto.setCreatedDate(DateTimeUtils.formatDate(entity.getCreatedDate(), DateTimeUtils.DD_MM_YYYY));
+        if (entity.getFromTiki())
+            dto.setLogo(entity.getLogo());
+        else {
+            dto.setLogo(Constants.baseUrl + Constants.folderImage + Constants.folderShop + entity.getLogo());
+        }
+        dto.setTotalProduct(shopDao.getTotalProduct(entity.getId(), 2));
+        long totalComment = shopDao.getTotalComment(entity.getId());
+        if (totalComment > 0) {
+            dto.setTotalComment(totalComment);
+            dto.setRating((double) Math.round((double) shopDao.getTotalRating(entity.getId()) / totalComment * 10) / 10);
+        } else {
+            dto.setTotalComment(0);
+            dto.setRating(0);
+        }
+        return dto;
+    }
+
+    @Override
+    public Long getShopIdOfSeller(Long sellerId) {
+        return shopDao.getOfSeller(sellerId).getId();
     }
 
     @Override

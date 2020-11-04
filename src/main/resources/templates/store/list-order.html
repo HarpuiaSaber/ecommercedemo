@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="store/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Đơn hàng</title>
+    <script th:src="@{/management/vendor/jquery-3.2.1.min.js}"></script>
+    <script th:src="@{/management/vendor/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/management/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+    <script th:src="@{/management/vendor/datatables/dataTables.checkboxes.min.js}"></script>
+    <link th:href="@{/management/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" media="all"/>
+    <link th:href="@{/management/vendor/datatables/dataTables.checkboxes.css}" rel="stylesheet" media="all"/>
+</head><!--/head-->
+
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <script>
+            $(function () {
+                $("#fromDate").datetimepicker({
+                    format: 'd/m/Y',
+                    timepicker: true
+                });
+                 $("#toDate").datetimepicker({
+                    format: 'd/m/Y',
+                    timepicker: true
+                });
+            });
+    </script>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        <h2 sec:authentication="principal.name"></h2>
+                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <ul class="nav nav-pills nav-stacked list-group">
+                                        <a th:href="@{/customer/profile}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <h4 class="panel-title"><i class="fa fa-user"></i> Thông tin cá nhân</h4>
+                                            </li>
+                                        </a>
+                                        <a th:href="@{/customer/order}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center active">
+                                                <h4 class="panel-title"><i class="fa fa-crosshairs"></i> Theo dõi đơn hàng</h4>
+                                            </li>
+                                        </a>
+                                        <a th:href="@{/customer/contact}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <h4 class="panel-title"> <i class="fa fa-book"></i> Sổ địa chỉ</h4>
+                                            </li>
+                                        </a>
+                                        <a th:href="@{/customer/comment}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <h4 class="panel-title"> <i class="fa fa-comment"></i> Nhận xét sản phẩm</h4>
+                                            </li>
+                                        </a>
+                                        <a th:href="@{/logout}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <h4 class="panel-title"> <i class="fa fa-sign-out"></i> Đăng xuất</h4>
+                                            </li>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-9 padding-right">
+                    <div class="features_items"><!--features_items-->
+                        <h2 class="title text-center">Đơn hàng của bạn</h2>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label">Từ ngày: </label><input
+                                        name="fromDate" id="fromDate"
+                                        class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label">Đến ngày: </label><input
+                                        name="toDate" id="toDate"
+                                        class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 pull-right">
+                                <div class="form-group">
+                                    <label class="control-label">Trạng thái: </label><select
+                                        name="staus" id="status"
+                                        class="form-control form-control-sm">
+                                    <option value="" selected>Tất cả</option>
+                                    <option value=0>Chờ xác nhận</option>
+                                    <option value=1>Chờ lấy hàng</option>
+                                    <option value=2>Đang giao</option>
+                                    <option value=3>Đã giao</option>
+                                    <option value=4>Đã hủy</option>
+                                </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive table-responsive-data2">
+                            <table class="table table-data2" id="datatable">
+                                <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Ngày đặt đơn</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript" th:inline="javascript">
+		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
+		var url = [[@{/api/customer/order/getAllPaging}]];
+
+		var id = "";
+		var table;
+		$(document).ready(function () {
+			table = $('#datatable').DataTable({
+				"ordering": false,
+				"searching": false,
+				"paging": true,
+				"destroy": true,
+				"info": false,
+				"autoWidth": false,
+				"processing": true,
+				"serverSide": true,
+				"ajax": {
+					type: "POST",
+					url: url,
+					dataType: "json",
+					contentType: "application/json",
+					data: function (d) {
+					      d.status = $('#status').val();
+                          d.toDate = $('#toDate').val();
+                          d.fromDate = $('#fromDate').val();
+                          return JSON.stringify(d);
+                    },
+					error: function (data) {
+						alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+					}
+				},
+				"lengthMenu": [10, 25, 50, 100, 200],
+				"columns": [
+					{ "data": "id", className: "text-right"},
+					{ "data": "createdDate", className: "text-center" },
+					{ "data": "items", className: "text-left" },
+					{ "data": "totalMoney", className: "text-right" },
+					{ "data": "status", className: "text-center" },
+				],
+				"createdRow": function (row, data, index) {
+					$(row).addClass('tr-shadow');
+				},
+				columnDefs:[
+				{
+					"render": function ( data, type, row ) {
+						var content = "";
+						for(let i = 0; i < data.length - 1; i++){
+						    content = content + data[i] + "<br/>";
+						}
+						content = content + data[data.length - 1];
+						return content;
+	                 },
+	                 "orderable": false,
+   	                "targets": 2
+	                },
+	                {
+					"render": function ( data, type, row ) {
+						return formatNumber(data) + "đ";
+	                 },
+	                 "orderable": false,
+   	                "targets": 3
+	                },
+	                {
+					"render": function ( data, type, row ) {
+						 if(data == 0) return "Chờ xác nhận";
+						 if(data == 1) return "Chờ lấy hàng";
+						 if(data == 2) return "Đang giao";
+						 if(data == 3) return "Đã giao";
+						 if(data == 4) return "Đã hủy";
+	                 },
+	                 "orderable": false,
+   	                "targets": 4
+	                }
+				],
+				"language": {
+					"url": vietnameseUrl,
+				},
+				"initComplete": function (settings, json) {
+                  $('#fromDate').change(function (e) {
+                      table.draw();
+                  });
+                  $('#toDate').change(function (e) {
+                      table.draw();
+                  });
+                   $('#status').change(function (e) {
+                      table.draw();
+                  });
+                },
+				"drawCallback": function () {
+					table.rows().every(function () {
+						this.nodes().to$().after('<tr class="spacer"></tr>')
+					})
+				}
+			});
+		});
+		$('#datatable').on( 'click', 'tbody tr', function () {
+				var data = table.row($(this)).data();
+				id = data.id;
+		});
+    </script>
+</div>
+</body>
+</html>

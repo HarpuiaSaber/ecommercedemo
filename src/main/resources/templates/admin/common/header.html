@@ -1,0 +1,50 @@
+<div th:fragment="header" th:remove="tag"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <!-- HEADER DESKTOP-->
+    <header class="header-desktop" style="background-color: #FE980F;">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <lable style="font-size: 24px; color: #131921;">Admin Center</lable>
+                <div class="header-wrap pull-right">
+                    <div class="header-button">
+                        <div class="account-wrap">
+                            <div class="account-item clearfix js-item-menu">
+                                <div class="content">
+                                    <a class="js-acc-btn"
+                                       sec:authentication="principal.name"></a>
+                                </div>
+                                <div class="account-dropdown js-dropdown">
+                                    <div class="info clearfix">
+                                        <div class="image">
+                                            <a th:href="@{/seller/profile}">
+                                                <img th:src="@{/management/images/avatar.jpg}" alt="Seller">
+                                            </a>
+                                        </div>
+                                        <div class="content">
+                                            <h5 class="name">
+                                                <a class="js-acc-btn" th:href="@{/seller/profile}"
+                                                   sec:authentication="principal.name"></a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <div class="account-dropdown__body">
+                                        <div class="account-dropdown__item">
+                                            <a th:href="@{/seller/profile}">
+                                                <i class="zmdi zmdi-account"></i>Tài khoản</a>
+                                        </div>
+                                    </div>
+                                    <div class="account-dropdown__footer">
+                                        <a th:href="@{/logout}">
+                                            <i class="zmdi zmdi-power"></i>Đăng xuất</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- HEADER DESKTOP-->
+</div>

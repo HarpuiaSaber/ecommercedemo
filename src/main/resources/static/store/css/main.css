@@ -320,7 +320,7 @@ ul.sub-menu {
 	list-style: none;
 	padding: 0;
 	margin: 0;
-	width: 220px;
+	width: 235px;
 	-webkit-box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
 	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
 	display: none;
@@ -725,9 +725,6 @@ ul.shop-menu {
 }
 
 .category-products {
-  border: 1px solid #f0f0e9;
-  margin-bottom: 35px;
-  padding-bottom: 20px;
   padding-top: 15px;
 }
 .left-sidebar h2, .brands_products h2 {
@@ -735,7 +732,7 @@ ul.shop-menu {
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
   font-weight: 700;
-  margin: 5px auto 30px;
+  margin: 25px auto 15px;
   text-align: center;
   text-transform: uppercase;
   position: relative;
@@ -789,15 +786,37 @@ h2.title:before{
   background-color: #FFFFFF;
   border: 0 none;
   color: #FFFFFF;
-  padding: 5px 20px;
 }
 
-.category-products .panel :hover{
-  background-color: #FDB45E;
+.category-products .panel-default .panel-heading li{
+    background-color: #fff;
+    color:  #131921;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    padding: 10px 5px 10px 15px;
+    margin-bottom: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
-.category-products .panel-default .panel-heading .panel-title a {
-  color: #696763;
+.category-products .panel-default .panel-heading a{
+    color:  #131921;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.category-products .panel-default .panel-heading li:hover, a:hover{
+  background-color: #131921;
+  color: #FDB45E;
+}
+.category-products .panel-default .panel-heading .active{
+  background-color: #131921;
+  color: #FDB45E;
+}
+
+.category-products .panel-default .panel-heading h4 {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   text-decoration: none;
@@ -836,25 +855,25 @@ h2.title:before{
 }
 
 .brands-name {
-  border: 1px solid #F7F7F0;
   padding-bottom: 20px;
   padding-top: 15px;
 }
 
 
-.brands-name .nav-stacked li a {
-  background-color: #FFFFFF;
-  color: #696763;
+.brands-name .nav-stacked li {
+  background-color: #fff;
+  color:  #131921;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  padding: 5px 25px;
+  padding: 10px 25px;
+  margin-bottom: 2px;
   text-decoration: none;
   text-transform: uppercase;
 }
 
-.brands-name .nav-stacked li a:hover{
-  background-color: #fff;
-  color: #696763;
+.brands-name .nav-stacked li:hover{
+  background-color: #131921;
+  color: #FDB45E;
 }
 
 .shipping {
@@ -867,7 +886,7 @@ h2.title:before{
 
 
 .price-range{
-  margin-top:30px;
+
 }
 
 .price-range input{
@@ -1108,7 +1127,7 @@ h2.title {
 }
 
 .category-tab ul {
-  background: #40403E;
+  background: #131921;
   border-bottom: 1px solid #FE980F;
   list-style: none outside none;
   margin: 0 0 30px;
@@ -1271,6 +1290,11 @@ h2.title {
   padding-right: 25px;
 }
 
+#reviews2 {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
 .product-details {
   margin-bottom: 40px;
   overflow: hidden;
@@ -1350,7 +1374,7 @@ h2.title {
 }
 
 .product-information p {
-  color: #696763;
+  color: #131921;
   font-family: 'Roboto', sans-serif;
   margin-bottom: 5px;
   font-size: 16px;
@@ -1412,7 +1436,8 @@ h2.title {
 .cart {
   background: #FE980F;
   border: 0 none;
-  border-radius: 0;
+  height: 45px;
+  border-radius: 4px;
   color: #FFFFFF;
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
@@ -1500,12 +1525,83 @@ h2.title {
 }
 
 #reviews button {
-  background: #FE980F;
-  border: 0 none;
-  border-radius: 0;
   color: #FFFFFF;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
+}
+
+#reviews2 ul {
+  background: #FFFFFF;
+  border: 0 none;
+  list-style: none outside none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+#reviews2  ul  li {
+	display:inline-block;
+}
+
+#reviews2 ul li a {
+  color: #696763;
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  padding-right: 15px;
+}
+
+#reviews2 ul li a i{
+	color:#FE980F;
+	padding-right:8px;
+}
+
+#reviews2 ul li a:hover{
+	background:#fff;
+	color:#FE980F;
+}
+
+#reviews2 p{
+	color:#363432;
+}
+
+#reviews2  form span {
+  display: block;
+}
+
+#reviews2 form span input {
+  background:#F0F0E9;
+  border: 0 none;
+  color: #A6A6A1;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  outline: medium none;
+  padding: 8px;
+  width: 48%;
+}
+#reviews2 form span input:last-child {
+  margin-left: 3%;
+}
+
+#reviews2 textarea {
+  background: #F0F0E9;
+  border: medium none;
+  color: #A6A6A1;
+  height: 195px;
+  margin-bottom: 25px;
+  margin-top: 15px;
+  outline: medium none;
+  padding-left: 10px;
+  padding-top: 15px;
+  resize: none;
+  width: 99.5%;
+}
+
+#reviews2 button {
+  background-color: #FE980F;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  border-color: none;
 }
 
 

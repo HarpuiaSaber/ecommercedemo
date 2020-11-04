@@ -9,6 +9,8 @@ public class ViewCommentDto implements Serializable {
 
     private Long id;
 
+    private String createdDate;
+
     private String title;
 
     private String content;
@@ -19,6 +21,8 @@ public class ViewCommentDto implements Serializable {
 
     private Long customerId;
 
+    private String customerName;
+
     private List<String> images;
 
     public Long getId() {
@@ -27,6 +31,14 @@ public class ViewCommentDto implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getTitle() {
@@ -75,5 +87,13 @@ public class ViewCommentDto implements Serializable {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 }

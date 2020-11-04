@@ -34,4 +34,9 @@ public class AdminController {
         model.addAttribute("listId", builder.toString());
         return "crawlerComment";
     }
+
+    @GetMapping("/home")
+    public String home(Model model) {
+        return "admin/index";
+    }
 }

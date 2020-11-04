@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CategoryService {
 
-    public List<CategoryDto> getParentCategory();
+    public List<CategoryDto> getRoot();
 
-    public List<CategoryDto> getChildrenCategory(Long parentId);
+    public CategoryDto getChildren(Long parentId);
 }

@@ -1,94 +1,190 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="store/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
+    <!-- Required meta tags-->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Signup</title>
+    <link rel="shortcut icon" th:href="@{/store/images/favicon.png}" type="image/png"/>
+    <!-- Title Page-->
+    <title>Đăng ký</title>
+
+    <!-- Fontfaces CSS-->
+    <link th:href="@{/management/css/font-face.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/css/jquery.datetimepicker.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/css/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+    <link th:href="@{/management/vendor/font-awesome-4.7/css/font-awesome.min.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/font-awesome-5/css/fontawesome-all.min.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/mdi-font/css/material-design-iconic-font.min.css}" rel="stylesheet" media="all">
+
+    <!-- Bootstrap CSS-->
+    <link th:href="@{/management/vendor/bootstrap-4.1/bootstrap.min.css}" rel="stylesheet" media="all">
+
+    <!-- Vendor CSS-->
+    <link th:href="@{/management/vendor/animsition/animsition.min.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css}" rel="stylesheet"
+          media="all">
+    <link th:href="@{/management/vendor/css-hamburgers/hamburgers.min.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/slick/slick.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/perfect-scrollbar/perfect-scrollbar.css}" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link th:href="@{/management/css/theme.css}" rel="stylesheet" media="all">
     <script th:src="@{/management/vendor/jquery-3.2.1.min.js}"></script>
-</head><!--/head-->
-
-<body>
-<div layout:fragment="content" th:remove="tag">
-    <script>
-			$(function () {
-				$("#dob").datetimepicker({
-					format: 'd/m/Y',
-					timepicker: true
-				});
-			});
-
-    </script>
-    <section id="form"><!--form-->
+    <script th:src="@{/management/js/jquery.datetimepicker.full.js}"></script>
+</head>
+<!--/head-->
+<body class="animsition">
+<script>
+            $(function () {
+                $("#dob").datetimepicker({
+                    format: 'd/m/Y',
+                    timepicker: true
+                });
+            });
+</script>
+<div class="page-wrapper" style="background-color: #fff;">
+    <div class="page-content--bge5" style="background-color: #fff;">
         <div class="container">
-            <div class="row">
-                <div class="col-sm-12 col-sm-offset-2">
-                    <div class="login-form"><!--login form-->
-                        <h2>Đăng ký tài khoản khách hàng</h2>
-                        <form id="formsignup">
-                            <div class="col-sm-4">
-                                <input type="text" placeholder="Họ tên" name="name"/>
-                                <input type="text" placeholder="Số điện thoại" name="phone"/>
-                                <input readonly="true" placeholder="Ngày sinh" name="dob" id="dob"/>
-                                <input type="text" placeholder="Email" name="email"/>
-                                <label>Giới tính</label>
-                                <span>
-                            <label for="gender2" style="margin-right: 10px;margin-left: 10px;"><input type="radio"
-                                                                                                      id="gender1"
-                                                                                                      name="gender"
-                                                                                                      value="0" checked>Nam</label>
-                            <label for="gender1" style="margin-right: 10px;margin-left: 10px;">
-                            <input type="radio" id="gender2" name="gender" value="1">Nữ</label>
-                            </span>
+            <div class="login-wrap" style="max-width: 550px;">
+                <div class="login-logo">
+                    <a th:href="@{/home}">
+                        <img th:src="@{/store/images/home/logo.png}" alt="E-Shopper">
+                    </a>
+                </div>
+                <div class="login-content" style="border: 1px solid #FE980F;">
+                    <div class="login-form">
+                        <!--login form-->
+                        <form id="signup" method="post">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Tên khách hàng: </label>
+                                        <input class="au-input au-input--full" type="Username"
+                                               placeholder="Nguyễn Văn A"
+                                               name="name" autofocus="autofocus"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Số điện thoại: </label>
+                                        <input class="au-input au-input--full" type="Username" placeholder="0123456789"
+                                               name="phone" autofocus="autofocus"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ngày sinh: </label>
+                                        <input class="au-input au-input--full" type="text" placeholder="01/01/2020"
+                                               name="dob" id="dob" autocomplete="off" onkeypress="return false;"/>
+                                    </div>
+                                    <label>Giới tính: </label>
+                                    <span>
+                                        <label for="gender1" style="margin-right: 10px;margin-left: 10px;"><input
+                                                type="radio" id="gender1" name="gender" value="0" checked>Nam</label>
+                                        <label for="gender2" style="margin-right: 10px;margin-left: 10px;">
+                                            <input type="radio" id="gender2" name="gender" value="1">Nữ</label>
+                                        </span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Địa chỉ email: </label>
+                                        <input class="au-input au-input--full" type="text"
+                                               placeholder="a@gmail.com"
+                                               name="email" autofocus="autofocus"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tên truy nhập: </label>
+                                        <input class="au-input au-input--full" type="Username"
+                                               placeholder="Tên truy nhập"
+                                               name="username" autofocus="autofocus"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mật khẩu: </label>
+                                        <input class="au-input au-input--full" type="Password" placeholder="Mật khẩu"
+                                               name="password"/>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-sm-4">
-                                <input type="Username" placeholder="Tên truy nhập" name="username"/>
-                                <input type="Password" placeholder="Mật khẩu" name="password"/>
-                                <button id="signup" type="button" class="btn btn-default">Đăng ký</button>
-                            </div>
+                            <button class="au-btn au-btn--block m-b-20" type="submit"
+                                    style="background-color: #FE980F;">Đăng ký
+                            </button>
                         </form>
                     </div>
                 </div>
+                <hr/>
+                <div class="register-link">
+                    <p>Bạn đã có tài khoản? <a th:href="@{/login}"> <i
+                            class="fa fa-sign-in"></i> Đăng nhập.</a></p>
+                </div>
             </div>
-        </div><!--/login form-->
-    </section><!--/form-->
-    <script>
-			var formData;
-			var userDto = {};
-
-			$('#signup').on('click', function () {
-			    formData = $('#formsignup').serializeArray();
-			    userDto.name = formData[0].value;
-				userDto.phone = formData[1].value;
-				userDto.dob = formData[2].value;
-				userDto.email = formData[3].value;
-				userDto.gender = formData[4].value;
-				userDto.username = formData[5].value;
-				userDto.password = formData[6].value;
-				$.ajax({
-					url: "/api/createCustomer",
-					type: 'POST',
-					dataType: "json",
-					contentType: "application/json",
-					data: JSON.stringify(userDto),
-					success: function (data) {
-						alert("Đăng ký thành công, vui lòng đăng nhập");
-						window.location="/login";
-					},
-					error: function (data) {
-						alert(data.responseJSON.error + "\n" + data.responseJSON.message);
-					}
-				});
-			});
-
-
-
-
-
-    </script>
+        </div>
+    </div>
 </div>
+<div class="modal fade" id="notice" tabindex="-1"
+     role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">Đăng ký khách hàng</div>
+            <div class="modal-body">Đăng ký thành công, vui lòng đăng nhập</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Ok
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/login form-->
+<!-- Jquery JS-->
+<!-- Bootstrap JS-->
+<script th:src="@{/management/vendor/bootstrap-4.1/popper.min.js}"></script>
+<script th:src="@{/management/vendor/bootstrap-4.1/bootstrap.min.js}"></script>
+<!-- Vendor JS       -->
+<script th:src="@{/management/vendor/wow/wow.min.js}"></script>
+<script th:src="@{/management/vendor/animsition/animsition.min.js}"></script>
+<script th:src="@{/management/vendor/slick/slick.min.js}">
+</script>
+<script th:src="@{/management/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js}">
+</script>
+<script th:src="@{/management/vendor/counter-up/jquery.waypoints.min.js}"></script>
+<script th:src="@{/management/vendor/counter-up/jquery.counterup.min.js}">
+</script>
+<script th:src="@{/management/vendor/circle-progress/circle-progress.min.js}"></script>
+<script th:src="@{/management/vendor/perfect-scrollbar/perfect-scrollbar.js}"></script>
+</script>
+
+<!-- Main JS -->
+<script th:src="@{/management/js/main.js}"></script>
+<script>
+            var userDto = {};
+
+            $('#signup').submit(function (e) {
+                e.preventDefault();
+                var formData = $('#signup').serializeArray();
+                userDto.name = formData[0].value;
+                userDto.phone = formData[1].value;
+                userDto.dob = formData[2].value;
+                userDto.gender = formData[3].value;
+                userDto.email = formData[4].value;
+                userDto.username = formData[5].value;
+                userDto.password = formData[6].value;
+                $.ajax({
+                    url: "/api/createCustomer",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(userDto),
+                    success: function (data) {
+                       $("#notice").modal("show");
+                    },
+                    error: function (data) {
+						$("#notice").find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');
+					    $("#notice").modal("show");
+					}
+                });
+            });
+            $('#notice').on('hidden.bs.modal', function () {
+               window.location = "/login";
+            })
+</script>
 </body>
+
 </html>

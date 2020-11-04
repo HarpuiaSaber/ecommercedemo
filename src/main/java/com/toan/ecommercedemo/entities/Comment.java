@@ -4,6 +4,7 @@ import com.toan.ecommercedemo.enums.CommentStatus;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "comment")
@@ -33,6 +34,9 @@ public class Comment extends Auditable implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY)
+    private List<CommentImage> images;
 
     @Column(name = "helpful_number")
     private Integer helpfulNumber;
@@ -101,6 +105,14 @@ public class Comment extends Auditable implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public List<CommentImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<CommentImage> images) {
+        this.images = images;
     }
 
     public Integer getHelpfulNumber() {

@@ -18,6 +18,6 @@ public class CategoryApi {
     @GetMapping("/getAll")
     @ResponseBody
     public List<CategoryDto> getAll() {
-        return categoryService.getParentCategory();
+        return categoryService.getRoot();
     }
 }

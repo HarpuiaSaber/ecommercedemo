@@ -12,12 +12,15 @@ public class Item extends Auditable implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
 
     @Column(name = "price")
     private Double price;
+
+    @Column(name = "price_usd")
+    private Double priceUSD;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -48,6 +51,14 @@ public class Item extends Auditable implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Double getPriceUSD() {
+        return priceUSD;
+    }
+
+    public void setPriceUSD(Double priceUSD) {
+        this.priceUSD = priceUSD;
     }
 
     public Integer getQuantity() {

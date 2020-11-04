@@ -11,9 +11,7 @@ public class CategoryDto implements Serializable {
 
     private String name;
 
-    private Long parentId;
-
-    private boolean isLeaf;
+    private List<ChildCategoryDto> children;
 
     public long getId() {
         return id;
@@ -31,19 +29,11 @@ public class CategoryDto implements Serializable {
         this.name = name;
     }
 
-    public Long getParentId() {
-        return parentId;
+    public List<ChildCategoryDto> getChildren() {
+        return children;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
-
-    public boolean isLeaf() {
-        return isLeaf;
-    }
-
-    public void setLeaf(boolean leaf) {
-        isLeaf = leaf;
+    public void setChildren(List<ChildCategoryDto> children) {
+        this.children = children;
     }
 }

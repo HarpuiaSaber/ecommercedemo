@@ -7,6 +7,7 @@ import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.model.search.ProductSearch;
 import com.toan.ecommercedemo.services.ProductService;
 import com.toan.ecommercedemo.utils.Constants;
+import com.toan.ecommercedemo.utils.DateTimeUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -23,6 +25,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductDao productDao;
+
+    @Autowired
+    private CategoryDao categoryDao;
+
+    @Autowired
+    private ShopDao shopDao;
 
     @Autowired
     private ProductImageDao productImageDao;
@@ -63,7 +71,18 @@ public class ProductServiceImpl implements ProductService {
         Product entity = productDao.getById(id);
         ViewProductDto dto = modelMapper.map(entity, ViewProductDto.class);
         dto.setBrand(entity.getBrand().getName());
-        dto.setShop(entity.getShop().getName());
+        List<Comment> comments = entity.getComments();
+        if (comments.size() > 0) {
+            dto.setTotalComment(comments.size());
+            double sumRating = 0;
+            for (Comment comment : comments) {
+                sumRating += comment.getRating();
+            }
+            dto.setRating((double) Math.round(sumRating / comments.size() * 10) / 10);
+        } else {
+            dto.setRating(0D);
+            dto.setTotalComment(0);
+        }
         List<ProductImage> imageEntities = entity.getImages();
         List<String> imageDtos = new ArrayList<>();
         for (ProductImage imageEntity : imageEntities) {
@@ -92,6 +111,20 @@ public class ProductServiceImpl implements ProductService {
             specificationDto.setAttributes(attributeDtos);
             specificationDtos.add(specificationDto);
         }
+        Shop shopEntity = entity.getShop();
+        ViewShopDto shopDto = new ViewShopDto();
+        shopDto.setId(shopEntity.getId());
+        shopDto.setName(shopEntity.getName());
+        shopDto.setDescription(shopEntity.getDescription());
+        shopDto.setCreatedDate(DateTimeUtils.formatDate(shopEntity.getCreatedDate(), DateTimeUtils.DD_MM_YYYY));
+        if (shopEntity.getFromTiki())
+            shopDto.setLogo(shopEntity.getLogo());
+        else {
+            shopDto.setLogo(Constants.baseUrl + Constants.folderImage + Constants.folderShop + shopEntity.getLogo());
+        }
+        shopDto.setTotalProduct(shopDao.getTotalProduct(shopEntity.getId(), 2));
+        shopDto.setTotalComment(shopDao.getTotalComment(shopEntity.getId()));
+        dto.setShop(shopDto);
         return dto;
     }
 
@@ -105,37 +138,63 @@ public class ProductServiceImpl implements ProductService {
             if (imageEntity.getFromTiki())
                 imageDtos.add(imageEntity.getPath());
             else {
-                imageDtos.add(Constants.baseUrl + imageEntity.getPath());
+                imageDtos.add(Constants.baseUrl + Constants.folderImage + Constants.folderProduct + imageEntity.getPath());
             }
         }
+        dto.setShopId(entity.getShop().getId());
         dto.setImages(imageDtos);
         return dto;
     }
 
     @Override
     public List<ShortProductDto> searchWithPaging(ProductSearch search) {
+        if (search.getCategoryId() != null) {
+            Category category = categoryDao.getById(search.getCategoryId());
+            List<Long> categoryIds = null;
+            //if category is not leaf -> return children
+            if (category.getLeaf()) {
+                categoryIds = new ArrayList<>();
+                categoryIds.add(category.getId());
+            }
+            //else -> get all category with same parent
+            else {
+                categoryIds = categoryDao.getChildenCategory(category.getId())
+                        .stream()
+                        .map(s -> s.getId())
+                        .collect(Collectors.toList());
+            }
+            search.setCategoryIds(categoryIds);
+        }
         List<Product> entities = productDao.searchWithPaging(search);
         List<ShortProductDto> dtos = new ArrayList<>();
         for (Product entity : entities) {
             ShortProductDto dto = modelMapper.map(entity, ShortProductDto.class);
             List<ProductImage> imageEntities = entity.getImages();
-            List<String> imageDtos = new ArrayList<>();
-            for (ProductImage imageEntity : imageEntities) {
+//            List<String> imageDtos = new ArrayList<>();
+//            for (ProductImage imageEntity : imageEntities) {
+//                if (imageEntity.getFromTiki())
+//                    imageDtos.add(imageEntity.getPath());
+//                else {
+//                    imageDtos.add(Constants.baseUrl + imageEntity.getPath());
+//                }
+//            }
+//            dto.setImages(imageDtos);
+            if (imageEntities.size() > 0) {
+                ProductImage imageEntity = imageEntities.get(0);
                 if (imageEntity.getFromTiki())
-                    imageDtos.add(imageEntity.getPath());
+                    dto.setImage(imageEntity.getPath());
                 else {
-                    imageDtos.add(Constants.baseUrl + imageEntity.getPath());
+                    dto.setImage(Constants.baseUrl + Constants.folderImage + Constants.folderProduct + imageEntity.getPath());
                 }
             }
-            dto.setImages(imageDtos);
             List<Comment> comments = entity.getComments();
             if (comments.size() > 0) {
                 dto.setTotalComment(comments.size());
-                int sumRating = 0;
+                double sumRating = 0;
                 for (Comment comment : comments) {
                     sumRating += comment.getRating();
                 }
-                dto.setRating(sumRating / comments.size());
+                dto.setRating((double) Math.round(sumRating / comments.size() * 10) / 10);
             } else {
                 dto.setRating(0);
                 dto.setTotalComment(0);
@@ -170,5 +229,71 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Long> getAllId() {
         return productDao.getAllId();
+    }
+
+    @Override
+    public List<CommentProductDto> getCustomerProductWithoutComment(Long customerId, Integer start, Integer length) {
+        List<Product> entities = productDao.getCustomerProductWithoutComment(customerId, start, length);
+        List<CommentProductDto> dtos = new ArrayList<CommentProductDto>();
+        for (Product entity : entities) {
+            CommentProductDto dto = modelMapper.map(entity, CommentProductDto.class);
+            List<ProductImage> imageEntities = entity.getImages();
+            if (imageEntities.size() > 0) {
+                ProductImage imageEntity = imageEntities.get(0);
+                if (imageEntity.getFromTiki())
+                    dto.setImage(imageEntity.getPath());
+                else {
+                    dto.setImage(Constants.baseUrl + Constants.folderImage + Constants.folderProduct + imageEntity.getPath());
+                }
+            }
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    @Override
+    public Long countCustomerProductWithoutComment(Long customerId) {
+        return productDao.countCustomerProductWithoutComment(customerId);
+    }
+
+    @Override
+    public List<ShortProductDto> getCustomerProductInComment(Long customerId) {
+        List<Product> entities = productDao.getCustomerProductInComment(customerId);
+        List<ShortProductDto> dtos = new ArrayList<>();
+        for (Product entity : entities) {
+            ShortProductDto dto = modelMapper.map(entity, ShortProductDto.class);
+            List<ProductImage> imageEntities = entity.getImages();
+//            List<String> imageDtos = new ArrayList<>();
+//            for (ProductImage imageEntity : imageEntities) {
+//                if (imageEntity.getFromTiki())
+//                    imageDtos.add(imageEntity.getPath());
+//                else {
+//                    imageDtos.add(Constants.baseUrl + imageEntity.getPath());
+//                }
+//            }
+//            dto.setImages(imageDtos);
+            if (imageEntities.size() > 0) {
+                ProductImage imageEntity = imageEntities.get(0);
+                if (imageEntity.getFromTiki())
+                    dto.setImage(imageEntity.getPath());
+                else {
+                    dto.setImage(Constants.baseUrl + Constants.folderImage + Constants.folderProduct + imageEntity.getPath());
+                }
+            }
+            List<Comment> comments = entity.getComments();
+            if (comments.size() > 0) {
+                dto.setTotalComment(comments.size());
+                double sumRating = 0;
+                for (Comment comment : comments) {
+                    sumRating += comment.getRating();
+                }
+                dto.setRating((double) Math.round(sumRating / comments.size() * 10) / 10);
+            } else {
+                dto.setRating(0);
+                dto.setTotalComment(0);
+            }
+            dtos.add(dto);
+        }
+        return dtos;
     }
 }

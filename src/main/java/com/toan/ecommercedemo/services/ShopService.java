@@ -15,5 +15,9 @@ public interface ShopService {
 
     public ViewShopDto getById(Long id) throws InternalServerException;
 
+    public ViewShopDto getOfSeller(Long sellerId);
+
+    public Long getShopIdOfSeller(Long sellerId);
+
     public void addFromTiki(TikiSellerDto dto);
 }

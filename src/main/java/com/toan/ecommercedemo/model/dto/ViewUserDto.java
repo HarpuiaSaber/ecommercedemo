@@ -22,7 +22,7 @@ public class ViewUserDto implements Serializable {
 
     private String email;
 
-    private Gender gender;
+    private int gender;
 
     private Role role;
 
@@ -74,11 +74,11 @@ public class ViewUserDto implements Serializable {
         this.email = email;
     }
 
-    public Gender getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 

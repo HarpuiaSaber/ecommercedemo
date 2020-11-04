@@ -7,12 +7,15 @@ import com.toan.ecommercedemo.entities.Order;
 import com.toan.ecommercedemo.entities.Product;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.dto.ItemDto;
+import com.toan.ecommercedemo.model.dto.ItemStatisticDto;
 import com.toan.ecommercedemo.services.ItemService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -46,5 +49,20 @@ public class ItemServiceImpl implements ItemService {
             itemDao.add(item);
             dto.setId(item.getId());
         }
+    }
+
+    @Override
+    public ItemStatisticDto getStatisticOfShop(Long shopId) {
+        List<Item> entities = itemDao.getSoldItemOfShop(shopId);
+        long totalSoldProduct = 0;
+        double totalIncome = 0;
+        for (Item item : entities) {
+            totalSoldProduct += item.getQuantity();
+            totalIncome += item.getQuantity() * item.getPrice();
+        }
+        ItemStatisticDto dto = new ItemStatisticDto();
+        dto.setTotalIncome(totalIncome);
+        dto.setTotalSoldProduct(totalSoldProduct);
+        return dto;
     }
 }

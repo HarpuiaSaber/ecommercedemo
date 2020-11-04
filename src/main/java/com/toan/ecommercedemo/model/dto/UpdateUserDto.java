@@ -12,13 +12,11 @@ public class UpdateUserDto implements Serializable {
 
     private Long id;
 
-    private String password;
-
     private String phone;
 
     private String name;
 
-    private Date dob;
+    private String dob;
 
     private String email;
 
@@ -30,14 +28,6 @@ public class UpdateUserDto implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getPhone() {
@@ -56,11 +46,11 @@ public class UpdateUserDto implements Serializable {
         this.name = name;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 

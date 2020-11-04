@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum OrderStatus {
-    WAITTINGFORACCEPT(0), WATTINGFORITEM(1), DELIVERING(2), COMPLETED(3), CANCELLED(4);
+    WAITINGFORACCEPT(0), WAITINGFORITEM(1), DELIVERING(2), SUCCESS(3), CANCELLED(4);
     private final int value;
     private static Map<Integer, OrderStatus> map = new HashMap<Integer, OrderStatus>();
 

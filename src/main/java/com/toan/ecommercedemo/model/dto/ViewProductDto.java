@@ -27,13 +27,13 @@ public class ViewProductDto implements Serializable {
 
     private String brand;
 
-    private String shop;
+    private ViewShopDto shop;
 
     private List<SpecificationDto> specifications;
 
     private List<String> images;
 
-    private Double ratting;
+    private Double rating;
 
     private long totalComment;
 
@@ -101,11 +101,11 @@ public class ViewProductDto implements Serializable {
         this.brand = brand;
     }
 
-    public String getShop() {
+    public ViewShopDto getShop() {
         return shop;
     }
 
-    public void setShop(String shop) {
+    public void setShop(ViewShopDto shop) {
         this.shop = shop;
     }
 
@@ -125,12 +125,12 @@ public class ViewProductDto implements Serializable {
         this.images = images;
     }
 
-    public Double getRatting() {
-        return ratting;
+    public Double getRating() {
+        return rating;
     }
 
-    public void setRatting(Double ratting) {
-        this.ratting = ratting;
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public long getTotalComment() {

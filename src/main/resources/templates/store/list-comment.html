@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="store/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Nhận xét</title>
+    <script th:src="@{/management/vendor/jquery-3.2.1.min.js}"></script>
+    <script th:src="@{/management/vendor/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/management/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+    <script th:src="@{/management/vendor/datatables/dataTables.checkboxes.min.js}"></script>
+    <link th:href="@{/management/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" media="all"/>
+    <link th:href="@{/management/vendor/datatables/dataTables.checkboxes.css}" rel="stylesheet" media="all"/>
+</head><!--/head-->
+
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        <h2 sec:authentication="principal.name"></h2>
+                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <ul class="nav nav-pills nav-stacked list-group">
+                                        <a th:href="@{/customer/profile}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <h4 class="panel-title"><i class="fa fa-user"></i> Thông tin cá nhân</h4>
+                                            </li>
+                                        </a>
+                                        <a th:href="@{/customer/order}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <h4 class="panel-title"><i class="fa fa-crosshairs"></i> Theo dõi đơn hàng</h4>
+                                            </li>
+                                        </a>
+                                        <a th:href="@{/customer/contact}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <h4 class="panel-title"> <i class="fa fa-book"></i> Sổ địa chỉ</h4>
+                                            </li>
+                                        </a>
+                                        <a th:href="@{/customer/comment}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center active">
+                                                <h4 class="panel-title"> <i class="fa fa-comment"></i> Nhận xét sản phẩm</h4>
+                                            </li>
+                                        </a>
+                                        <a th:href="@{/logout}">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <h4 class="panel-title"> <i class="fa fa-sign-out"></i> Đăng xuất</h4>
+                                            </li>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-9 padding-right">
+                    <div class="features_items"><!--features_items-->
+                        <h2 class="title text-center">Nhận xét của bạn</h2>
+                        <div class="category-tab shop-details-tab"><!--category-tab-->
+                            <div class="col-sm-12">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#reviews" data-toggle="tab">Đã nhận xét</a></li>
+                                    <li><a href="#reviews2" data-toggle="tab">Chưa nhận xét</a></li>
+                                </ul>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="reviews">
+                                    <div class="table-responsive table-responsive-data2">
+                                        <table class="table table-data2" id="datatable">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th styel="width:100%;"></th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade in" id="reviews2">
+                                    <div class="table-responsive table-responsive-data2">
+                                        <table class="table table-data2" id="datatable2">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th styel="width:100%;"></th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="add-comment" tabindex="-1" role="dialog"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        <span th:remove="tag">Thêm nhận xét</span>
+                                    </h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="from-add" enctype="multipart/form-data">
+                                        <table>
+                                            <tr>
+                                                <td><img id="pImage" width="85px"/></td>
+                                                <td style="padding:10px;"><p id="pName"></p></td>
+                                            </tr>
+                                        </table>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-label">Đánh giá</label>
+                                            <div class="col-sm-9" id="star" style="display: flex;align-items: center;">
+                                                <input id="rating" name="rating" hidden/>
+                                                <svg id="onestar" xmlns="http://www.w3.org/2000/svg" width="36"
+                                                     height="36" viewBox="0 0 32 32">
+                                                    <path fill="none" fill-rule="evenodd" stroke="#FFB500"
+                                                          stroke-width="1.5"
+                                                          d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path>
+                                                </svg>
+                                                <svg id="twostar" xmlns="http://www.w3.org/2000/svg" width="36"
+                                                     height="36" viewBox="0 0 32 32">
+                                                    <path fill="none" fill-rule="evenodd" stroke="#FFB500"
+                                                          stroke-width="1.5"
+                                                          d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path>
+                                                </svg>
+                                                <svg id="threestar" xmlns="http://www.w3.org/2000/svg" width="36"
+                                                     height="36" viewBox="0 0 32 32">
+                                                    <path fill="none" fill-rule="evenodd" stroke="#FFB500"
+                                                          stroke-width="1.5"
+                                                          d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path>
+                                                </svg>
+                                                <svg id="fourstar" xmlns="http://www.w3.org/2000/svg" width="36"
+                                                     height="36" viewBox="0 0 32 32">
+                                                    <path fill="none" fill-rule="evenodd" stroke="#FFB500"
+                                                          stroke-width="1.5"
+                                                          d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path>
+                                                </svg>
+                                                <svg id="fivestar" xmlns="http://www.w3.org/2000/svg" width="36"
+                                                     height="36" viewBox="0 0 32 32">
+                                                    <path fill="none" fill-rule="evenodd" stroke="#FFB500"
+                                                          stroke-width="1.5"
+                                                          d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path>
+                                                </svg>
+                                                <b id="temptitle" style="margin-left:20px; font-size: 18px;" value="0">Vui
+                                                    lòng đánh giá</b>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-label">Tiêu đề</label>
+                                            <div class="col-sm-9">
+                                                <input required="required" class="form-control" type="text"
+                                                       name="title" id="title"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-label">Nội dung</label>
+                                            <div class="col-sm-9">
+                                                <textarea required="required" class="form-control" type="text"
+                                                          name="content" id="content" style="height: 100px;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-label">Ảnh(tối đa 5 ảnh)</label>
+                                            <div class="col-sm-9">
+                                                <input class="form-control" type="file"
+                                                       name="imageFile1" id="imageFile1"/>
+                                                <input class="form-control" type="file"
+                                                       name="imageFile2" id="imageFile2"/>
+                                                <input class="form-control" type="file"
+                                                       name="imageFile3" id="imageFile3"/>
+                                                <input class="form-control" type="file"
+                                                       name="imageFile4" id="imageFile4"/>
+                                                <input class="form-control" type="file"
+                                                       name="imageFile5" id="imageFile5"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-3"></div>
+                                            <div class="form-group col-sm-9">
+                                                <div>
+                                                    <button id="addButton" type="submit" style="width: 60%;"
+                                                            class="btn btn-success waves-effect waves-light">Thêm
+                                                    </button>
+                                                    <button type="reset"
+                                                            class="btn btn-warning waves-effect waves-light">Đặt lại
+                                                    </button>
+                                                    <button type="button"
+                                                            class="btn btn-danger waves-effect waves-light"
+                                                            data-dismiss="modal">Hủy
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="notice" tabindex="-1"
+                         role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">Thêm nhận xét thành công</div>
+                                <div class="modal-body">Cảm ơn bạn đã đánh giá về sản phẩm.</div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary2 btn-ok" data-dismiss="modal" style="color: white;">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript" th:inline="javascript">
+		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
+		var url = [[@{/api/customer/comment/getAllPaging}]];
+
+		var id = "";
+		var table;
+		$(document).ready(function () {
+			table = $('#datatable').DataTable({
+				"ordering": false,
+				"searching": false,
+				"paging": true,
+				"destroy": true,
+				"info": false,
+				"autoWidth": false,
+				"processing": true,
+				"serverSide": true,
+				"ajax": {
+					type: "POST",
+					url: url,
+					dataType: "json",
+					contentType: "application/json",
+					data: function (d) {
+                          return JSON.stringify(d);
+                    },
+					error: function (data) {
+						alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+					}
+				},
+				"lengthMenu": [10, 25, 50, 100, 200],
+				"columns": [
+				    { "data": "productImage", className: "text-center" },
+					{ "data": function (data, type, dataToSet) {
+                        var content = '<ul>'
+                            +'<li><a href="/product/'+data.productId+'"><i class="fa fa-comment"></i>'+data.productName+'</a></li>'
+							+'<li><a><i class="fa fa-calendar-o"></i>'+data.createdDate+'</a></li>'
+							+'</ul>'
+							+'<p>'+data.rating+'&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 32 32"><path fill="#FDD835" fill-rule="evenodd" stroke="#FFB500" stroke-width="1.5" d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path></svg></p>'
+							+'<b style="font-size: 16px;">'+data.title+'</b><br/><br/>'
+							+'<p>'+data.content+'</p>';
+						data.images.forEach((image) => {
+						    content += '<img height="85px" src="'+image+'" alt=""/>'
+						});
+						return content;
+					}, className: "text-left"}
+				],
+				columnDefs:[
+				 {
+					"render": function ( data, type, row ) {
+						 var content = "<a href='/product/"+row.productId+"'><img height='100px' src="+row.productImage+"></a>";
+						 return content;
+	                 },
+	                "orderable": false,
+   	                "targets": 0
+	                }
+				],
+				"createdRow": function (row, data, index) {
+					$(row).addClass('tr-shadow');
+				},
+				"language": {
+					"url": vietnameseUrl,
+				},
+				"initComplete": function (settings, json) {
+                },
+				"drawCallback": function () {
+					table.rows().every(function () {
+						this.nodes().to$().after('<tr class="spacer"></tr>')
+					})
+				}
+			});
+		});
+		$('#datatable').on( 'click', 'tbody tr', function () {
+				var data = table.row($(this)).data();
+				id = data.id;
+		});
+		var url2 = [[@{/api/customer/getProductWithoutComment}]];
+		var addURL = [[@{/api/customer/comment/add}]];
+
+		var id2 = "";
+		var table2;
+		$(document).ready(function () {
+			table2 = $('#datatable2').DataTable({
+				"ordering": false,
+				"searching": false,
+				"paging": true,
+				"destroy": true,
+				"info": false,
+				"autoWidth": false,
+				"processing": true,
+				"serverSide": true,
+				"ajax": {
+					type: "POST",
+					url: url2,
+					dataType: "json",
+					contentType: "application/json",
+					data: function (d) {
+                          return JSON.stringify(d);
+                    },
+					error: function (data) {
+						alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+					}
+				},
+				"lengthMenu": [10, 25, 50, 100, 200],
+				"columns": [
+				    { "data": "image", className: "text-center" },
+					{ "data": "name", className: "text-left"},
+					{ "data": "id", className: "text-center"}
+				],
+				columnDefs:[
+				 {
+					"render": function ( data, type, row ) {
+						 var content = "<a href='/product/"+row.id+"'><img height='100px' src="+row.image+"></a>";
+						 return content;
+	                 },
+	                "orderable": false,
+   	                "targets": 0
+	                },
+	              {
+	                "render": function ( data, type, row ) {
+						 var content = '<a href="/product/'+data.id+'">'+data+'</a>';
+						 return content;
+	                 },
+	                "orderable": false,
+   	                "targets": 1
+	                },
+	              {
+	                "render": function ( data, type, row ) {
+						 var content = '<button class="btn btn-default" data-placement="top" data-toggle="modal" data-target="#add-comment" data-json="' + encodeURI(JSON.stringify(row)) +'">Viết nhận xét</button>';
+						 return content;
+	                 },
+	                "orderable": false,
+   	                "targets": 2
+	                }
+				],
+				"createdRow": function (row, data, index) {
+					$(row).addClass('tr-shadow');
+				},
+				"language": {
+					"url": vietnameseUrl,
+				},
+				"initComplete": function (settings, json) {
+                },
+				"drawCallback": function () {
+					table2.rows().every(function () {
+						this.nodes().to$().after('<tr class="spacer"></tr>')
+					})
+				}
+			});
+		});
+		$('#datatable2').on( 'click', 'tbody tr', function () {
+				var data = table2.row($(this)).data();
+				id2 = data.id;
+		});
+		$('#add-comment').on('show.bs.modal', function(e) {
+			    //get data-id attribute of the clicked element
+			    var jsonStr = $(e.relatedTarget).data('json');
+			  	var row = JSON.parse(decodeURI(jsonStr));
+			    //populate the textbox
+			  	 $("#add-comment #pImage").attr('src',row.image);
+			  	 $("#add-comment #pName").html(row.name);
+		});
+		$("#add-comment form").submit(function (e) {
+              e.preventDefault();
+              var formData= new FormData(this);
+			   formData.append('productId',id2);
+              $.ajax({
+                  url: addURL,
+                  type: 'POST',
+                  dataType: "json",
+                  cache: false,
+                  contentType: false,
+                  processData: false,
+                  data: formData,
+                  success: function () {
+                      $('#add-comment').modal('hide');
+                      $('#add-comment').find('form').trigger('reset');
+                      $('#notice').modal('show');
+                      table2.draw();
+                      table.draw();
+                  },
+                  error: function (data) {
+                      alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+                  }
+              });
+        });
+		var temptitelDefault="Vui lòng đánh giá";
+		var checked = false;
+		$("#onestar").on({
+            mouseover: function(){
+            if(!checked){
+                $("#onestar path").attr("fill","#FDD835");
+                $("#temptitle").html("Rất không hài lòng");
+                }
+            },
+		    mouseleave: function() {
+		        if(!checked){
+                    $("#onestar path").attr("fill","none");
+                    $("#temptitle").html(temptitelDefault);
+                }
+            },
+            click : function(){
+                checked = true;
+                $("#onestar path").attr("fill","#FDD835");
+                $("#twostar path").attr("fill","none");
+                $("#threestar path").attr("fill","none");
+                $("#fourstar path").attr("fill","none");
+                $("#fivestar path").attr("fill","none");
+                $("#temptitle").html("Rất không hài lòng");
+                $("#rating").val(1);
+            }
+        });
+        $("#twostar").on({
+            mouseover: function(){
+            if(!checked){
+                $("#onestar path").attr("fill","#FDD835");
+                $("#twostar path").attr("fill","#FDD835");
+                $("#temptitle").html("Không hài lòng");
+                }
+            },
+		    mouseleave: function() {
+		    if(!checked){
+                $("#onestar path").attr("fill","none");
+                $("#twostar path").attr("fill","none");
+                $("#temptitle").html(temptitelDefault);
+                }
+            },
+            click : function(){
+                checked = true;
+                $("#onestar path").attr("fill","#FDD835");
+                $("#twostar path").attr("fill","#FDD835");
+                $("#threestar path").attr("fill","none");
+                $("#fourstar path").attr("fill","none");
+                $("#fivestar path").attr("fill","none");
+                $("#temptitle").html("Không hài lòng");
+                $("#rating").val(2);
+            }
+        });
+        $("#threestar").on({
+            mouseover: function(){
+            if(!checked){
+                $("#onestar path").attr("fill","#FDD835");
+                $("#twostar path").attr("fill","#FDD835");
+                $("#threestar path").attr("fill","#FDD835");
+                $("#temptitle").html("Bình thường");
+                }
+            },
+		    mouseleave: function() {
+		    if(!checked){
+                $("#onestar path").attr("fill","none");
+                $("#twostar path").attr("fill","none");
+                $("#threestar path").attr("fill","none");
+                $("#temptitle").html(temptitelDefault);
+                }
+            },
+            click : function(){
+            $("#onestar path").attr("fill","#FDD835");
+                checked = true;
+                $("#onestar path").attr("fill","#FDD835");
+                $("#twostar path").attr("fill","#FDD835");
+                $("#threestar path").attr("fill","#FDD835");
+                $("#fourstar path").attr("fill","none");
+                $("#fivestar path").attr("fill","none");
+                $("#temptitle").html("Bình thường");
+                $("#rating").val(3);
+                }
+        });
+        $("#fourstar").on({
+            mouseover: function(){
+            if(!checked){
+                $("#onestar path").attr("fill","#FDD835");
+                $("#twostar path").attr("fill","#FDD835");
+                $("#threestar path").attr("fill","#FDD835");
+                $("#fourstar path").attr("fill","#FDD835");
+                $("#temptitle").html("Hài lòng");
+                }
+            },
+		    mouseleave: function() {
+		    if(!checked){
+                $("#onestar path").attr("fill","none");
+                $("#twostar path").attr("fill","none");
+                $("#threestar path").attr("fill","none");
+                $("#fourstar path").attr("fill","none");
+                $("#temptitle").html(temptitelDefault);
+                }
+            },
+            click : function(){
+            $("#onestar path").attr("fill","#FDD835");
+               checked = true;
+                $("#onestar path").attr("fill","#FDD835");
+                $("#twostar path").attr("fill","#FDD835");
+                $("#threestar path").attr("fill","#FDD835");
+                $("#fourstar path").attr("fill","#FDD835");
+                $("#fivestar path").attr("fill","none");
+                $("#temptitle").html("Hài lòng");
+                $("#rating").val(4);
+                }
+        });
+        $("#fivestar").on({
+            mouseover: function(){
+            if(!checked){
+                $("#star path").attr("fill","#FDD835");
+                $("#temptitle").html("Cực kỳ hài lòng");
+                }
+            },
+		    mouseleave: function() {
+		    if(!checked){
+                $("#star path").attr("fill","none");
+                $("#temptitle").html(temptitelDefault);
+                }
+            },
+            click : function(){
+                checked = true;
+                $("#star path").attr("fill","#FDD835");
+                $("#temptitle").html("Cực kỳ hài lòng");
+                $("#rating").val(5);
+            }
+        });
+        $("#add-comment").on('hide.bs.modal', function(){
+           checked = false;
+            $("#star path").attr("fill","none");
+            $("#temptitle").html(temptitelDefault);
+        });
+
+    </script>
+</div>
+</body>
+</html>

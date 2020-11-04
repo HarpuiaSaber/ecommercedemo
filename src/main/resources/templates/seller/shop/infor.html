@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="seller/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Title Page-->
+    <title>Cửa hàng</title>
+
+</head>
+
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <!-- MAIN CONTENT-->
+    <section class="au-breadcrumb m-t-75">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="au-breadcrumb-content">
+                            <div class="au-breadcrumb-left">
+                                <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                    <li class="list-inline-item active">
+                                        <a th:href="@{/seller/home}">Trang chủ</a>
+                                    </li>
+                                    <li class="list-inline-item seprate">
+                                        <span>/</span>
+                                    </li>
+                                    <li class="list-inline-item">Cửa hàng</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="main-content">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="au-card recent-report" style="padding-bottom: 0;">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-image"></i>
+                                    <strong class="card-title pl-2">Logo</strong>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mx-auto d-block">
+                                        <img class="mx-auto d-block" th:src="${shop.logo}"
+                                             alt="E-shopper">
+                                    </div>
+                                    <hr>
+                                    <div class="login-form">
+                                        <form th:action="@{/seller/shop/update-logo}" method="post"
+                                              enctype="multipart/form-data">
+                                            <div class="form-group">
+                                                <input hidden th:value="${shop.id}" name="id">
+                                                <input class="au-input au-input--full" type="file" name="logo">
+                                                <button class="btn au-btn--block btn-warning"><i
+                                                        class="fa fa-update"></i>Cập nhật logo
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="au-card chart-percent-card">
+                            <div class="card-text text-sm-center">
+                                <h4 class="text-sm-center mt-2 mb-1" th:text="${shop.name}"></h4>
+                            </div>
+                            <hr>
+                            <span style="margin: 10px; display: flex; align-items: baseline;"><i
+                                    class="fa fa-comment"></i>&nbsp;<p
+                                    th:text="'Lượt comment: '+${shop.totalComment}"></p></span>
+                            <span style="margin: 10px; display: flex; align-items: baseline;"><i
+                                    class="fa fa-shopping-cart"></i>&nbsp;<p
+                                    th:text="'Số sản phẩm: '+${shop.totalProduct}"></p></span>
+                            <span style="margin: 10px; display: flex; align-items: baseline;"><i
+                                    class="fa fa-calendar-o"></i>&nbsp;<p
+                                    th:text="'Ngày tham gia: '+${shop.createdDate}"></p></span>
+                            <hr>
+                            <div class="login-form">
+                                <form th:action="@{/seller/shop/update-description}" method="post">
+                                    <div class="form-group">
+                                        <input hidden th:value="${shop.id}" name="id">
+                                        <label>Mô tả: (tối đa 500 kí tự)</label>
+                                        <textarea class="au-input au-input--full" name="description"
+                                                  th:text="${shop.description}"></textarea>
+                                        <button class="btn au-btn--block btn-warning" type="submit"><i
+                                                class="fa fa-update"></i>Cập
+                                            nhật mô tả
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

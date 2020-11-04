@@ -22,6 +22,12 @@ public class Shop extends Auditable implements Serializable {
     @JoinColumn(name = "seller_id")
     private User seller;
 
+    @Column(name = "from_tiki")
+    private Boolean fromTiki;
+
+    @Column(name = "description", length = 500)
+    private String description;
+
     public Shop() {
     }
 
@@ -59,5 +65,21 @@ public class Shop extends Auditable implements Serializable {
 
     public void setSeller(User seller) {
         this.seller = seller;
+    }
+
+    public Boolean getFromTiki() {
+        return fromTiki;
+    }
+
+    public void setFromTiki(Boolean fromTiki) {
+        this.fromTiki = fromTiki;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

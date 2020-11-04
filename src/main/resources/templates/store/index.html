@@ -96,22 +96,6 @@
                             </div>
                         </div><!--/category-products-->
 
-                        <div class="brands_products"><!--brands_products-->
-                            <h2>Thương hiệu</h2>
-                            <div class="brands-name">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="#"> <span class="pull-right">(50)</span>Acne</a></li>
-
-                                </ul>
-                            </div>
-                        </div><!--/brands_products-->
-
-                        <div class="price-range"><!--price-range-->
-                            <h2>Giá</h2>
-                            <input type="text" placeholder="Từ(đ)"> <span> - </span> <input type="text"
-                                                                                            placeholder="Đến(đ)">
-                        </div><!--/price-range-->
-
                         <div class="shipping text-center"><!--shipping-->
                             <img th:src="@{store/images/home/shipping.jpg}" alt=""/>
                         </div><!--/shipping-->
@@ -597,7 +581,7 @@
                         </div>
                     </div><!--/category-tab-->
 
-                    <div class="recommended_items"><!--recommended_items-->
+                    <div class="recommended_items" id="recommendation"><!--recommended_items-->
                         <h2 class="title text-center">recommended items</h2>
 
                         <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">

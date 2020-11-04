@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" th:href="@{/store/images/favicon.png}" type="image/png"/>
+    <!-- Title Page-->
+    <title>Đăng nhập</title>
+
+    <!-- Fontfaces CSS-->
+    <link th:href="@{/management/css/font-face.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/font-awesome-4.7/css/font-awesome.min.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/font-awesome-5/css/fontawesome-all.min.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/mdi-font/css/material-design-iconic-font.min.css}" rel="stylesheet" media="all">
+
+    <!-- Bootstrap CSS-->
+    <link th:href="@{/management/vendor/bootstrap-4.1/bootstrap.min.css}" rel="stylesheet" media="all">
+
+    <!-- Vendor CSS-->
+    <link th:href="@{/management/vendor/animsition/animsition.min.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css}" rel="stylesheet"
+          media="all">
+    <link th:href="@{/management/vendor/css-hamburgers/hamburgers.min.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/slick/slick.css}" rel="stylesheet" media="all">
+    <link th:href="@{/management/vendor/perfect-scrollbar/perfect-scrollbar.css}" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link th:href="@{/management/css/theme.css}" rel="stylesheet" media="all">
+
+</head>
+
+<body class="animsition">
+<div class="page-wrapper" style="background-color: #fff;">
+    <div class="page-content--bge5" style="background-color: #fff;">
+        <div class="container">
+            <div class="login-wrap">
+                <div class="login-logo">
+                    <a th:href="@{/home}">
+                        <img th:src="@{/store/images/home/logo.png}" alt="E-Shopper">
+                    </a>
+                </div>
+                <div class="login-content" style="border: 1px solid #FE980F;">
+                    <div class="login-form">
+                        <form action="/auth" method="post">
+                            <div class="form-group">
+                                <label>Tên truy nhập: </label>
+                                <input class="au-input au-input--full" type="Username" placeholder="Tên truy nhập"
+                                       name="username" autofocus="autofocus"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Mật khẩu: </label>
+                                <input class="au-input au-input--full" type="Password" placeholder="Mật khẩu"
+                                       name="password"/>
+                            </div>
+                            <div class="login-checkbox">
+                                <label>
+                                    <input type="checkbox" name="remember-me">Ghi nhớ đăng nhập
+                                </label>
+                                <label>
+                                    <a th:href="@{/signup}">Quên mật khẩu?</a>
+                                </label>
+                            </div>
+                            <button class="au-btn au-btn--block m-b-20" type="submit" style="background-color: #FE980F;">Đăng nhập</button>
+                        </form>
+                    </div>
+                </div>
+                <hr/>
+                <div class="register-link">
+                    <p>Bạn chưa có tài khoản mua hàng? <a th:href="@{/signup}"> <i
+                            class="fa fa-shopping-cart"></i> Đăng ký ngay.</a></p>
+                </div>
+                <hr/>
+                <div class="register-link">
+                    <p>Bạn muốn đăng ký bán hàng? <a th:href="@{/seller-signup}"><i class="fa fa-dollar"></i>
+                        Đăng ký ngay.</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Jquery JS-->
+<script th:src="@{/management/vendor/jquery-3.2.1.min.js}"></script>
+<!-- Bootstrap JS-->
+<script th:src="@{/management/vendor/bootstrap-4.1/popper.min.js}"></script>
+<script th:src="@{/management/vendor/bootstrap-4.1/bootstrap.min.js}"></script>
+<!-- Vendor JS       -->
+<script th:src="@{/management/vendor/wow/wow.min.js}"></script>
+<script th:src="@{/management/vendor/animsition/animsition.min.js}"></script>
+<script th:src="@{/management/vendor/slick/slick.min.js}">
+</script>
+<script th:src="@{/management/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js}">
+</script>
+<script th:src="@{/management/vendor/counter-up/jquery.waypoints.min.js}"></script>
+<script th:src="@{/management/vendor/counter-up/jquery.counterup.min.js}">
+</script>
+<script th:src="@{/management/vendor/circle-progress/circle-progress.min.js}"></script>
+<script th:src="@{/management/vendor/perfect-scrollbar/perfect-scrollbar.js}"></script>
+</script>
+
+<!-- Main JS -->
+<script th:src="@{/management/js/main.js}"></script>
+
+</body>
+
+</html>
+<!-- end document-->

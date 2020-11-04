@@ -1,5 +1,7 @@
 package com.toan.ecommercedemo.entities;
 
+import com.toan.ecommercedemo.enums.ProductStatus;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -39,6 +41,10 @@ public class Product extends Auditable implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_id")
     private Shop shop;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    private ProductStatus status;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Specification> specifications;
@@ -150,5 +156,13 @@ public class Product extends Auditable implements Serializable {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
     }
 }
