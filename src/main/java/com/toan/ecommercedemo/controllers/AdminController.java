@@ -39,4 +39,30 @@ public class AdminController {
     public String home(Model model) {
         return "admin/index";
     }
+
+    @GetMapping("/user/list-shop")
+    public String listSeller(Model model) {
+        return "admin/user/list-shop";
+    }
+
+    @GetMapping("/user/list-user")
+    public String listCustomer(Model model) {
+        return "admin/user/list-user";
+    }
+
+    @GetMapping("/product/list-waiting-for-accept")
+    public String listProduct() {
+        return "admin/product/list-waiting-for-accept";
+    }
+
+    @GetMapping("/product/list-accepted")
+    public String listAccepted() {
+        return "admin/product/list-accepted";
+    }
+
+    @GetMapping("/product/list-deny")
+    public String listCancel() {
+        return "admin/product/list-deny";
+    }
+
 }

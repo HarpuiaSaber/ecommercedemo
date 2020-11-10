@@ -26,6 +26,8 @@ public class ViewUserDto implements Serializable {
 
     private Role role;
 
+    private String createdDate;
+
     public Long getId() {
         return id;
     }
@@ -88,5 +90,13 @@ public class ViewUserDto implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 }

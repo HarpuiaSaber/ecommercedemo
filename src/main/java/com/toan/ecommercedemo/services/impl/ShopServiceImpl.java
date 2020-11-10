@@ -7,6 +7,7 @@ import com.toan.ecommercedemo.entities.Shop;
 import com.toan.ecommercedemo.entities.User;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.dto.*;
+import com.toan.ecommercedemo.model.search.ShopSearch;
 import com.toan.ecommercedemo.services.ShopService;
 import com.toan.ecommercedemo.utils.Constants;
 import com.toan.ecommercedemo.utils.DateTimeUtils;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -38,7 +41,7 @@ public class ShopServiceImpl implements ShopService {
     public void update(SaveShopDto dto) throws InternalServerException {
         Shop old = shopDao.getById(dto.getId());
         if (old != null) {
-            if (!old.getSeller().getId().equals(dto.getSellerId())){
+            if (!old.getSeller().getId().equals(dto.getSellerId())) {
                 throw new InternalServerException("Shop không phải của bạn");
             }
             if (!Strings.isNullOrEmpty(dto.getLogo())) {
@@ -135,5 +138,31 @@ public class ShopServiceImpl implements ShopService {
         } else {
             dto.setStore_id(oldShop.getId());
         }
+    }
+
+    @Override
+    public List<ShopDto> getAllPaging(ShopSearch search) {
+        List<Shop> entities = shopDao.getAllPaging(search);
+        List<ShopDto> dtos = new ArrayList<>();
+        for (Shop entity : entities) {
+            ShopDto dto =modelMapper.map(entity, ShopDto.class);
+            if (entity.getFromTiki())
+                dto.setLogo(entity.getLogo());
+            else {
+                dto.setLogo(Constants.baseUrl + Constants.folderImage + Constants.folderShop + entity.getLogo());
+            }
+            User seller = entity.getSeller();
+            dto.setSellerEmail(seller.getEmail());
+            dto.setSellerName(seller.getName());
+            dto.setSellerUsername(seller.getUsername());
+            dto.setSellerPhone(seller.getPhone());
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    @Override
+    public Long getTotalRecord(ShopSearch search) {
+        return shopDao.getTotalRecord(search);
     }
 }

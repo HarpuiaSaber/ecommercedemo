@@ -15,7 +15,9 @@ public interface UserService {
 
     public ViewUserDto getById(Long id) throws InternalServerException;
 
-    public List<ViewUserDto> search(UserSearch search);
+    public List<ViewUserDto> searchWithPaging(UserSearch search);
+
+    public Long getTotalRecord(UserSearch search);
 
     public void addSellerFromTiki(TikiSellerDto dto);
 

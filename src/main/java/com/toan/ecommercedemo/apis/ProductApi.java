@@ -4,7 +4,7 @@ import com.toan.ecommercedemo.enums.ProductStatus;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.UserPrincipal;
 import com.toan.ecommercedemo.model.dto.CommentProductDto;
-import com.toan.ecommercedemo.model.dto.CustomerCommentDto;
+import com.toan.ecommercedemo.model.dto.ProductDto;
 import com.toan.ecommercedemo.model.dto.ResponseDto;
 import com.toan.ecommercedemo.model.dto.ShortProductDto;
 import com.toan.ecommercedemo.model.search.BaseSearch;
@@ -46,5 +46,18 @@ public class ProductApi {
             }
         }
         throw new InternalServerException("Phiên đăng nhập hết hạn");
+    }
+
+    @PostMapping("/admin/product/getAllPaging")
+    @ResponseBody
+    public ResponseDto<ProductDto> getAllProductWithPaging(@RequestBody ProductSearch search) {
+        List<ProductDto> dtos = productService.getAllPaging(search);
+        return new ResponseDto<ProductDto>(dtos.size(), productService.totalRecord(search), dtos);
+    }
+
+    @GetMapping("/seller/product/updateStatus")
+    @ResponseBody
+    public void updateProductStatus(@RequestParam Long productId, @RequestParam Integer status) throws InternalServerException {
+        productService.updateStatus(productId, status);
     }
 }

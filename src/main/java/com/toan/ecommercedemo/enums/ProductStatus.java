@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ProductStatus {
-    DRAFT(0), WATTINGFORACCEPT(1), ACCEPTED(2), DENY(3);
+    DRAFT(0), WAITINGFORACCEPT(1), ACCEPTED(2), DENY(3), ON(4), OFF(5);
     private final int value;
     private static Map<Integer, ProductStatus> map = new HashMap<Integer, ProductStatus>();
 

@@ -8,9 +8,19 @@ public class ShopDto implements Serializable {
 
     private Long id;
 
+    private String sellerPhone;
+
     private String name;
 
+    private String createdDate;
+
+    private String sellerEmail;
+
+    private String sellerName;
+
     private String logo;
+
+    private String sellerUsername;
 
     public Long getId() {
         return id;
@@ -18,6 +28,14 @@ public class ShopDto implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSellerPhone() {
+        return sellerPhone;
+    }
+
+    public void setSellerPhone(String sellerPhone) {
+        this.sellerPhone = sellerPhone;
     }
 
     public String getName() {
@@ -28,11 +46,43 @@ public class ShopDto implements Serializable {
         this.name = name;
     }
 
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
     public String getLogo() {
         return logo;
     }
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public String getSellerUsername() {
+        return sellerUsername;
+    }
+
+    public void setSellerUsername(String sellerUsername) {
+        this.sellerUsername = sellerUsername;
     }
 }

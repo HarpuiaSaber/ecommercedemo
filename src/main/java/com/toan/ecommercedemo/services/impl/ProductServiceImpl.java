@@ -2,6 +2,7 @@ package com.toan.ecommercedemo.services.impl;
 
 import com.toan.ecommercedemo.daos.*;
 import com.toan.ecommercedemo.entities.*;
+import com.toan.ecommercedemo.enums.ProductStatus;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.model.search.ProductSearch;
@@ -40,6 +41,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private AttributeDao attributeDao;
+
+    @Override
+    public void updateStatus(Long id, Integer status) throws InternalServerException {
+        Product old = productDao.getById(id);
+        if (old != null) {
+            old.setStatus(ProductStatus.valueOf(status));
+            productDao.update(old);
+        } else {
+            throw new InternalServerException("Sản phẩm không tồn tại!!!");
+        }
+    }
 
     @Override
     public void delete(Long id) throws InternalServerException {
@@ -198,6 +210,26 @@ public class ProductServiceImpl implements ProductService {
             } else {
                 dto.setRating(0);
                 dto.setTotalComment(0);
+            }
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    @Override
+    public List<ProductDto> getAllPaging(ProductSearch search) {
+        List<Product> entities = productDao.searchWithPaging(search);
+        List<ProductDto> dtos = new ArrayList<>();
+        for (Product entity : entities) {
+            ProductDto dto = modelMapper.map(entity, ProductDto.class);
+            List<ProductImage> imageEntities = entity.getImages();
+            if (imageEntities.size() > 0) {
+                ProductImage imageEntity = imageEntities.get(0);
+                if (imageEntity.getFromTiki())
+                    dto.setImage(imageEntity.getPath());
+                else {
+                    dto.setImage(Constants.baseUrl + Constants.folderImage + Constants.folderProduct + imageEntity.getPath());
+                }
             }
             dtos.add(dto);
         }

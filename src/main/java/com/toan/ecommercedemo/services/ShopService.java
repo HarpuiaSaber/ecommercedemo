@@ -2,7 +2,7 @@ package com.toan.ecommercedemo.services;
 
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.dto.*;
-import com.toan.ecommercedemo.model.search.UserSearch;
+import com.toan.ecommercedemo.model.search.ShopSearch;
 
 import java.util.List;
 
@@ -20,4 +20,8 @@ public interface ShopService {
     public Long getShopIdOfSeller(Long sellerId);
 
     public void addFromTiki(TikiSellerDto dto);
+
+    public List<ShopDto> getAllPaging(ShopSearch search);
+
+    public Long getTotalRecord(ShopSearch search);
 }

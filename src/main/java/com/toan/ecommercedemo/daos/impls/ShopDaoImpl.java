@@ -1,11 +1,14 @@
 package com.toan.ecommercedemo.daos.impls;
 
+import com.google.common.base.Strings;
 import com.toan.ecommercedemo.daos.ShopDao;
 import com.toan.ecommercedemo.entities.Comment;
 import com.toan.ecommercedemo.entities.Product;
 import com.toan.ecommercedemo.entities.Shop;
 import com.toan.ecommercedemo.entities.User;
 import com.toan.ecommercedemo.enums.ProductStatus;
+import com.toan.ecommercedemo.model.search.ShopSearch;
+import com.toan.ecommercedemo.utils.DateTimeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +17,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -149,5 +153,99 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop, Long> implements ShopDao {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Override
+    public List<Shop> getAllPaging(ShopSearch search) {
+        // create returns the data type of critetia query
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Shop> criteriaQuery = criteriaBuilder.createQuery(Shop.class);
+
+        // from and join entity
+        Root<Shop> root = criteriaQuery.from(Shop.class);
+        Join<Shop, User> seller = root.join("seller");
+
+        // add predicate
+        List<Predicate> predicates = new ArrayList<>();
+        String key = search.getKey();
+        if (StringUtils.isNotBlank(key)) {
+            Predicate predicate = criteriaBuilder.or(criteriaBuilder.like(root.get("name"), "%" + key + "%"),
+                    criteriaBuilder.like(seller.get("name"), "%" + key + "%"),
+                    criteriaBuilder.like(seller.get("username"), "%" + key + "%"),
+                    criteriaBuilder.like(seller.get("phone"), "%" + key + "%"),
+                    criteriaBuilder.like(seller.get("email"), "%" + key + "%"));
+            predicates.add(predicate);
+        }
+        if (StringUtils.isNotBlank(search.getFromDate())) {
+            try {
+                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("createdDate"),
+                        DateTimeUtils.parseDate(search.getFromDate(), DateTimeUtils.DD_MM_YYYY));
+                predicates.add(predicate);
+            } catch (RuntimeException ignored) {
+            }
+        }
+        if (StringUtils.isNotBlank(search.getToDate())) {
+            try {
+                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("createdDate"),
+                        DateTimeUtils.parseDate(search.getToDate(), DateTimeUtils.DD_MM_YYYY));
+                predicates.add(predicate);
+            } catch (RuntimeException ignored) {
+            }
+        }
+        criteriaQuery.where(predicates.toArray(new Predicate[]{}));
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get("createdDate")));
+
+        // create query
+        TypedQuery<Shop> typedQuery = entityManager.createQuery(criteriaQuery.select(root));
+        if (search.getStart() != null) {
+            typedQuery.setFirstResult((search.getStart()));
+        }
+
+        typedQuery.setMaxResults(search.getLength());
+        return typedQuery.getResultList();
+    }
+
+    @Override
+    public Long getTotalRecord(ShopSearch search) {
+        // create returns the data type of critetia query
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+
+        // from and join entity
+        Root<Shop> root = criteriaQuery.from(Shop.class);
+        Join<Shop, User> seller = root.join("seller");
+
+        // add predicate
+        List<Predicate> predicates = new ArrayList<>();
+        String key = search.getKey();
+        if (StringUtils.isNotBlank(key)) {
+            Predicate predicate = criteriaBuilder.or(criteriaBuilder.like(root.get("name"), "%" + key + "%"),
+                    criteriaBuilder.like(seller.get("name"), "%" + key + "%"),
+                    criteriaBuilder.like(seller.get("username"), "%" + key + "%"),
+                    criteriaBuilder.like(seller.get("phone"), "%" + key + "%"),
+                    criteriaBuilder.like(seller.get("email"), "%" + key + "%"));
+            predicates.add(predicate);
+        }
+        if (StringUtils.isNotBlank(search.getFromDate())) {
+            try {
+                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("createdDate"),
+                        DateTimeUtils.parseDate(search.getFromDate(), DateTimeUtils.DD_MM_YYYY));
+                predicates.add(predicate);
+            } catch (RuntimeException ignored) {
+            }
+        }
+        if (StringUtils.isNotBlank(search.getToDate())) {
+            try {
+                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("createdDate"),
+                        DateTimeUtils.parseDate(search.getToDate(), DateTimeUtils.DD_MM_YYYY));
+                predicates.add(predicate);
+            } catch (RuntimeException ignored) {
+            }
+        }
+        criteriaQuery.where(predicates.toArray(new Predicate[]{}));
+
+        // create query
+        TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery.select(criteriaBuilder.count(root)));
+        return typedQuery.getSingleResult();
     }
 }

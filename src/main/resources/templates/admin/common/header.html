@@ -1,43 +1,134 @@
 <div th:fragment="header" th:remove="tag"
      xmlns:th="http://www.thymeleaf.org"
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <!-- HEADER DESKTOP-->
-    <header class="header-desktop" style="background-color: #FE980F;">
-        <div class="section__content section__content--p30">
-            <div class="container-fluid">
-                <lable style="font-size: 24px; color: #131921;">Admin Center</lable>
-                <div class="header-wrap pull-right">
-                    <div class="header-button">
-                        <div class="account-wrap">
-                            <div class="account-item clearfix js-item-menu">
+    <header class="header-desktop3 d-none d-lg-block">
+        <div class="section__content section__content--p35">
+            <div class="header3-wrap">
+                <div class="header__logo">
+                    <a th:href="@{/dashboard}">
+                        <img th:src="@{/store/images/home/logo.png}" alt="E-Shopper"/>
+                    </a>
+                </div>
+                <div class="header__navbar">
+                    <ul class="list-unstyled">
+                        <li class="has-sub">
+                            <a th:href="@{/admin/home}">
+                                <i class="fas fa-tachometer-alt"></i>Dashboard
+                                <span class="bot-line"></span>
+                            </a>
+                        </li>
+                        <li class="has-sub">
+                            <a href="#">
+                                <i class="fa fa-user"></i>
+                                <span class="bot-line"></span>Quản lý tài khoản
+                            </a>
+                            <ul class="header3-sub-list list-unstyled">
+                                <li>
+                                    <a th:href="@{/admin/user/list-shop}"><i class="fa fa-users"></i> Shop</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/admin/user/list-user}"><i class="fa fa-users"></i> Người dùng</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span class="bot-line"></span>Quản lý danh mục
+                            </a>
+                            <ul class="header3-sub-list list-unstyled">
+                                <li>
+                                    <a th:href="@{/admin/category/add}"><i class="fa fa-plus-circle"></i> Tạo mới danh
+                                        mục</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/admin/category/list}"><i class="fa fa-list-alt"></i> Danh sách danh
+                                        mục</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a href="#">
+                                <i class="fa fa-laptop"></i>Quản lý sản phẩm
+                                <span class="bot-line"></span>
+                            </a>
+                            <ul class="header3-sub-list list-unstyled">
+                                <li>
+                                    <a th:href="@{/admin/product/list-waiting-for-accept}"><i class="fa fa-exclamation"></i> Chờ phê duyệt</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/admin/product/list-accepted}"><i class="fa fa-check"></i> Đã phê duyệt</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/admin/product/list-deny}"><i class="fa fa-times"></i> Từ chối phê
+                                        duyệt</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a href="#">
+                                <i class="fa fa-copy"></i>Quản lý đơn hàng
+                                <span class="bot-line"></span>
+                            </a>
+                            <ul class="header3-sub-list list-unstyled">
+                                <li>
+                                    <a th:href="@{/admin/order/list-waiting-for-accept}"><i class="fa fa-share"></i> Đơn
+                                        đến / Chờ xác nhận</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/admin/order/list-waiting-for-item}"><i class="fa fa-check"></i> Đã
+                                        xác
+                                        nhận / Chờ lấy hàng</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/admin/order/list-delivering}"><i class="fa fa-reply"></i> Đang vận
+                                        chuyển</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/admin/order/list-success}"><i class="fa fa-dollar"></i> Giao thành
+                                        công</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/admin/order/list-cancel}"><i class="fa fa-times"></i> Đơn bị hủy</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="header__tool">
+                    <div class="account-wrap">
+                        <div class="account-item account-item--style2 clearfix js-item-menu">
+                            <div class="info clearfix">
                                 <div class="content">
                                     <a class="js-acc-btn"
                                        sec:authentication="principal.name"></a>
+                                    <i class="fa fa-angle-down"
+                                       style="margin-left: auto;"></i>
                                 </div>
-                                <div class="account-dropdown js-dropdown">
-                                    <div class="info clearfix">
-                                        <div class="image">
-                                            <a th:href="@{/seller/profile}">
-                                                <img th:src="@{/management/images/avatar.jpg}" alt="Seller">
-                                            </a>
-                                        </div>
-                                        <div class="content">
-                                            <h5 class="name">
-                                                <a class="js-acc-btn" th:href="@{/seller/profile}"
-                                                   sec:authentication="principal.name"></a>
-                                            </h5>
-                                        </div>
+                            </div>
+                            <div class="account-dropdown js-dropdown">
+                                <div class="info clearfix">
+                                    <div class="image">
+                                        <a th:href="@{/seller/profile}">
+                                            <img th:src="@{/management/images/avatar.jpg}" alt="Seller">
+                                        </a>
                                     </div>
-                                    <div class="account-dropdown__body">
-                                        <div class="account-dropdown__item">
-                                            <a th:href="@{/seller/profile}">
-                                                <i class="zmdi zmdi-account"></i>Tài khoản</a>
-                                        </div>
+                                    <div class="content">
+                                        <h5 class="name">
+                                            <a class="js-acc-btn" th:href="@{/seller/profile}"
+                                               sec:authentication="principal.name"></a>
+                                        </h5>
                                     </div>
-                                    <div class="account-dropdown__footer">
-                                        <a th:href="@{/logout}">
-                                            <i class="zmdi zmdi-power"></i>Đăng xuất</a>
+                                </div>
+                                <div class="account-dropdown__body">
+                                    <div class="account-dropdown__item">
+                                        <a th:href="@{/seller/profile}">
+                                            <i class="zmdi zmdi-account"></i>Tài khoản</a>
                                     </div>
+                                </div>
+                                <div class="account-dropdown__footer">
+                                    <a th:href="@{/logout}">
+                                        <i class="zmdi zmdi-power"></i>Đăng xuất</a>
                                 </div>
                             </div>
                         </div>
@@ -46,5 +137,4 @@
             </div>
         </div>
     </header>
-    <!-- HEADER DESKTOP-->
 </div>

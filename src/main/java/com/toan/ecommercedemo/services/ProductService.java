@@ -11,6 +11,8 @@ public interface ProductService {
 //
 //    public void update() throws InternalServerException;
 //
+    public void updateStatus(Long id, Integer status) throws InternalServerException;
+
     public void delete(Long id) throws InternalServerException;
 
     public ViewProductDto getById(Long id);
@@ -18,6 +20,8 @@ public interface ProductService {
     public CartProductDto getCartProductById(Long id);
 
     public List<ShortProductDto> searchWithPaging(ProductSearch search);
+
+    public List<ProductDto> getAllPaging(ProductSearch search);
 
     public Long totalRecord(ProductSearch search);
 

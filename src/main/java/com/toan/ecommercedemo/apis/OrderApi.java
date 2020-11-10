@@ -102,7 +102,7 @@ public class OrderApi {
 
     @GetMapping("/seller/order/updateStatus")
     @ResponseBody
-    public void updateOrderStatus(@RequestParam Long orderId, Integer status) {
+    public void updateOrderStatus(@RequestParam Long orderId, @RequestParam Integer status) {
         orderService.updateStatus(orderId, status);
     }
 }

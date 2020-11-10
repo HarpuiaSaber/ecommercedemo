@@ -2,7 +2,6 @@ package com.toan.ecommercedemo.daos.impls;
 
 import com.toan.ecommercedemo.daos.ProductDao;
 import com.toan.ecommercedemo.entities.*;
-import com.toan.ecommercedemo.entities.Order;
 import com.toan.ecommercedemo.enums.ProductStatus;
 import com.toan.ecommercedemo.model.search.ProductSearch;
 import com.toan.ecommercedemo.utils.DateTimeUtils;
@@ -71,7 +70,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         }
         if (StringUtils.isNotBlank(search.getFromDate())) {
             try {
-                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("createdDate"),
+                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("updatedDate"),
                         DateTimeUtils.parseDate(search.getFromDate(), DateTimeUtils.DD_MM_YYYY));
                 predicates.add(predicate);
             } catch (RuntimeException ignored) {
@@ -79,7 +78,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         }
         if (StringUtils.isNotBlank(search.getToDate())) {
             try {
-                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("createdDate"),
+                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("updatedDate"),
                         DateTimeUtils.parseDate(search.getToDate(), DateTimeUtils.DD_MM_YYYY));
                 predicates.add(predicate);
             } catch (RuntimeException ignored) {
@@ -139,7 +138,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         }
         if (StringUtils.isNotBlank(search.getFromDate())) {
             try {
-                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("createdDate"),
+                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("updatedDate"),
                         DateTimeUtils.parseDate(search.getFromDate(), DateTimeUtils.DD_MM_YYYY));
                 predicates.add(predicate);
             } catch (RuntimeException ignored) {
@@ -147,7 +146,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         }
         if (StringUtils.isNotBlank(search.getToDate())) {
             try {
-                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("createdDate"),
+                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("updatedDate"),
                         DateTimeUtils.parseDate(search.getToDate(), DateTimeUtils.DD_MM_YYYY));
                 predicates.add(predicate);
             } catch (RuntimeException ignored) {
@@ -160,9 +159,24 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
 
         // order
-        criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.size(root.<Collection>get("comments"))), criteriaBuilder.desc(root.get("createdDate")));
-        //criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.size(root.<Collection>get("comments"))));
-
+        Integer order = search.getShortType();
+        if (order != null) {
+            if (order == 0) {
+                criteriaQuery.orderBy(criteriaBuilder.desc(root.get("updatedDate")));
+            }
+            if (order == 1) {
+                criteriaQuery.orderBy(criteriaBuilder.desc(root.get("updatedDate")));
+            }
+            if (order == 2) {
+                criteriaQuery.orderBy(criteriaBuilder.desc(root.get("unitPrice")));
+            }
+            if (order == 3) {
+                criteriaQuery.orderBy(criteriaBuilder.asc(root.get("unitPrice")));
+            }
+        } else {
+            criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.size(root.<Collection>get("comments"))), criteriaBuilder.desc(root.get("createdDate")));
+            //criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.size(root.<Collection>get("comments"))));
+        }
         // paging
         // create query
         TypedQuery<Product> typedQuery = entityManager.createQuery(criteriaQuery.select(root));
@@ -217,7 +231,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         }
         if (StringUtils.isNotBlank(search.getFromDate())) {
             try {
-                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("createdDate"),
+                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("updatedDate"),
                         DateTimeUtils.parseDate(search.getFromDate(), DateTimeUtils.DD_MM_YYYY));
                 predicates.add(predicate);
             } catch (RuntimeException ignored) {
@@ -225,7 +239,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         }
         if (StringUtils.isNotBlank(search.getToDate())) {
             try {
-                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("createdDate"),
+                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get("updatedDate"),
                         DateTimeUtils.parseDate(search.getToDate(), DateTimeUtils.DD_MM_YYYY));
                 predicates.add(predicate);
             } catch (RuntimeException ignored) {

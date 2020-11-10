@@ -114,8 +114,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<ViewUserDto> search(UserSearch search) {
-        return null;
+    public List<ViewUserDto> searchWithPaging(UserSearch search) {
+        List<ViewUserDto> dtos = new ArrayList<>();
+        List<User> enities = userDao.getAllPaging(search);
+        for (User entity : enities) {
+            ViewUserDto dto = new ViewUserDto();
+            dto.setId(entity.getId());
+            dto.setDob(DateTimeUtils.formatDate(entity.getDob(), DateTimeUtils.DD_MM_YYYY));
+            dto.setEmail(entity.getEmail());
+            dto.setGender(entity.getGender() == null ? 0 : entity.getGender().getValue());
+            dto.setName(entity.getName());
+            dto.setPhone(entity.getPhone());
+            dto.setRole(entity.getRole());
+            dto.setUsername(entity.getUsername());
+            dto.setCreatedDate(DateTimeUtils.formatDate(entity.getCreatedDate(), DateTimeUtils.DD_MM_YYYY));
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    @Override
+    public Long getTotalRecord(UserSearch search) {
+        return userDao.getTotalRecord(search);
     }
 
     @Override

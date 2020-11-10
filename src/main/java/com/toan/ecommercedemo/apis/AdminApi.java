@@ -1,10 +1,15 @@
 package com.toan.ecommercedemo.apis;
 
+import com.toan.ecommercedemo.enums.Role;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.dto.*;
+import com.toan.ecommercedemo.model.search.ShopSearch;
+import com.toan.ecommercedemo.model.search.UserSearch;
 import com.toan.ecommercedemo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -42,12 +47,6 @@ public class AdminApi {
     public AddUserDto addUser(@RequestBody AddUserDto dto) throws InternalServerException {
         userService.add(dto);
         return dto;
-    }
-
-    @GetMapping("/test")
-    @ResponseBody
-    public String test() throws InternalServerException {
-        return "pelpleple";
     }
 
     @PostMapping("/product/add")
