@@ -159,7 +159,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
 
         // order
-        Integer order = search.getShortType();
+        Integer order = search.getSortType();
         if (order != null) {
             if (order == 0) {
                 criteriaQuery.orderBy(criteriaBuilder.desc(root.get("updatedDate")));

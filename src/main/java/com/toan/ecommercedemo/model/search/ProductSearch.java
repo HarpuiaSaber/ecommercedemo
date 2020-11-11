@@ -22,7 +22,7 @@ public class ProductSearch extends BaseDateSearch {
 
     private Integer status;
 
-    private Integer shortType;
+    private Integer sortType;
 
     public Long getCategoryId() {
         return categoryId;
@@ -88,11 +88,11 @@ public class ProductSearch extends BaseDateSearch {
         this.status = status;
     }
 
-    public Integer getShortType() {
-        return shortType;
+    public Integer getSortType() {
+        return sortType;
     }
 
-    public void setShortType(Integer shortType) {
-        this.shortType = shortType;
+    public void setSortType(Integer sortType) {
+        this.sortType = sortType;
     }
 }
