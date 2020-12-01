@@ -11,6 +11,7 @@ import com.toan.ecommercedemo.services.CommentService;
 import com.toan.ecommercedemo.utils.Constants;
 import com.toan.ecommercedemo.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/comment")
 @CrossOrigin(origins = "", maxAge = -1)
 public class CommentApi {
 
@@ -29,7 +30,8 @@ public class CommentApi {
     @Autowired
     private CommentImageService commentImageService;
 
-    @PostMapping("/customer/comment/add")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PostMapping("/add")
     @ResponseBody
     public CommentDto addComment(@ModelAttribute CommentDto dto) throws InternalServerException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -80,7 +82,7 @@ public class CommentApi {
         throw new InternalServerException("Phiên đăng nhập hết hạn");
     }
 
-    @PostMapping("/comment/getAllPaging")
+    @PostMapping("/getAllPaging")
     @ResponseBody
     public CommentResponseDto getAllCommentPaging(@RequestBody CommentSearch search) {
         List<ViewCommentDto> dtos = commentService.searchWithPaging(search);
@@ -96,7 +98,8 @@ public class CommentApi {
         return responseDto;
     }
 
-    @PostMapping("/customer/comment/getAllPaging")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PostMapping("/getCustomerComment")
     @ResponseBody
     public ResponseDto<CustomerCommentDto> getCommentOfCustomer(@RequestBody CommentSearch search) throws InternalServerException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

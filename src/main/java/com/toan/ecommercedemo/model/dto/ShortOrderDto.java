@@ -3,7 +3,7 @@ package com.toan.ecommercedemo.model.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class TrackingOrderDto implements Serializable {
+public class ShortOrderDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

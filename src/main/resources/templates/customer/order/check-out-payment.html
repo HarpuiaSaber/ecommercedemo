@@ -139,21 +139,9 @@
                     <li>Tạm tính <span>đ</span> <span id="temp"></span></li>
                     <li>Giảm giá <span> đ</span><span id="discount"></span></li>
                     <li>Thành tiền <span> đ</span><span id="money"></span></li>
-                    <form id="formCheckOut">
-                        <button class="btn btn-danger check_out">Đặt hàng và thanh toán</button>
+                    <form id="formCheckOut" th:action="@{/customer/order/create}" method="POST">
+                        <button id="orderBtn" class="btn btn-danger check_out">Đặt hàng và thanh toán</button>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="notice" tabindex="-1"
-         role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">Tạo đơn hàng thành công</div>
-                <div class="modal-body">Vui lòng chờ xác nhận từ người bán! Hệ thống tự động chuyển về trang chủ</div>
-                <div class="modal-footer">
-                    <a th:href="@{/home}"class="btn btn-primary2 btn-ok" style="color: white;">OK</a>
                 </div>
             </div>
         </div>
@@ -193,9 +181,8 @@
 </script>
 <script type="text/javascript" th:inline="javascript">
         var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
-        var listURL = [[@{/api/customer/cart/list}]];
+        var listURL = [[@{/api/cart/getAll}]];
         var listPaymentURL = [[@{/api/payment/getAll}]];
-        var orderURL = [[@{/api/customer/addOrder}]];
         var tableItem;
         var id;
         var temp;
@@ -274,7 +261,7 @@
 					data: null,
 					success: function (data) {
 						for (var i = 0; i < data.length; i++) {
-						    $("#payment").append('<li><input type="radio" name="paymentMethod" value="'+data[i].id+'"><label>'+data[i].name+'</label></li>');
+						    $("#payment").append('<li><input style="width:3%;height:1.5em;" type="radio" name="paymentMethod" value="'+data[i].id+'"><label>'+data[i].name+'</label></li>');
 						}
 					},
 					error: function () {
@@ -290,29 +277,23 @@
 		$('#discount').html(formatNumber(discount));
 		money = temp - discount;
 		$('#money').html(formatNumber(money));
-        $("#formCheckOut").submit(function (e) {
-              e.preventDefault();
-             var orderDto={};
-             orderDto.paymentId=$("#payment li input[name='paymentMethod']").val();
-             orderDto.contactId=[[${contact.id}]];
-              $.ajax({
-                  url: orderURL,
-                  type: 'POST',
-                  dataType: "json",
-                  cache: false,
-                  contentType: "application/json",
-                  processData: false,
-                  data: JSON.stringify(orderDto),
-                  success: function () {
-                      $('#notice').modal('show');
-                      setTimeout
-                      window.location = window.location.hostname+ ":8080/home"
-
-                  },
-                  error: function (data) {
-                      $modalDiv.find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');
-                  }
-              });
+        $("#orderBtn").click(function (e) {
+             let paymentId= $("#payment li input[name='paymentMethod']:checked").val();
+             let $input = $('<input>', {
+                type: 'hidden',
+                id: 'paymentId',
+                name: 'paymentId',
+                value: paymentId
+                });
+             $("#formCheckOut").append($input);
+              $input = $('<input>', {
+                type: 'hidden',
+                id: 'contactId',
+                name: 'contactId',
+                value: [[${contact.id}]]
+                });
+             $("#formCheckOut").append($input);
+             $("#formCheckOut").submit();
           });
 </script>
 </body>

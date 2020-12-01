@@ -65,7 +65,7 @@ public class OrderDaoImpl extends BaseDaoImpl<Order, Long> implements OrderDao {
             }
         }
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
-        criteriaQuery.distinct(true);
+        criteriaQuery.groupBy(order.get("id"));
 
         // order
         criteriaQuery.orderBy(criteriaBuilder.desc(order.get("createdDate")));
@@ -126,13 +126,13 @@ public class OrderDaoImpl extends BaseDaoImpl<Order, Long> implements OrderDao {
             }
         }
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
-        criteriaQuery.distinct(true);
+        criteriaQuery.groupBy(order.get("id"));
 
         // create query
         TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery.select(criteriaBuilder.count(order)));
         try {
-            return typedQuery.getSingleResult();
-        } catch (NoResultException e) {
+            return new Long(typedQuery.getResultList().size());
+        } catch (Exception e) {
             return 0L;
         }
     }
@@ -166,7 +166,7 @@ public class OrderDaoImpl extends BaseDaoImpl<Order, Long> implements OrderDao {
         TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery.select(criteriaBuilder.count(order)));
         try {
             return typedQuery.getSingleResult();
-        } catch (NoResultException e) {
+        } catch (Exception e) {
             return 0L;
         }
     }

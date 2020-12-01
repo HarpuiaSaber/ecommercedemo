@@ -170,7 +170,7 @@ public class ProductServiceImpl implements ProductService {
             }
             //else -> get all category with same parent
             else {
-                categoryIds = categoryDao.getChildenCategory(category.getId())
+                categoryIds = categoryDao.getChildrenCategory(category.getId())
                         .stream()
                         .map(s -> s.getId())
                         .collect(Collectors.toList());

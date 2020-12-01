@@ -6,6 +6,7 @@ import com.toan.ecommercedemo.model.dto.ItemDto;
 import com.toan.ecommercedemo.model.dto.ResponseDto;
 import com.toan.ecommercedemo.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -15,14 +16,16 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/customer")
+@PreAuthorize("isAuthenticated()")
+@RequestMapping("/api/cart")
 @CrossOrigin(origins = "*", maxAge = -1)
 public class CartApi {
 
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/cart/list")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/getAll")
     @ResponseBody
     public ResponseDto<ItemDto> getCartOfCustomer(HttpSession httpSession) {
         Object object = httpSession.getAttribute("cart");
@@ -33,7 +36,8 @@ public class CartApi {
         return new ResponseDto<ItemDto>(0, 0, new ArrayList<ItemDto>());
     }
 
-    @GetMapping("/cart/add")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/add")
     @ResponseBody
     public void addToCart(HttpSession httpSession,
                           @RequestParam Long productId, @RequestParam Integer quantity) throws InternalServerException {
@@ -72,7 +76,8 @@ public class CartApi {
         }
     }
 
-    @GetMapping("/cart/edit")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/edit")
     @ResponseBody
     public void editCart(HttpSession httpSession,
                          @RequestParam Long productId, @RequestParam Integer quantity) throws InternalServerException {
@@ -95,7 +100,8 @@ public class CartApi {
         }
     }
 
-    @DeleteMapping("/cart/delete")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @DeleteMapping("/delete")
     @ResponseBody
     public void deleteCart(HttpSession httpSession, @RequestParam long id) {
         Object object = httpSession.getAttribute("cart");

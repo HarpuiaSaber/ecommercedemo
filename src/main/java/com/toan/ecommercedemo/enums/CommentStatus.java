@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum CommentStatus {
-    WAITTINGFORACCEPT(0), APPROVED(1), DENIED(2);
+    WAITTINGFORACCEPT(1000), APPROVED(2000), DENIED(3000);
     private final int value;
     private static Map<Integer, CommentStatus> map = new HashMap<Integer, CommentStatus>();
 

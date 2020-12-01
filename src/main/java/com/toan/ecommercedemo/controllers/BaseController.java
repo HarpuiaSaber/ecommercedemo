@@ -12,7 +12,7 @@ public abstract class BaseController {
     CategoryService categoryService;
 
     protected String getViewName(Model model, String viewName) {
-        model.addAttribute("categories", categoryService.getRoot());
+        model.addAttribute("categories", categoryService.getChildren(null));
         return viewName;
     }
 }

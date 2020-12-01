@@ -16,28 +16,40 @@
                             <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                     </li>
                     <li>
-                        <a th:href="@{/seller/shop/infor}">
+                        <a th:href="@{/seller/shop/info}">
                             <i class="fa fa-home"></i>Thông tin shop</a>
                     </li>
                     <li>
-                        <a class="js-arrow" href="#">
+                        <a id="productMenu" class="js-arrow" href="#">
                             <i class="fa fa-laptop"></i>Quản lý sản phẩm<i class="fa fa-angle-down"
-                                                                   style="margin-left: auto;"></i></a>
+                                                                           style="margin-left: auto;"></i></a>
                         <ul class="list-unstyled navbar__sub-list js-sub-list">
                             <li>
-                                <a th:href="@{/seller/add-product}"><i class="fa fa-plus-circle"></i> Tạo mới / Đăng sản
+                                <a th:href="@{/seller/product/add}"><i class="fa fa-plus-circle"></i> Tạo mới sản
                                     phẩm</a>
                             </li>
                             <li>
-                                <a th:href="@{/seller/list-product}"><i class="fa fa-list-alt"></i> Danh sách sản
-                                    phẩm</a>
+                                <a th:href="@{/seller/product/list-new}"><i class="fa fa-list-alt"></i> Sản phẩm mới tạo</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/seller/product/list-waiting-for-accept}"><i class="fa  fa-spinner"></i>
+                                    Sản phẩm chờ
+                                    duyệt</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/seller/product/list-accepted}"><i class="fa fa-check"></i> Sản phẩm đã
+                                    duyệt</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/seller/product/list-deny}"><i class="fa fa-times"></i> Sản phẩm bị từ
+                                    chối</a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a class="js-arrow" href="#">
+                        <a id="orderMenu" class="js-arrow" href="#">
                             <i class="fa fa-copy"></i>Quản lý đơn hàng<i class="fa fa-angle-down"
-                                                                 style="margin-left: auto;"></i></a>
+                                                                         style="margin-left: auto;"></i></a>
                         <ul class="list-unstyled navbar__sub-list js-sub-list">
                             <li>
                                 <a th:href="@{/seller/order/list-waiting-for-accept}"><i class="fa fa-share"></i> Đơn
@@ -68,4 +80,15 @@
         </div>
     </aside>
     <!-- END MENU SIDEBAR-->
+    <script>
+    $(document).ready(function() {
+       let sideOpen = window.location.pathname.split("/")[2];
+       if(sideOpen == "order"){
+            $("#orderMenu").click();
+       }
+       else if(sideOpen == "product"){
+            $("#productMenu").click();
+       }
+    });
+    </script>
 </div>

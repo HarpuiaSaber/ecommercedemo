@@ -17,7 +17,7 @@ import java.util.List;
 @Transactional
 public class CategoryDaoImpl extends BaseDaoImpl<Category, Long> implements CategoryDao {
     @Override
-    public List<Category> getParentCategory() {
+    public List<Category> getRootCategory() {
         // create returns the data type of critetia query
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Category> criteriaQuery = criteriaBuilder.createQuery(Category.class);
@@ -38,19 +38,21 @@ public class CategoryDaoImpl extends BaseDaoImpl<Category, Long> implements Cate
     }
 
     @Override
-    public List<Category> getChildenCategory(Long parentId) {
+    public List<Category> getChildrenCategory(Long parentId) {
         // create returns the data type of critetia query
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Category> criteriaQuery = criteriaBuilder.createQuery(Category.class);
 
         // from and join entity
         Root<Category> root = criteriaQuery.from(Category.class);
-        Join<Category, Category> parent = root.join("parentCategory");
 
         // add predicate
         List<Predicate> predicates = new ArrayList<>();
         if (parentId != null) {
-            Predicate predicate = criteriaBuilder.equal(parent.get("id"), parentId);
+            Predicate predicate = criteriaBuilder.equal(root.get("parentCategory").get("id"), parentId);
+            predicates.add(predicate);
+        } else{
+            Predicate predicate = criteriaBuilder.isNull(root.get("parentCategory"));
             predicates.add(predicate);
         }
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));

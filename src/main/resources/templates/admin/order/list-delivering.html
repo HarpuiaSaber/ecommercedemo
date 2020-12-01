@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="admin/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Title Page-->
+    <title>Đơn hàng</title>
+
+</head>
+
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <script>
+            $(function () {
+                $("#fromDate").datetimepicker({
+                    format: 'd/m/Y',
+                    timepicker: true
+                });
+                 $("#toDate").datetimepicker({
+                    format: 'd/m/Y',
+                    timepicker: true
+                });
+            });
+    </script>
+    <!-- MAIN CONTENT-->
+    <section class="au-breadcrumb m-t-75">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="au-breadcrumb-content">
+                            <div class="au-breadcrumb-left">
+                                <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                    <li class="list-inline-item active">
+                                        <a th:href="@{/admin/home}">Trang chủ</a>
+                                    </li>
+                                    <li class="list-inline-item seprate">
+                                        <span>/</span>
+                                    </li>
+                                    <li class="list-inline-item">Đơn hàng đang vận chuyển</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="p-t-20">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-data__tool">
+                        <div class="table-data__tool-left">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Từ ngày: </label><input
+                                            name="fromDate" id="fromDate"
+                                            class="form-control form-control-sm"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Đến ngày: </label><input
+                                            name="toDate" id="toDate"
+                                            class="form-control form-control-sm"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Tìm kiếm: </label><input
+                                            name="key" id="key"
+                                            placeholder="Tên sản phẩm"
+                                            class="form-control form-control-sm"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-data__tool-right">
+                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                <i class="zmdi zmdi-file"></i> Xuất báo cáo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="table-responsive table-responsive-data2">
+        <table class="table table-data2" id="datatable">
+            <thead>
+            <tr>
+                <th></th>
+                <th class="text-center">Mã đơn</th>
+                <th>Ngày đặt đơn</th>
+                <th>Sản phẩm</th>
+                <th>Tổng tiền</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>
+                    <button id="multipleButton" class="btn btn-danger">
+                        <i class="fa fa-check"></i> Hoàn tất nhiều
+                    </button>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="modal fade" id="confirm" tabindex="-1"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">Hoàn tất đơn hàng</div>
+                <div class="modal-body">Bạn muốn hoàn tất đơn hàng này?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-ok">Có
+                    </button>
+                    <a class="btn btn-danger" data-dismiss="modal" style="color: white;">Không</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirm-multiple" tabindex="-1"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">Hoàn tất đơn hàng</div>
+                <div class="modal-body">Bạn muốn hoàn tất các đơn hàng này?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-ok">Có
+                    </button>
+                    <a class="btn btn-danger" data-dismiss="modal" style="color: white;">Không</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="please-select-dialog" tabindex="-1"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">Vui lòng tích chọn các dòng để hoàn tất?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="notice" tabindex="-1"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">Hoàn tất đơn hàng</div>
+                <div class="modal-body">Hoàn tất thành công.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Ok
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
+		var url = [[@{/api/order/getAllPaging}]];
+		var updateURL = [[@{/api/order/updateStatus}]];
+
+		var id = "";
+		var table;
+		$(document).ready(function () {
+			table = $('#datatable').DataTable({
+				"ordering": false,
+				"searching": false,
+				"paging": true,
+				"destroy": true,
+				"info": true,
+				"autoWidth": false,
+				"processing": true,
+				"serverSide": true,
+				"ajax": {
+					type: "POST",
+					url: url,
+					dataType: "json",
+					contentType: "application/json",
+					data: function (d) {
+                          d.toDate = $('#toDate').val();
+                          d.fromDate = $('#fromDate').val();
+                          d.status = 2;
+                          return JSON.stringify(d);
+                    },
+					error: function (data) {
+						alert(data.responseJSON.error + "\n" + data.responseJSON.message);
+					}
+				},
+				"lengthMenu": [10, 25, 50, 100, 200],
+				"columns": [
+				    { "data": "id"},
+					{ "data": "id", className: "text-right"},
+					{ "data": "createdDate", className: "text-center" },
+					{ "data": "items", className: "text-left" },
+					{ "data": "totalMoney", className: "text-right" },
+					{ "data": "id", className: "text-center" },
+				],
+				"select": {
+                  'style': 'multi'
+                },
+				"createdRow": function (row, data, index) {
+					$(row).addClass('tr-shadow');
+				},
+				columnDefs:[
+				 {
+                      'targets': 0,
+                      'checkboxes': {
+                          'selectRow': true
+                      }
+                  },
+				{
+					"render": function ( data, type, row ) {
+						var content = "";
+						for(let i = 0; i < data.length - 1; i++){
+						    content = content + data[i] + "<br/>";
+						}
+						content = content + data[data.length - 1];
+						return content;
+	                 },
+	                 "orderable": false,
+   	                "targets": 3
+	                },
+	                {
+					"render": function ( data, type, row ) {
+						return formatNumber(data) + "đ";
+	                 },
+	                 "orderable": false,
+   	                "targets": 4
+	                },
+	                 {
+					"render": function ( data, type, row ) {
+						 var content = '<div class="table-data-feature">'
+		                    +'<button class="btn au-btn--block btn-warning" data-placement="top" data-toggle="modal" data-target="#confirm"><i class="fa fa-check"></i> Hoàn tất</button></div>';
+				         return content;
+	                 },
+	                 "orderable": false,
+   	                "targets": 5
+	                }
+				],
+				"language": {
+					"url": vietnameseUrl,
+				},
+				"initComplete": function (settings, json) {
+                  $('#fromDate').change(function (e) {
+                      table.draw();
+                  });
+                  $('#toDate').change(function (e) {
+                      table.draw();
+                  });
+                },
+				"drawCallback": function () {
+					table.rows().every(function () {
+						this.nodes().to$().after('<tr class="spacer"></tr>')
+					})
+				}
+			});
+		});
+		$('#datatable').on( 'click', 'tbody tr', function () {
+				var data = table.row($(this)).data();
+				id = data.id;
+		});
+		var rowIds = [];
+		$('#confirm').on('click', '.btn-ok', function(e) {
+			  var $modalDiv = $(e.delegateTarget);
+			  rowIds = [];
+			  rowIds.push(id);
+			  let bodyUpdate ={};
+              bodyUpdate.ids = rowIds;
+			  bodyUpdate.status = 3;
+             $.ajax({
+				type: "POST",
+				url: updateURL,
+				contentType: "application/json",
+				data: JSON.stringify(bodyUpdate),
+				success: function(){
+                    $modalDiv.modal('hide');
+                    $("#notice").modal("show");
+                    table.draw();
+				},
+				error: function (data) {
+					 $("#notice").find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');
+				     $("#notice").modal("show");
+				}
+			});
+		});
+          $('#multipleButton').on('click', function (e) {
+              var rows_selected = table.column(0).checkboxes.selected();
+              rowIds = [];
+              // Iterate over all selected checkboxes
+              $.each(rows_selected, function (index, rowId) {
+                  // Create a hidden element
+                  rowIds.push(rowId);
+              });
+              if (rows_selected.length == 0) {
+                  $("#please-select-dialog").modal('show');
+              } else {
+                  $("#confirm-multiple").modal('show');
+              }
+          });
+          $('#confirm-multiple').on('click', '.btn-ok', function (e) {
+              var $modalDiv = $(e.delegateTarget);
+              let bodyUpdate ={};
+              bodyUpdate.ids = rowIds;
+			  bodyUpdate.status = 3;
+             $.ajax({
+					type: "POST",
+					url: updateURL,
+					contentType: "application/json",
+					data: JSON.stringify(bodyUpdate),
+					success: function(){
+                        $modalDiv.modal('hide');
+                        $("#notice").modal("show");
+                         table.draw();
+					},
+					error: function (data) {
+						 $("#notice").find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');
+					     $("#notice").modal("show");
+					}
+				});
+          });
+    </script>
+</div>
+</body>
+</html>

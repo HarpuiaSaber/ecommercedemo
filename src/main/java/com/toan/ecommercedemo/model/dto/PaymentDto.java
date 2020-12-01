@@ -1,5 +1,7 @@
 package com.toan.ecommercedemo.model.dto;
 
+import com.toan.ecommercedemo.enums.PaymentMethod;
+
 import java.io.Serializable;
 
 public class PaymentDto implements Serializable {
@@ -8,6 +10,7 @@ public class PaymentDto implements Serializable {
 
     private Long id;
     private String name;
+    private PaymentMethod method;
 
     public Long getId() {
         return id;
@@ -25,4 +28,11 @@ public class PaymentDto implements Serializable {
         this.name = name;
     }
 
+    public PaymentMethod getMethod() {
+        return method;
+    }
+
+    public void setMethod(PaymentMethod method) {
+        this.method = method;
+    }
 }

@@ -39,6 +39,16 @@ public class GeneralController extends BaseController {
         return "redirect:/swagger-ui.html";
     }
 
+    @GetMapping("/403")
+    public String accessDeny() {
+        return "403";
+    }
+
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
+
     @GetMapping("/home-direction")
     public String homeDirection() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -70,7 +80,7 @@ public class GeneralController extends BaseController {
 
     @GetMapping("/signup")
     public String signup() {
-        return "store/signup";
+        return "customer/signup";
     }
 
     @GetMapping("/seller-signup")
@@ -90,9 +100,9 @@ public class GeneralController extends BaseController {
         model.addAttribute("toPrice", toPrice);
         model.addAttribute("categoryId", categoryId);
         if (categoryId == null) {
-            model.addAttribute("childrenCategory", categoryService.getRoot());
+            model.addAttribute("childrenCategory", categoryService.getChildren(null));
         } else {
-            model.addAttribute("childrenCategory", categoryService.getChildren(categoryId));
+            model.addAttribute("childrenCategory", categoryService.getDetailCategory(categoryId));
         }
         ProductSearch search = new ProductSearch();
         search.setName(name);

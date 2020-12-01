@@ -57,9 +57,9 @@
     </section> <!--/#cart_items-->
     <script type="text/javascript" th:inline="javascript">
         var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
-        var listURL = [[@{/api/customer/cart/list}]];
-        var editURL = [[@{/api/customer/cart/edit}]];
-        var delURL = [[@{/api/customer/cart/delete}]];
+        var listURL = [[@{/api/cart/getAll}]];
+        var editURL = [[@{/api/cart/edit}]];
+        var delURL = [[@{/api/cart/delete}]];
         var table;
         var id;
         var temp;

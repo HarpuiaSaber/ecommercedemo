@@ -1,5 +1,7 @@
 package com.toan.ecommercedemo.model.dto;
 
+import com.toan.ecommercedemo.enums.OrderStatus;
+
 import java.io.Serializable;
 
 public class OrderDto implements Serializable {
@@ -7,11 +9,10 @@ public class OrderDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private String description;
     private Long contactId;
     private Long customerId;
     private Long paymentId;
-    private Boolean paid;
+    private OrderStatus status;
 
     public Long getId() {
         return id;
@@ -19,14 +20,6 @@ public class OrderDto implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Long getContactId() {
@@ -53,11 +46,11 @@ public class OrderDto implements Serializable {
         this.paymentId = paymentId;
     }
 
-    public Boolean getPaid() {
-        return paid;
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    public void setPaid(Boolean paid) {
-        this.paid = paid;
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }

@@ -23,8 +23,8 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryDao categoryDao;
 
     @Override
-    public List<CategoryDto> getRoot() {
-        List<Category> entities = categoryDao.getParentCategory();
+    public List<CategoryDto> getChildren(Long parentId) {
+        List<Category> entities = categoryDao.getChildrenCategory(parentId);
         List<CategoryDto> dtos = new ArrayList<CategoryDto>();
         for (Category entity : entities) {
             CategoryDto dto = modelMapper.map(entity, CategoryDto.class);
@@ -34,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getChildren(Long parentId) {
+    public CategoryDto getDetailCategory(Long parentId) {
         List<Category> entities = null;
         CategoryDto dto = new CategoryDto();
         Category category = categoryDao.getById(parentId);
@@ -42,11 +42,11 @@ public class CategoryServiceImpl implements CategoryService {
             Category parent = category.getParentCategory();
             dto.setId(parent.getId());
             dto.setName(parent.getName());
-            entities = categoryDao.getChildenCategory(parent.getId());
+            entities = categoryDao.getChildrenCategory(parent.getId());
         } else {
             dto.setId(category.getId());
             dto.setName(category.getName());
-            entities = categoryDao.getChildenCategory(parentId);
+            entities = categoryDao.getChildrenCategory(parentId);
         }
         List<ChildCategoryDto> children = new ArrayList<ChildCategoryDto>();
         for (Category entity : entities) {

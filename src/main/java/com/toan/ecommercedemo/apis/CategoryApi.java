@@ -3,21 +3,25 @@ package com.toan.ecommercedemo.apis;
 import com.toan.ecommercedemo.model.dto.CategoryDto;
 import com.toan.ecommercedemo.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/category")
+@PreAuthorize("isAuthenticated()")
+@RequestMapping("/api/category")
 @CrossOrigin(origins = "*", maxAge = -1)
 public class CategoryApi {
 
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/getAll")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SELLER')")
+    @GetMapping("/getChildren")
     @ResponseBody
-    public List<CategoryDto> getAll() {
-        return categoryService.getRoot();
+    public List<CategoryDto> getAll(@RequestParam(required = false) Long parentId) {
+        return categoryService.getChildren(parentId);
     }
+
 }

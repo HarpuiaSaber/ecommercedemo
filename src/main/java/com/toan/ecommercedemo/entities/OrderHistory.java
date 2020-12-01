@@ -15,13 +15,16 @@ public class OrderHistory extends Auditable implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 
     @Column(name = "status")
     @Enumerated(EnumType.ORDINAL)
     private OrderStatus status;
+
+    @Column(name = "content")
+    private String content;
 
     public Long getId() {
         return id;
@@ -45,5 +48,13 @@ public class OrderHistory extends Auditable implements Serializable {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

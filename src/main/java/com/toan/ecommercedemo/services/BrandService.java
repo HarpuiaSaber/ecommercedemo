@@ -10,5 +10,5 @@ public interface BrandService {
 
     public void addFromTiki(TikiBrandDto dto);
 
-    public List<BrandDto> getOfProduct(ProductSearch search);
+    public List<BrandDto> getBrandOfProduct(ProductSearch search);
 }

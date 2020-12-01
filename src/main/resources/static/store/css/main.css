@@ -720,6 +720,9 @@ ul.shop-menu {
   color: #FE980F ;
 }
 
+.control-carousel:focus{
+  color: #C2C2C1 ;
+}
 .right {
   right: 0;
 }
@@ -807,7 +810,7 @@ h2.title:before{
     text-transform: uppercase;
 }
 
-.category-products .panel-default .panel-heading li:hover, a:hover{
+.category-products .panel-default .panel-heading li:hover{
   background-color: #131921;
   color: #FDB45E;
 }
@@ -948,7 +951,7 @@ h2.title {
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
   font-weight: 700px;
-  margin: 5px 15px;
+  margin: 25px 15px;
   text-transform: uppercase;
   margin-bottom: 30px;
   position: relative;
@@ -1000,7 +1003,7 @@ h2.title {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   font-weight: 400;
-  color: #696763;
+  color: #131921;
 }
 
 .productinfo img{
@@ -1127,7 +1130,6 @@ h2.title {
 }
 
 .category-tab ul {
-  background: #131921;
   border-bottom: 1px solid #FE980F;
   list-style: none outside none;
   margin: 0 0 30px;
@@ -1138,7 +1140,7 @@ h2.title {
 .category-tab ul li a {
   border: 0 none;
   border-radius: 0;
-  color: #B3AFA8;
+  color: #131921;
   display: block;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
@@ -1157,7 +1159,7 @@ h2.title {
   -moz-border-top-colors: none;
   background-color: #FE980F;
   border:0px;
-  color: #FFFFFF;
+  color: #131921;
   cursor: default;
   margin-right:0;
   margin-left:0;
@@ -1309,7 +1311,7 @@ h2.title {
 
 .view-product img {
   border: 1px solid #F7F7F0;
-  height: 450px;
+  height: 550px;
   width: 100%;
 }
 
@@ -1354,9 +1356,8 @@ h2.title {
 .product-information {
   border: 1px solid #F7F7F0;
   overflow: hidden;
-  padding-bottom: 60px;
+  padding: 30px;
   padding-left: 60px;
-  padding-top: 60px;
   position: relative;
 }
 
@@ -1371,6 +1372,7 @@ h2.title {
   font-family: 'Roboto', sans-serif;
   font-size: 24px;
   margin-top: 0;
+  line-height: 1.5;
 }
 
 .product-information p {
@@ -1378,12 +1380,11 @@ h2.title {
   font-family: 'Roboto', sans-serif;
   margin-bottom: 5px;
   font-size: 16px;
+  line-height: 1.8;
 }
 
 .product-information span {
   display: inline-block;
-  margin-bottom: 8px;
-  margin-top: 18px;
 }
 
 .product-information span span {
@@ -1415,10 +1416,9 @@ h2.title {
   margin-right: 5px;
 }
 .product-information span button{
-    border: none;
     border-radius: 4px;
     height: 33px;
-    width: 33px;
+    width: 40px;
     vertical-align:middle;
 }
 .product-information span button:hover {
@@ -1490,6 +1490,7 @@ h2.title {
 
 #reviews p{
 	color:#363432;
+	line-height: 1.5;
 }
 
 #reviews  form span {
@@ -1522,12 +1523,6 @@ h2.title {
   padding-top: 15px;
   resize: none;
   width: 99.5%;
-}
-
-#reviews button {
-  color: #FFFFFF;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
 }
 
 #reviews2 ul {
@@ -1597,7 +1592,7 @@ h2.title {
 }
 
 #reviews2 button {
-  background-color: #FE980F;
+  background-color: #007bff;
   color: #fff;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
@@ -1637,9 +1632,9 @@ h2.title {
   background: #FE980F;
   color: #FFFFFF;
   font-family: 'Roboto', sans-serif;
-  font-size: 44px;
   font-weight: 300;
   padding: 8px 40px;
+  text-decoration: none;
 }
 
 
@@ -2030,6 +2025,7 @@ h2.title {
   color: #696763;
   font-weight: normal;
   margin-left: 10px;
+  font-size: 16px;
 }
 
 

@@ -88,26 +88,26 @@
                     </div>
                 </div>
             </div>
-            <div class="table-responsive table-responsive-data2">
-                <table class="table table-data2" id="datatable">
-                    <thead>
-                    <tr>
-                        <th>Tên người bán</th>
-                        <th>Số điện thoại</th>
-                        <th>Email</th>
-                        <th>Tên truy nhập</th>
-                        <th>Tên shop</th>
-                        <th>Logo</th>
-                        <th>Ngày tham gia</th>
-                        <th>Hành động</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </section>
+    <div class="table-responsive table-responsive-data2">
+        <table class="table table-data2" id="datatable">
+            <thead>
+            <tr>
+                <th>Tên người bán</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Tên truy nhập</th>
+                <th>Tên shop</th>
+                <th>Logo</th>
+                <th>Ngày tham gia</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
     <div class="modal fade" id="shop" tabindex="-1"
          role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -175,7 +175,7 @@
     </div>
     <script type="text/javascript" th:inline="javascript">
 		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
-		var url = [[@{/api/admin/shop/getAllPaging}]];
+		var url = [[@{/api/shop/getAllPaging}]];
 		var urlShop = [[@{/api/shop/getById}]];
 
 		var id = "";

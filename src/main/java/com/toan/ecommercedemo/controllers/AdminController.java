@@ -40,29 +40,64 @@ public class AdminController {
         return "admin/index";
     }
 
-    @GetMapping("/user/list-shop")
+    @GetMapping("/account/list-shop")
     public String listSeller(Model model) {
-        return "admin/user/list-shop";
+        return "admin/account/list-shop";
     }
 
-    @GetMapping("/user/list-user")
+    @GetMapping("/account/list-user")
     public String listCustomer(Model model) {
-        return "admin/user/list-user";
+        return "admin/account/list-user";
+    }
+
+    @GetMapping("category/list")
+    public String listCategory() {
+        return "admin/category/list-category";
     }
 
     @GetMapping("/product/list-waiting-for-accept")
-    public String listProduct() {
+    public String listWaitingForAcceptProduct() {
         return "admin/product/list-waiting-for-accept";
     }
 
     @GetMapping("/product/list-accepted")
-    public String listAccepted() {
+    public String listAcceptedProduct() {
         return "admin/product/list-accepted";
     }
 
     @GetMapping("/product/list-deny")
-    public String listCancel() {
+    public String listDenyProduct() {
         return "admin/product/list-deny";
+    }
+
+    @GetMapping("/order/list-waiting-for-accept")
+    public String listWaitingForAcceptOrder() {
+        return "admin/order/list-waiting-for-accept";
+    }
+
+    @GetMapping("/order/list-waiting-for-item")
+    public String listWaitingForItemOrder() {
+        return "admin/order/list-waiting-for-item";
+    }
+
+    @GetMapping("/order/list-delivering")
+    public String listDeliveringOrder() {
+        return "admin/order/list-delivering";
+    }
+
+    @GetMapping("/order/list-success")
+    public String listSuccessOrder() {
+        return "admin/order/list-success";
+    }
+
+    @GetMapping("/order/list-cancel")
+    public String listCancelOrder() {
+        return "admin/order/list-cancel";
+    }
+
+    @GetMapping("/order/list-not-paid")
+    public String listNotPaid() {
+        return "admin/order/list-not-paid";
     }
 
 }

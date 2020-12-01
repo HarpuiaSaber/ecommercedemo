@@ -66,24 +66,12 @@
                         <div class="category-tab shop-details-tab"><!--category-tab-->
                             <div class="col-sm-12">
                                 <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#reviews" data-toggle="tab">Đã nhận xét</a></li>
-                                    <li><a href="#reviews2" data-toggle="tab">Chưa nhận xét</a></li>
+                                    <li class="active"><a href="#reviews2" data-toggle="tab">Chưa nhận xét</a></li>
+                                    <li><a href="#reviews" data-toggle="tab">Đã nhận xét</a></li>
                                 </ul>
                             </div>
                             <div class="tab-content">
-                                <div class="tab-pane fade active in" id="reviews">
-                                    <div class="table-responsive table-responsive-data2">
-                                        <table class="table table-data2" id="datatable">
-                                            <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th styel="width:100%;"></th>
-                                            </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade in" id="reviews2">
+                                <div class="tab-pane fade active in" id="reviews2">
                                     <div class="table-responsive table-responsive-data2">
                                         <table class="table table-data2" id="datatable2">
                                             <thead>
@@ -91,6 +79,18 @@
                                                 <th></th>
                                                 <th styel="width:100%;"></th>
                                                 <th></th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade in" id="reviews">
+                                    <div class="table-responsive table-responsive-data2">
+                                        <table class="table table-data2" id="datatable">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th styel="width:100%;"></th>
                                             </tr>
                                             </thead>
                                         </table>
@@ -223,7 +223,7 @@
     </section>
     <script type="text/javascript" th:inline="javascript">
 		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
-		var url = [[@{/api/customer/comment/getAllPaging}]];
+		var url = [[@{/api/comment/getCustomerComment}]];
 
 		var id = "";
 		var table;
@@ -295,8 +295,8 @@
 				var data = table.row($(this)).data();
 				id = data.id;
 		});
-		var url2 = [[@{/api/customer/getProductWithoutComment}]];
-		var addURL = [[@{/api/customer/comment/add}]];
+		var url2 = [[@{/api/product/getCustomerProductWithoutComment}]];
+		var addURL = [[@{/api/comment/add}]];
 
 		var id2 = "";
 		var table2;
@@ -340,7 +340,7 @@
 	                },
 	              {
 	                "render": function ( data, type, row ) {
-						 var content = '<a href="/product/'+data.id+'">'+data+'</a>';
+						 var content = '<a href="/product/'+row.id+'">'+data+'</a>';
 						 return content;
 	                 },
 	                "orderable": false,

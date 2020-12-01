@@ -25,12 +25,15 @@
                     <div class="product-details"><!--product-details-->
                         <div class="col-sm-5">
                             <div class="view-product">
-                                <img th:src="${product.images[0]}" alt=""/>
+                                <img class="currentProductImage" th:src="${product.images[0]}" alt=""
+                                     style="cursor:zoom-in;"/>
                             </div>
-                            <div id="similar-product" class="carousel slide" data-ride="carousel">
+                            <div id="similar-product" class="carousel slide">
                                 <div class="carousel-inner">
                                     <div class="item active">
-                                        <a th:each="image : ${product.images}"><img th:src="${image}" alt=""> </a>
+                                        <a th:each="image : ${product.images}"><img th:src="${image}" alt=""
+                                                                                    style="cursor:zoom-in;"
+                                                                                    class="product-image"> </a>
                                     </div>
                                 </div>
                             </div>
@@ -40,8 +43,11 @@
                                 <h2 th:text="${product.name}"></h2>
                                 <span style="display: flex; align-items: baseline;">
                                                 <p th:text="${product.rating}"></p>
-                                                &nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 32 32"><path fill="#FDD835" fill-rule="evenodd" stroke="#FFB500" stroke-width="1.5" d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path></svg>
-                                &nbsp;(<p onclick="showReview()"th:text="${product.totalComment} + ' nhận xét'"></p>)
+                                                &nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                           viewBox="0 0 32 32"><path fill="#FDD835" fill-rule="evenodd"
+                                                                                     stroke="#FFB500" stroke-width="1.5"
+                                                                                     d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path></svg>
+                                &nbsp;(<p th:text="${product.totalComment} + ' nhận xét'"></p>)
                                 </span>
                                 <label>Thương hiệu:</label>&nbsp;<span><p th:text="${product.brand}"></p></span>
                                 <hr/>
@@ -54,10 +60,9 @@
                                 <b>Kho:</b> <span><p th:text="${product.quantity}"></p></span>
                                 &nbsp;&nbsp;&nbsp;
                                 <span>
-                                <label>Số lượng:</label>
-                                    <button id="sub">-</button>
+                                    <button class ="btn btn-default" id="sub">–</button>
                                 <input id="quantity" type="text" value="1" min="1"/>
-                                    <button id="add">+</button>
+                                    <button class ="btn btn-default" id="add">+</button>
                                 </span>
                                 <button id="addToCart" type="button" class="btn btn-fefault cart"
                                         th:value="${product.id}">
@@ -66,16 +71,12 @@
                                 </button>
                                 <br/>
                                 </span>
-                                <a href=""><img th:src="@{/store/images/product-details/share.png}"
-                                                class="share img-responsive"
-                                                alt=""/></a>
-
                             </div><!--/product-information-->
                         </div>
                     </div><!--/product-details-->
 
-                    <div class="category-tab shop-details-tab"><!--category-tab-->
-                        <div class="col-sm-12">
+                    <div class="shop-details-tab"><!--category-tab-->
+                        <div class="col-sm-12 category-tab">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a href="#details" data-toggle="tab">Chi tiết</a></li>
                                 <li><a href="#companyprofile" data-toggle="tab">Nhà bán</a></li>
@@ -109,7 +110,8 @@
                                                 <td style="padding: 10px;"><label
                                                         th:text="${product.shop.name}"></label>
                                                     <br/>
-                                                    <a class="btn btn-default" th:href="|/shop?shopId=${product.shop.id}|">
+                                                    <a class="btn btn-default"
+                                                       th:href="|/shop?shopId=${product.shop.id}|">
                                                         <svg style="width: 15px;" enable-background="new 0 0 15 15"
                                                              viewBox="0 0 15 15" x="0" y="0" stroke-width="0"
                                                              class="shopee-svg-icon _1fzrWY ">
@@ -121,12 +123,18 @@
                                         </table>
                                     </div>
                                     <div class="col-sm-3">
-                                        <span style="margin: 10px; display: flex; align-items: baseline;"><i class="fa fa-comment"></i>&nbsp;<p th:text="'Lượt comment: '+${product.shop.totalComment}"></p></span>
-                                        <span style="margin: 10px; display: flex; align-items: baseline;"><i class="fa fa-shopping-cart"></i>&nbsp;<p th:text="'Số sản phẩm: '+${product.shop.totalProduct}"></p></span>
-                                        <span style="margin: 10px; display: flex; align-items: baseline;"><i class="fa fa-calendar-o"></i>&nbsp;<p th:text="'Ngày tham gia: '+${product.shop.createdDate}"></p></span>
+                                        <span style="margin: 10px; display: flex; align-items: baseline;"><i
+                                                class="fa fa-comment"></i>&nbsp;<p
+                                                th:text="'Lượt comment: '+${product.shop.totalComment}"></p></span>
+                                        <span style="margin: 10px; display: flex; align-items: baseline;"><i
+                                                class="fa fa-shopping-cart"></i>&nbsp;<p
+                                                th:text="'Số sản phẩm: '+${product.shop.totalProduct}"></p></span>
+                                        <span style="margin: 10px; display: flex; align-items: baseline;"><i
+                                                class="fa fa-calendar-o"></i>&nbsp;<p
+                                                th:text="'Ngày tham gia: '+${product.shop.createdDate}"></p></span>
                                     </div>
                                     <div class="col-sm-5">
-                                         <p th:text="${product.shop.description}"></p>
+                                        <p th:text="${product.shop.description}"></p>
                                     </div>
                                 </div>
                             </div>
@@ -143,6 +151,20 @@
                                         </span>
                                         <p id="totalComment"></p>
                                     </div>
+<!--                                    <div class="col-md-2 col-sm-3 pull-right">-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="control-label">Lọc theo: </label><select-->
+<!--                                                name="rate" id="rate"-->
+<!--                                                class="form-control form-control-sm">-->
+<!--                                            <option value="" selected>Tất cả</option>-->
+<!--                                            <option value=5>5 Sao</option>-->
+<!--                                            <option value=4>4 Sao</option>-->
+<!--                                            <option value=3>3 Sao</option>-->
+<!--                                            <option value=2>2 Sao</option>-->
+<!--                                            <option value=1>1 Sao</option>-->
+<!--                                        </select>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
                                     <div class="col-sm-5">
                                         <table id="star">
                                             <tbody>
@@ -155,7 +177,6 @@
                                         <table class="table table-data2" id="datatable">
                                             <thead>
                                             <tr>
-                                                <th></th>
                                                 <th styel="width:100%;"></th>
                                             </tr>
                                             </thead>
@@ -165,28 +186,45 @@
                             </div>
                         </div>
                     </div><!--/category-tab-->
-                    <div class="modal fade" id="notice" tabindex="-1"
-                         role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">Thêm vào giỏ hàng</div>
-                                <div class="modal-body">Thêm thành công</div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Để sau
-                                    </button>
-                                    <a th:href="@{/customer/cart}" class="btn btn-danger btn-ok" style="color: white;">Xem
-                                        giỏ hàng và thanh
-                                        toán</a>
-                                </div>
-                            </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="notice" tabindex="-1"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">Thêm vào giỏ hàng</div>
+                <div class="modal-body">Thêm thành công</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Để sau
+                    </button>
+                    <a th:href="@{/customer/cart}" class="btn btn-danger btn-ok" style="color: white;">Xem
+                        giỏ hàng và thanh
+                        toán</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="imageDetail" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width:65%;">
+            <div class="modal-content">
+                <div id="carouselImage" class="carousel slide" data-ride="carousel"
+                     style="background-color: #131921b3;">
+                    <ol class="carousel-indicators">
+                        <li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="item">
+                            <img/>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
     <script type="text/javascript" th:inline="javascript">
-        var addURL = [[@{/api/customer/cart/add}]];
+        var addURL = [[@{/api/cart/add}]];
         $("#add").click(function() {
             var newQty = +($("#quantity").val()) + 1;
             $("#quantity").val(newQty);
@@ -244,39 +282,37 @@
 				},
 				"lengthMenu": [10, 25, 50, 100, 200],
 				"columns": [
-					{ "data": function (data, type, dataToSet) {
-                        var content = '<ul>'
-                            +'<li><a><i class="fa fa-user"></i>'+data.customerName+'</a></li>'
-							+'<li><a><i class="fa fa-calendar-o"></i>'+data.createdDate+'</a></li>'
-							+'</ul>'
-							+'<p>'+data.rating+'&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 32 32"><path fill="#FDD835" fill-rule="evenodd" stroke="#FFB500" stroke-width="1.5" d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path></svg></p>'
-							+'<b style="font-size: 16px;">'+data.title+'</b><br/><br/>'
-							+'<p>'+data.content+'</p>';
-						data.images.forEach((image) => {
-						    content += '<img height="85px" src="'+image+'" alt=""/>'
-						});
-						return content;
-					}, className: "text-left"},
-					{ "data": "id", className: "text-center" },
+					{ "data": "id", className: "text-left"}
 				],
 				"createdRow": function (row, data, index) {
 					$(row).addClass('tr-shadow');
 				},
 				columnDefs:[
-				 {
-					"render": function ( data, type, row ) {
-						 var content = '<div class="table-data-feature"> <button class="btn btn-primary2 waves-effect waves-light" data-placement="top" data-toggle="modal"><i class="fa fa-thumbs-up"></i> Hữu ích</button>'
-						 +'<button class="btn btn-primary2 waves-effect waves-light" data-placement="top" data-toggle="modal"><i class="fa fa-thumbs-down"></i> Không hữu ích</button></div>';
-				         return content;
+				{
+					"render": function ( data, type, row, meta ) {
+						  var content = '<ul>'
+                            +'<li><a><i class="fa fa-user"></i>'+row.customerName+'</a></li>'
+							+'<li><a><i class="fa fa-calendar-o"></i>'+row.createdDate+'</a></li>'
+							+'</ul>'
+							+'<p>'+row.rating+'&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 32 32"><path fill="#FDD835" fill-rule="evenodd" stroke="#FFB500" stroke-width="1.5" d="M16 1.695l-4.204 8.518-9.401 1.366 6.802 6.631-1.605 9.363L16 23.153l8.408 4.42-1.605-9.363 6.802-6.63-9.4-1.367L16 1.695z"></path></svg></p>'
+							+'<b style="font-size: 16px;">'+row.title+'</b><br/><br/>'
+							+'<p>'+row.content+'</p>';
+						row.images.forEach((image) => {
+						    content += '<img height="85px" src="'+image+'" alt="" style="cursor:zoom-in;" class="comment-image-'+meta.row+'"/>'
+						});
+						content += '<br><br><div class="table-data-feature"> <button class="btn btn-outline-primary" data-placement="top" data-toggle="modal"><i class="fa fa-thumbs-up"></i> Hữu ích</button>'
+						 +'&emsp;<button class="btn btn-outline-danger" data-placement="top" data-toggle="modal"><i class="fa fa-thumbs-down"></i> Không hữu ích</button></div>';
+						return content;
 	                 },
 	                "orderable": false,
-   	                "targets": 1
+   	                "targets": 0
 	                }
 				],
 				"language": {
 					"url": vietnameseUrl,
 				},
 				"initComplete": function (settings, json) {
+
 				    table.on('page.dt', function() {
                       $('html, body').animate({
                         scrollTop: $(".dataTables_wrapper").offset().top
@@ -308,6 +344,58 @@
 			var data = table.row($(this)).data();
 			id = data.id;
 		});
+		$('#datatable').on( 'click', 'tbody tr img', function () {
+			 let listImg = $("."+$(this).attr("class"));
+			  $("#imageDetail .carousel-indicators li").remove();
+		      $("#imageDetail .carousel-inner div").remove();
+		      for(let i = 0; i < listImg.length; i++){
+		         if($(this).attr("src") == listImg[i].currentSrc){
+		            if(listImg.length > 1){
+		                $("#imageDetail .carousel-indicators").html( $("#imageDetail .carousel-indicators").html() + '<li data-target="#carouselImage" data-slide-to="'+i+'" class="active"></li>');
+		                $("#imageDetail .modal-content").html($("#imageDetail .modal-content").html() + '<a href="#carouselImage" class="left control-carousel hidden-xs" data-slide="prev">'
+                        +'<i class="fa fa-angle-left"></i>'
+                        +'</a>'
+                        +'<a href="#carouselImage" class="right control-carousel hidden-xs" data-slide="next">'
+                        +'<i class="fa fa-angle-right"></i>'
+                        +'</a>')
+		            } else {
+		                $("#imageDetail .modal-content a").remove();
+		            }
+		            $("#imageDetail .carousel-inner").html( $("#imageDetail .carousel-inner").html() + '<div class="item active"><img src="'+listImg[i].currentSrc+'" alt="" style="max-width: 87%;"></div>');
+		         } else {
+		            $("#imageDetail .carousel-indicators").html( $("#imageDetail .carousel-indicators").html() + '<li data-target="#carouselImage" data-slide-to="'+i+'"></li>');
+		            $("#imageDetail .carousel-inner").html( $("#imageDetail .carousel-inner").html() + '<div class="item"><img src="'+listImg[i].currentSrc+'" alt="" style="max-width: 87%;"></div>');
+		        }
+		      }
+		      $("#imageDetail").modal("show");
+		});
+		$('img').each(function(){
+		    $(this).click(function(){
+		        let listImg = $("."+$(this).attr("class"));
+		        $("#imageDetail .carousel-indicators li").remove();
+		        $("#imageDetail .carousel-inner div").remove();
+		        for(let i = 0; i < listImg.length; i++){
+		            if($(this).attr("src") == listImg[i].currentSrc){
+		               if(listImg.length > 1){
+		                  $("#imageDetail .carousel-indicators").html( $("#imageDetail .carousel-indicators").html() + '<li data-target="#carouselImage" data-slide-to="'+i+'" class="active"></li>');
+		                  $("#imageDetail .modal-content").html($("#imageDetail .modal-content").html() + '<a href="#carouselImage" class="left control-carousel hidden-xs" data-slide="prev">'
+                            +'<i class="fa fa-angle-left"></i>'
+                            +'</a>'
+                            +'<a href="#carouselImage" class="right control-carousel hidden-xs" data-slide="next">'
+                            +'<i class="fa fa-angle-right"></i>'
+                            +'</a>')
+		                } else {
+		                    $("#imageDetail .modal-content a").remove();
+		                }
+		               $("#imageDetail .carousel-inner").html( $("#imageDetail .carousel-inner").html() + '<div class="item active"><img src="'+listImg[i].currentSrc+'" alt="" style="max-width: 87%;"></div>');
+		            } else {
+		                $("#imageDetail .carousel-indicators").html( $("#imageDetail .carousel-indicators").html() + '<li data-target="#carouselImage" data-slide-to="'+i+'"></li>');
+		                $("#imageDetail .carousel-inner").html( $("#imageDetail .carousel-inner").html() + '<div class="item"><img src="'+listImg[i].currentSrc+'" alt="" style="max-width: 87%;"></div>');
+		            }
+		        }
+		        $("#imageDetail").modal("show");
+		    });
+        });
     </script>
 </div>
 </body>

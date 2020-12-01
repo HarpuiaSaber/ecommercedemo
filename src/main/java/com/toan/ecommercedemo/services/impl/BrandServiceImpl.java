@@ -48,7 +48,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public List<BrandDto> getOfProduct(ProductSearch search) {
+    public List<BrandDto> getBrandOfProduct(ProductSearch search) {
         if (search.getCategoryId() != null) {
             Category category = categoryDao.getById(search.getCategoryId());
             List<Long> categoryIds = null;
@@ -59,14 +59,14 @@ public class BrandServiceImpl implements BrandService {
             }
             //else -> get all category with same parent
             else {
-                categoryIds = categoryDao.getChildenCategory(category.getId())
+                categoryIds = categoryDao.getChildrenCategory(category.getId())
                         .stream()
                         .map(s -> s.getId())
                         .collect(Collectors.toList());
             }
             search.setCategoryIds(categoryIds);
         }
-        List<Brand> entites = brandDao.getOfProduct(search);
+        List<Brand> entites = brandDao.getBrandOfProduct(search);
         List<BrandDto> dtos = new ArrayList<>();
         for (Brand entity : entites) {
             BrandDto dto = modelMapper.map(entity, BrandDto.class);

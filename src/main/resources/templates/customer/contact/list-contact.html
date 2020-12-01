@@ -71,7 +71,7 @@
                             <i class="fa fa-plus"></i>Thêm mới
                         </button>
                         <div class="table-responsive table-responsive-data2">
-                            <table class="table table-data2" id="datatable">
+                            <table class="table table-striped" id="datatable">
                                 <thead>
                                 <tr>
                                     <th>Địa chỉ</th>
@@ -274,44 +274,44 @@
 							});
 							province.append($option);
 						}
-					},
-					error: function () {
-						alert("Loi xay ra");
-					}
-				});
-				$.ajax({
-					url: getDistrictByProvince,
-					type: 'GET',
-					dataType: "json",
-					contentType: "application/json",
-					data: { "provinceId": "01" },
-					success: function (data) {
-						for (var i = 0; i < data.length; i++) {
-							var $option = $("<option/>", {
-								value: data[i].id,
-								text: data[i].name
-							});
-							district.append($option);
-						}
-					},
-					error: function () {
-						alert("Loi xay ra");
-					}
-				});
-				$.ajax({
-					url: getVillageByDistrict,
-					type: 'GET',
-					dataType: "json",
-					contentType: "application/json",
-					data: { "districtId": "001" },
-					success: function (data) {
-						for (var i = 0; i < data.length; i++) {
-							var $option = $("<option/>", {
-								value: data[i].id,
-								text: data[i].name
-							});
-							village.append($option);
-						}
+						$.ajax({
+                            url: getDistrictByProvince,
+                            type: 'GET',
+                            dataType: "json",
+                            contentType: "application/json",
+                            data: { "provinceId": data[0].id  },
+                            success: function (data) {
+                                for (var i = 0; i < data.length; i++) {
+                                    var $option = $("<option/>", {
+                                        value: data[i].id,
+                                        text: data[i].name
+                                    });
+                                    district.append($option);
+                                }
+                                $.ajax({
+                                    url: getVillageByDistrict,
+                                    type: 'GET',
+                                    dataType: "json",
+                                    contentType: "application/json",
+                                    data: { "districtId": data[0].id },
+                                    success: function (data) {
+                                        for (var i = 0; i < data.length; i++) {
+                                            var $option = $("<option/>", {
+                                                value: data[i].id,
+                                                text: data[i].name
+                                            });
+                                            village.append($option);
+                                        }
+                                    },
+                                    error: function () {
+                                        alert("Loi xay ra");
+                                    }
+                                });
+                            },
+                            error: function () {
+                                alert("Loi xay ra");
+                            }
+                        });
 					},
 					error: function () {
 						alert("Loi xay ra");
@@ -513,10 +513,10 @@
 			});
 
 		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
-		var url = [[@{/api/customer/getContact}]];
-		var addURL = [[@{/api/customer/addContact}]];
-		var editURL = [[@{/api/customer/editContact}]];
-		var delURL = [[@{/api/customer/deleteContact}]];
+		var url = [[@{/api/contact/getAll}]];
+		var addURL = [[@{/api/contact/add}]];
+		var editURL = [[@{/api/contact/edit}]];
+		var delURL = [[@{/api/contact/delete}]];
 
 		var id = "";
 		var table;

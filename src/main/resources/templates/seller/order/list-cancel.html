@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Title Page-->
-    <title>Đơn hàng bị hủy</title>
+    <title>Đơn hàng</title>
 
 </head>
 
@@ -70,21 +70,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="table-responsive table--no-card m-b-40">
-                    <table class="table table table-borderless table-data3" id="datatable">
-                        <thead>
-                        <tr>
-                            <th>Mã đơn</th>
-                            <th>Ngày đặt đơn</th>
-                            <th>Sản phẩm</th>
-                            <th>Tổng tiền</th>
-                            <th>Hành động</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
             </div>
+
+        </div>
+        <div class="table-responsive table--no-card m-b-40">
+            <table class="table table table-borderless table-data3" id="datatable">
+                <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Ngày đặt đơn</th>
+                    <th>Sản phẩm</th>
+                    <th>Tổng tiền</th>
+                    <th>Hành động</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
     <div class="modal fade" id="confirm" tabindex="-1"
@@ -116,8 +117,8 @@
     </div>
     <script type="text/javascript" th:inline="javascript">
 		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
-		var url = [[@{/api/seller/order/getAllPaging}]];
-		var updateURL = [[@{/api/seller/order/updateStatus}]];
+		var url = [[@{/api/order/getAllPaging}]];
+		var updateURL = [[@{/api/order/updateStatus}]];
 
 		var id = "";
 		var table;
@@ -209,21 +210,29 @@
 				var data = table.row($(this)).data();
 				id = data.id;
 		});
+		var rowIds = [];
 		$('#confirm').on('click', '.btn-ok', function(e) {
-			  	var $modalDiv = $(e.delegateTarget);
-			  	$.ajax({
-					type: "GET",
-					url: updateURL +"?orderId=" + id + "&status=4",
-					success: function(){
-                        $modalDiv.modal('hide');
-                        $("#notice").modal("show");
-                         table.draw();
-					},
-					error: function (data) {
-						$modalDiv.find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');
-						 $("#notice").modal("show");
-					}
-				});
+			  var $modalDiv = $(e.delegateTarget);
+			  rowIds = [];
+			  rowIds.push(id);
+			  let bodyUpdate ={};
+              bodyUpdate.ids = rowIds;
+			  bodyUpdate.status = 4;
+             $.ajax({
+				type: "POST",
+				url: updateURL,
+				contentType: "application/json",
+				data: JSON.stringify(bodyUpdate),
+				success: function(){
+                    $modalDiv.modal('hide');
+                    $("#notice").modal("show");
+                    table.draw();
+				},
+				error: function (data) {
+					 $("#notice").find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');
+				     $("#notice").modal("show");
+				}
+			});
 		});
     </script>
 </div>

@@ -58,7 +58,7 @@ public class SellerController {
         return "redirect:/login";
     }
 
-    @GetMapping("/shop/infor")
+    @GetMapping("/shop/info")
     public String shop(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
@@ -67,7 +67,7 @@ public class SellerController {
                 UserPrincipal principal = (UserPrincipal) obj;
                 ViewShopDto shopDto = shopService.getOfSeller(principal.getId());
                 model.addAttribute("shop", shopDto);
-                return "seller/shop/infor";
+                return "seller/shop/info";
             }
         }
         return "redirect:/login";
@@ -89,7 +89,7 @@ public class SellerController {
                 shopService.update(shopDto);
             }
         }
-        return "redirect:/seller/shop/infor";
+        return "redirect:/seller/shop/info";
     }
 
     @PostMapping("/shop/update-description")
@@ -103,7 +103,7 @@ public class SellerController {
                 shopService.update(dto);
             }
         }
-        return "redirect:/seller/shop/infor";
+        return "redirect:/seller/shop/info";
     }
 
     @GetMapping("/product/list")
@@ -139,5 +139,25 @@ public class SellerController {
     @GetMapping("/order/list-cancel")
     public String listCancelOrder() {
         return "seller/order/list-cancel";
+    }
+
+    @GetMapping("/product/list-new")
+    public String listNewProduct() {
+        return "seller/product/list-new";
+    }
+
+    @GetMapping("/product/list-waiting-for-accept")
+    public String listWaitingForAcceptProduct() {
+        return "seller/product/list-waiting-for-accept";
+    }
+
+    @GetMapping("/product/list-accepted")
+    public String listAcceptedProduct() {
+        return "seller/product/list-accepted";
+    }
+
+    @GetMapping("/product/list-deny")
+    public String listCancelProduct() {
+        return "seller/product/list-deny";
     }
 }

@@ -18,46 +18,38 @@
                             </a>
                         </li>
                         <li class="has-sub">
-                            <a href="#">
+                            <a href="" style="pointer-events: none;cursor: default;">
                                 <i class="fa fa-user"></i>
                                 <span class="bot-line"></span>Quản lý tài khoản
                             </a>
                             <ul class="header3-sub-list list-unstyled">
                                 <li>
-                                    <a th:href="@{/admin/user/list-shop}"><i class="fa fa-users"></i> Shop</a>
+                                    <a th:href="@{/admin/account/list-shop}"><i class="fa fa-users"></i> Shop</a>
                                 </li>
                                 <li>
-                                    <a th:href="@{/admin/user/list-user}"><i class="fa fa-users"></i> Người dùng</a>
+                                    <a th:href="@{/admin/account/list-user}"><i class="fa fa-users"></i> Người dùng</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="has-sub">
-                            <a href="#">
+                            <a th:href="@{/admin/category/list}">
                                 <i class="fa fa-bars"></i>
                                 <span class="bot-line"></span>Quản lý danh mục
                             </a>
-                            <ul class="header3-sub-list list-unstyled">
-                                <li>
-                                    <a th:href="@{/admin/category/add}"><i class="fa fa-plus-circle"></i> Tạo mới danh
-                                        mục</a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/admin/category/list}"><i class="fa fa-list-alt"></i> Danh sách danh
-                                        mục</a>
-                                </li>
-                            </ul>
                         </li>
                         <li class="has-sub">
-                            <a href="#">
+                            <a href="" style="pointer-events: none;cursor: default;">
                                 <i class="fa fa-laptop"></i>Quản lý sản phẩm
                                 <span class="bot-line"></span>
                             </a>
                             <ul class="header3-sub-list list-unstyled">
                                 <li>
-                                    <a th:href="@{/admin/product/list-waiting-for-accept}"><i class="fa fa-exclamation"></i> Chờ phê duyệt</a>
+                                    <a th:href="@{/admin/product/list-waiting-for-accept}"><i
+                                            class="fa fa-exclamation"></i> Chờ phê duyệt</a>
                                 </li>
                                 <li>
-                                    <a th:href="@{/admin/product/list-accepted}"><i class="fa fa-check"></i> Đã phê duyệt</a>
+                                    <a th:href="@{/admin/product/list-accepted}"><i class="fa fa-check"></i> Đã phê
+                                        duyệt</a>
                                 </li>
                                 <li>
                                     <a th:href="@{/admin/product/list-deny}"><i class="fa fa-times"></i> Từ chối phê
@@ -66,11 +58,15 @@
                             </ul>
                         </li>
                         <li class="has-sub">
-                            <a href="#">
+                            <a href="" style="pointer-events: none;cursor: default;">
                                 <i class="fa fa-copy"></i>Quản lý đơn hàng
                                 <span class="bot-line"></span>
                             </a>
                             <ul class="header3-sub-list list-unstyled">
+                                <li>
+                                    <a th:href="@{/admin/order/list-not-paid}"><i class="fa fa-share"></i> Đơn
+                                        chưa thanh toán</a>
+                                </li>
                                 <li>
                                     <a th:href="@{/admin/order/list-waiting-for-accept}"><i class="fa fa-share"></i> Đơn
                                         đến / Chờ xác nhận</a>
@@ -109,20 +105,20 @@
                             <div class="account-dropdown js-dropdown">
                                 <div class="info clearfix">
                                     <div class="image">
-                                        <a th:href="@{/seller/profile}">
+                                        <a th:href="@{/admin/profile}">
                                             <img th:src="@{/management/images/avatar.jpg}" alt="Seller">
                                         </a>
                                     </div>
                                     <div class="content">
                                         <h5 class="name">
-                                            <a class="js-acc-btn" th:href="@{/seller/profile}"
+                                            <a class="js-acc-btn" th:href="@{/admin/profile}"
                                                sec:authentication="principal.name"></a>
                                         </h5>
                                     </div>
                                 </div>
                                 <div class="account-dropdown__body">
                                     <div class="account-dropdown__item">
-                                        <a th:href="@{/seller/profile}">
+                                        <a th:href="@{/admin/profile}">
                                             <i class="zmdi zmdi-account"></i>Tài khoản</a>
                                     </div>
                                 </div>

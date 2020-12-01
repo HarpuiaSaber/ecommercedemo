@@ -7,6 +7,7 @@ import com.toan.ecommercedemo.model.dto.SaveContactDto;
 import com.toan.ecommercedemo.model.dto.ViewContactDto;
 import com.toan.ecommercedemo.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +15,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customer")
+@PreAuthorize("isAuthenticated()")
+@RequestMapping("/api/contact")
 @CrossOrigin(origins = "*", maxAge = -1)
 public class ContactApi {
 
     @Autowired
     private ContactService contactService;
 
-    @GetMapping("/getContact")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/getAll")
     @ResponseBody
     public ResponseDto<ViewContactDto> getContactOfCustomer() throws InternalServerException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,7 +39,8 @@ public class ContactApi {
         throw new InternalServerException("Phiên đăng nhập hết hạn");
     }
 
-    @PostMapping("/addContact")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PostMapping("/add")
     @ResponseBody
     public SaveContactDto addContactOfCustomer(@RequestBody SaveContactDto dto) throws InternalServerException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -52,7 +56,8 @@ public class ContactApi {
         throw new InternalServerException("Phiên đăng nhập hết hạn");
     }
 
-    @PostMapping("/editContact")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PostMapping("/edit")
     @ResponseBody
     public SaveContactDto editContactOfCustomer(@RequestBody SaveContactDto dto) throws InternalServerException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,7 +73,8 @@ public class ContactApi {
         throw new InternalServerException("Phiên đăng nhập hết hạn");
     }
 
-    @DeleteMapping("/deleteContact")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @DeleteMapping("/delete")
     public @ResponseBody
     void deleteContactOfCustomer(@RequestParam long id) throws InternalServerException {
         contactService.delete(id);

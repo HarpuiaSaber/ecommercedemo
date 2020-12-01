@@ -1,109 +1,97 @@
 package com.toan.ecommercedemo.apis;
 
+import com.toan.ecommercedemo.enums.Role;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
+import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.model.UserPrincipal;
-import com.toan.ecommercedemo.model.dto.ItemDto;
-import com.toan.ecommercedemo.model.dto.OrderDto;
-import com.toan.ecommercedemo.model.dto.ResponseDto;
-import com.toan.ecommercedemo.model.dto.TrackingOrderDto;
 import com.toan.ecommercedemo.model.search.OrderSearch;
-import com.toan.ecommercedemo.services.ItemService;
 import com.toan.ecommercedemo.services.OrderService;
-import com.toan.ecommercedemo.services.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @RestController
-@RequestMapping("/api")
+@PreAuthorize("isAuthenticated()")
+@RequestMapping("/api/order")
 @CrossOrigin(origins = "", maxAge = -1)
 public class OrderApi {
 
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private ItemService itemService;
+//    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+//    @PostMapping("/add")
+//    @ResponseBody
+//    public Long order(@RequestBody OrderDto dto, HttpSession httpSession) throws InternalServerException {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication.isAuthenticated()) {
+//            Object obj = authentication.getPrincipal();
+//            if (obj instanceof UserPrincipal) {
+//                UserPrincipal principal = (UserPrincipal) obj;
+//                dto.setCustomerId(principal.getId());
+//                //set multi shop
+//                Map<Long, ItemDto> map = (Map<Long, ItemDto>) httpSession.getAttribute("cart");
+//                Set<Long> shopIds = new HashSet<Long>();
+//                for (ItemDto itemDto : map.values()) {
+//                    shopIds.add(itemDto.getProduct().getShopId());
+//                }
+//                //create multi order
+//                PaymentDto paymentDto = paymentService.getById(dto.getPaymentId());
+//                if (paymentDto.getMethod() == PaymentMethod.COD) {
+//                    dto.setStatus(OrderStatus.WAITINGFORACCEPT);
+//                } else if (paymentDto.getMethod() == PaymentMethod.PAYPAL) {
+//                    dto.setStatus(OrderStatus.NOTPAID);
+//                }
+//                for (Long shopId : shopIds) {
+//                    orderService.add(dto);
+//                    for (ItemDto itemDto : map.values()) {
+//                        if (itemDto.getProduct().getShopId() == shopId) {
+//                            itemDto.setOrderId(dto.getId());
+//                            itemService.add(itemDto);
+//                        }
+//                    }
+//                }
+//                httpSession.removeAttribute("cart");
+//                return dto.getId();
+//            }
+//        }
+//        throw new InternalServerException("Phiên đăng nhập hết hạn");
+//    }
 
-    @Autowired
-    private ShopService shopService;
-
-    @PostMapping("/customer/addOrder")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SELLER', 'CUSTOMER')")
+    @PostMapping("/getAllPaging")
     @ResponseBody
-    public Long order(@RequestBody OrderDto dto, HttpSession httpSession) throws InternalServerException {
+    public ResponseDto<ShortOrderDto> getOrderAllPaging(@RequestBody OrderSearch search) throws InternalServerException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
             Object obj = authentication.getPrincipal();
             if (obj instanceof UserPrincipal) {
                 UserPrincipal principal = (UserPrincipal) obj;
-                dto.setCustomerId(principal.getId());
-                dto.setPaid(false);
-                //check same shop
-                Map<Long, ItemDto> map = (Map<Long, ItemDto>) httpSession.getAttribute("cart");
-                Set<Long> shopIds = new HashSet<Long>();
-                for (ItemDto itemDto : map.values()) {
-                    shopIds.add(itemDto.getProduct().getShopId());
+                if (principal.getRole() == Role.CUSTOMER) {
+                    search.setCustomerId(principal.getId());
+                } else if (principal.getRole() == Role.SELLER) {
+                    search.setSellerId(principal.getId());
                 }
-                for (Long shopId : shopIds) {
-                    orderService.add(dto);
-                    for (ItemDto itemDto : map.values()) {
-                        if (itemDto.getProduct().getShopId() == shopId) {
-                            itemDto.setOrderId(dto.getId());
-                            itemService.add(itemDto);
-                        }
-                    }
-                }
-                httpSession.removeAttribute("cart");
-                return dto.getId();
+                List<ShortOrderDto> dtos = orderService.searchWithPaging(search);
+                return new ResponseDto<ShortOrderDto>(dtos.size(), orderService.getTotalRecord(search), dtos);
             }
         }
         throw new InternalServerException("Phiên đăng nhập hết hạn");
     }
 
-    @PostMapping("/customer/order/getAllPaging")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SELLER')")
+    @PostMapping("/updateStatus")
     @ResponseBody
-    public ResponseDto<TrackingOrderDto> getOrderOfCustomer(@RequestBody OrderSearch search) throws InternalServerException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            Object obj = authentication.getPrincipal();
-            if (obj instanceof UserPrincipal) {
-                UserPrincipal principal = (UserPrincipal) obj;
-                search.setCustomerId(principal.getId());
-                List<TrackingOrderDto> dtos = orderService.searchWithPaging(search);
-                return new ResponseDto<TrackingOrderDto>(dtos.size(), orderService.getTotalRecord(search), dtos);
-            }
+    public void updateOrderStatus(@RequestBody UpdateStatusDto body) {
+        for (Long orderId : body.getIds()) {
+            orderService.updateStatus(orderId, body.getStatus(), body.getContent());
         }
-        throw new InternalServerException("Phiên đăng nhập hết hạn");
+
     }
 
-    @PostMapping("/seller/order/getAllPaging")
-    @ResponseBody
-    public ResponseDto<TrackingOrderDto> getOrderOfShop(@RequestBody OrderSearch search) throws InternalServerException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            Object obj = authentication.getPrincipal();
-            if (obj instanceof UserPrincipal) {
-                UserPrincipal principal = (UserPrincipal) obj;
-                search.setSellerId(principal.getId());
-                List<TrackingOrderDto> dtos = orderService.searchWithPaging(search);
-                return new ResponseDto<TrackingOrderDto>(dtos.size(), orderService.getTotalRecord(search), dtos);
-            }
-        }
-        throw new InternalServerException("Phiên đăng nhập hết hạn");
-    }
-
-
-    @GetMapping("/seller/order/updateStatus")
-    @ResponseBody
-    public void updateOrderStatus(@RequestParam Long orderId, @RequestParam Integer status) {
-        orderService.updateStatus(orderId, status);
-    }
 }
 

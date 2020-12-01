@@ -9,5 +9,5 @@ public interface BrandDao extends BaseDao<Brand, Long> {
 
     public Brand getByName(String name);
 
-    public List<Brand> getOfProduct(ProductSearch search);
+    public List<Brand> getBrandOfProduct(ProductSearch search);
 }

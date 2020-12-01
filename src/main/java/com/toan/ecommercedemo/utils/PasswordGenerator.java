@@ -1,6 +1,7 @@
 package com.toan.ecommercedemo.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.toan.ecommercedemo.enums.Role;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Random;
@@ -40,5 +41,6 @@ public class PasswordGenerator {
 
 	public static void main(String[] args) throws JsonProcessingException {
 		System.out.println(getHashString("123qwe"));
+		//System.out.println(Role.valueOf(3));
 	}
 }

@@ -15,9 +15,6 @@ public class Order extends Auditable implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "status")
     @Enumerated(EnumType.ORDINAL)
     private OrderStatus status;
@@ -33,15 +30,13 @@ public class Order extends Auditable implements Serializable {
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<Item> items;
 
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<OrderHistory> histories;
+
     //payment
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
     private Payment payment;
-
-    @Column(name = "paid")
-    private Boolean paid;
-    //shippment
-
 
     public Order() {
     }
@@ -56,14 +51,6 @@ public class Order extends Auditable implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public OrderStatus getStatus() {
@@ -98,19 +85,19 @@ public class Order extends Auditable implements Serializable {
         this.items = items;
     }
 
+    public List<OrderHistory> getHistories() {
+        return histories;
+    }
+
+    public void setHistories(List<OrderHistory> histories) {
+        this.histories = histories;
+    }
+
     public Payment getPayment() {
         return payment;
     }
 
     public void setPayment(Payment payment) {
         this.payment = payment;
-    }
-
-    public Boolean getPaid() {
-        return paid;
-    }
-
-    public void setPaid(Boolean paid) {
-        this.paid = paid;
     }
 }

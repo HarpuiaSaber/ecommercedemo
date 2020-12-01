@@ -81,8 +81,6 @@ public class ContactServiceImpl implements ContactService {
             dto.setName(entity.getName());
             dto.setAddress(entity.getAddress());
             dto.setPhone(entity.getPhone());
-            dto.setCustomerId(entity.getCustomer().getId());
-            dto.setCustomerName(entity.getCustomer().getName());
             dto.setLocation(String.format("%s, %s, %s",
                     entity.getVillage().getName(),
                     entity.getVillage().getDistrict().getName(),
@@ -106,8 +104,6 @@ public class ContactServiceImpl implements ContactService {
             dto.setName(entity.getName());
             dto.setAddress(entity.getAddress());
             dto.setPhone(entity.getPhone());
-            dto.setCustomerId(entity.getCustomer().getId());
-            dto.setCustomerName(entity.getCustomer().getName());
             dto.setLocation(String.format("%s, %s, %s",
                     entity.getVillage().getName(),
                     entity.getVillage().getDistrict().getName(),

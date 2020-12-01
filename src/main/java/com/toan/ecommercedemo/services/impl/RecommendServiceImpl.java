@@ -63,14 +63,14 @@ public class RecommendServiceImpl implements RecommendService {
                 connectionPoolDataSource, "comment", "customer_id",
                 "product_id", "rating", null);
         try {
-//            ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity(dataModel);
+            ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity(dataModel);
 //            GenericItemSimilarity genericItemSimilarity = new GenericItemSimilarity(itemSimilarity, dataModel);
-//            Recommender recommender = new GenericItemBasedRecommender(dataModel, itemSimilarity);
-            UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
-            UserNeighborhood neighborhood =
-                    new NearestNUserNeighborhood(2, similarity, dataModel);
-            Recommender recommender =
-                    new GenericUserBasedRecommender(dataModel, neighborhood, similarity);
+            Recommender recommender = new GenericItemBasedRecommender(dataModel, itemSimilarity);
+//            UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
+//            UserNeighborhood neighborhood =
+//                    new NearestNUserNeighborhood(100, similarity, dataModel);
+//            Recommender recommender =
+//                    new GenericUserBasedRecommender(dataModel, neighborhood, similarity);
             List<RecommendedItem> recommendedItems = recommender.recommend(userId, 10);
             List<ShortProductDto> dtos = new ArrayList<>();
             for (RecommendedItem recommendedItem : recommendedItems) {

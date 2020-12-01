@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Role {
-    ADMIN(0), SELLER(1), CUSTOMER(2);
+    CUSTOMER(0), SELLER(1), ADMIN(2);
     private final int value;
     private static Map<Integer, Role> map = new HashMap<Integer, Role>();
 

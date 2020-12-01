@@ -88,26 +88,26 @@
                     </div>
                 </div>
             </div>
-            <div class="table-responsive table-responsive-data2">
-                <table class="table table-data2" id="datatable">
-                    <thead>
-                    <tr>
-                        <th>Tên sản phẩm</th>
-                        <th>Ảnh</th>
-                        <th>Giá</th>
-                        <th>Ngày cập nhật</th>
-                        <th>Hành động</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </section>
+    <div class="table-responsive table-responsive-data2">
+        <table class="table table-data2" id="datatable">
+            <thead>
+            <tr>
+                <th>Tên sản phẩm</th>
+                <th>Ảnh</th>
+                <th>Giá</th>
+                <th>Ngày cập nhật</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
     <script type="text/javascript" th:inline="javascript">
 		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
-		var url = [[@{/api/admin/product/getAllPaging}]];
+		var url = [[@{/api/product/getAllPaging}]];
 		var urlShop = [[@{/api/shop/getById}]];
 
 		var id = "";
@@ -143,9 +143,9 @@
 				"lengthMenu": [10, 25, 50, 100, 200],
 				"columns": [
 					{ "data": "name", className: "text-left"},
-					{ "data": "image", className: "text-right" },
-					{ "data": "unitPrice", className: "text-left" },
-					{ "data": "updatedDate", className: "text-left" },
+					{ "data": "image", className: "text-center" },
+					{ "data": "unitPrice", className: "text-right" },
+					{ "data": "updatedDate", className: "text-center" },
 					{ "data": "id", className: "text-center" }
 				],
 				"createdRow": function (row, data, index) {

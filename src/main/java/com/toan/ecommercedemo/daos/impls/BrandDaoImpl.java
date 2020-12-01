@@ -45,7 +45,7 @@ public class BrandDaoImpl extends BaseDaoImpl<Brand, Long> implements BrandDao {
     }
 
     @Override
-    public List<Brand> getOfProduct(ProductSearch search) {
+    public List<Brand> getBrandOfProduct(ProductSearch search) {
         // create returns the data type of critetia query
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Brand> criteriaQuery = criteriaBuilder.createQuery(Brand.class);

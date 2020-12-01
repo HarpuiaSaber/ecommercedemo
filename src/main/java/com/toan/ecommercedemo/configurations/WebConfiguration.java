@@ -50,7 +50,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
         tokenRepository.setDataSource(dataSource);
         try {
             /// insert to db;
-            String sql = "INSERT INTO user(id, dob, enabled, gender, name, password, phone, role, username, email) VALUES(1, '1998-04-25 00:00:00', 1, 1, 'Admin', '$2a$12$utPye5L4xWAUx1IhfY2rAudifM56z5UoAMnZBA1htS5vyl.Lv5BQ.','0123456789', 0, 'admin', 'admin@gmail.com')";
+            String sql = "INSERT INTO user(id, dob, enabled, gender, name, password, phone, role, username, email) VALUES(1, '1998-04-25 00:00:00', 1, 1, 'Admin', '$2a$12$utPye5L4xWAUx1IhfY2rAudifM56z5UoAMnZBA1htS5vyl.Lv5BQ.','0123456789', 3, 'admin', 'admin@gmail.com')";
             dataSource.getConnection().prepareStatement(sql).executeUpdate();
         } catch (Exception ex) {
             System.out.println("Data already exists");
@@ -84,7 +84,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).clearAuthentication(true)
                 .invalidateHttpSession(true).deleteCookies("JSESSIONID", "app-remember-me").permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/access-deny")
+                .exceptionHandling().accessDeniedPage("/403")
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS).sessionFixation().migrateSession()

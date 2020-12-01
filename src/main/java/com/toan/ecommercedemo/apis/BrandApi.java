@@ -16,10 +16,10 @@ public class BrandApi {
     @Autowired
     private BrandService brandService;
 
-    @PostMapping("/getOfProduct")
+    @PostMapping("/getBrandOfProduct")
     @ResponseBody
     public List<BrandDto> getBrandOfProduct(@RequestBody ProductSearch search) {
-        return brandService.getOfProduct(search);
+        return brandService.getBrandOfProduct(search);
     }
 }
 

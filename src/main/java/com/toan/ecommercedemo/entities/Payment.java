@@ -1,5 +1,7 @@
 package com.toan.ecommercedemo.entities;
 
+import com.toan.ecommercedemo.enums.PaymentMethod;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -14,6 +16,10 @@ public class Payment extends Auditable implements Serializable {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "method")
+    @Enumerated(EnumType.ORDINAL)
+    private PaymentMethod method;
 
     public Payment() {
     }
@@ -36,5 +42,13 @@ public class Payment extends Auditable implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public PaymentMethod getMethod() {
+        return method;
+    }
+
+    public void setMethod(PaymentMethod method) {
+        this.method = method;
     }
 }
