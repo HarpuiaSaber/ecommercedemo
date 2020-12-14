@@ -1,61 +1,20 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="store/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      layout:decorator="customer/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Đơn hàng</title>
+    <script th:src="@{/store/js/jquery.js}"></script>
 </head><!--/head-->
 <body>
 <div layout:fragment="content" th:remove="tag">
     <section>
         <div class="container">
             <div class="row">
-                <div class="col-sm-3">
-                    <div class="left-sidebar">
-                        <h2 sec:authentication="principal.name"></h2>
-                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <ul class="nav nav-pills nav-stacked list-group">
-                                        <a th:href="@{/customer/profile}">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <h4 class="panel-title"><i class="fa fa-user"></i> Thông tin cá nhân
-                                                </h4>
-                                            </li>
-                                        </a>
-                                        <a th:href="@{/customer/order}">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center active">
-                                                <h4 class="panel-title"><i class="fa fa-crosshairs"></i> Theo dõi đơn
-                                                    hàng</h4>
-                                            </li>
-                                        </a>
-                                        <a th:href="@{/customer/contact}">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <h4 class="panel-title"><i class="fa fa-book"></i> Sổ địa chỉ</h4>
-                                            </li>
-                                        </a>
-                                        <a th:href="@{/customer/comment}">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <h4 class="panel-title"><i class="fa fa-comment"></i> Nhận xét sản phẩm
-                                                </h4>
-                                            </li>
-                                        </a>
-                                        <a th:href="@{/logout}">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <h4 class="panel-title"><i class="fa fa-sign-out"></i> Đăng xuất</h4>
-                                            </li>
-                                        </a>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="col-sm-9 padding-right">
                     <div class="features_items"><!--features_items-->
                         <h2 class="title text-center">Đơn hàng của bạn</h2>
@@ -70,7 +29,7 @@
                             <span class="lead" th:if="${order.status == 2}"><span
                                     class="badge badge-primary">Đang giao</span></span>
                             <span class="lead" th:if="${order.status == 3}"><span
-                                    class="badge badge-success">Đã giao</span></span>
+                                    class="badge badge-success">Giao thành công</span></span>
                             <span class="lead" th:if="${order.status == 4}"><span
                                     class="badge badge-danger">Đã hủy</span></span>
                         </h4>
@@ -94,24 +53,33 @@
                                 <h4>Hình thức thanh toán</h4>
                                 <hr>
                                 <h4 th:text="${order.paymentMethod}"></h4>
-                                <span class="lead" th:if="${order.status == 5}"><span
-                                        class="badge badge-danger">Chưa thanh toán</span></span>
+                                <span class="lead" th:if="${order.status == 5}">
+                                    <span class="badge badge-danger">Chưa thanh toán</span>
+                                    <a class="btn btn-primary2" th:href="@{/customer/order/pay-again} + '?orderId=' + ${order.id}"><i class="fa fa-money"></i> Thanh toán lại</a>
+                                </span>
                                 <span class="lead" th:if="${order.status == 3}"><span
                                         class="badge badge-success">Thanh toán thành công</span></span>
                             </div>
                         </div>
                         <hr>
                         <div class="table-responsive table-responsive-data2">
-                            <table class="table table-data2">
+                            <table class="table table-striped table-dark">
                                 <thead>
                                 <tr>
+                                    <th>Ảnh</th>
                                     <th>Sản phẩm</th>
                                     <th>Giá</th>
                                     <th>Số lượng</th>
                                     <th>Tổng tiền</th>
                                 </tr>
                                 <tr th:each="item : ${order.items}">
-
+                                    <td class="align-middle"><img th:src="${item.image}" width="100"></td>
+                                    <td th:text="${item.name}" class="align-middle"></td>
+                                    <td th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'POINT', 0, 'POINT') +'đ'}"
+                                        class="align-middle"></td>
+                                    <td th:text="${item.quantity}" class="align-middle"></td>
+                                    <td th:text="${#numbers.formatDecimal(item.unitPrice * item.quantity, 0, 'POINT', 0, 'POINT') +'đ'}"
+                                        class="align-middle"></td>
                                 </tr>
                                 </thead>
                             </table>
@@ -128,8 +96,8 @@
                                     <th>Nội dung</th>
                                 </tr>
                                 <tr th:each="history : ${order.histories}">
-                                    <td th:text="${history.createdDate}"></td>
-                                    <td>
+                                    <td th:text="${history.createdDate}" class="align-middle"></td>
+                                    <td class="align-middle">
                                         <span class="lead" th:if="${history.status == 5}"><span
                                                 class="badge badge-secondary">Chờ thanh toán</span></span>
                                         <span class="lead" th:if="${history.status == 0}"><span
@@ -139,11 +107,11 @@
                                         <span class="lead" th:if="${history.status == 2}"><span
                                                 class="badge badge-primary">Đang giao</span></span>
                                         <span class="lead" th:if="${history.status == 3}"><span
-                                                class="badge badge-success">Đã giao</span></span>
+                                                class="badge badge-success">Giao thành công</span></span>
                                         <span class="lead" th:if="${history.status == 4}"><span
                                                 class="badge badge-danger">Đã hủy</span></span>
                                     </td>
-                                    <td th:text="${history.content}"></td>
+                                    <td th:text="${history.content}" class="align-middle"></td>
                                 </tr>
                                 </thead>
                             </table>

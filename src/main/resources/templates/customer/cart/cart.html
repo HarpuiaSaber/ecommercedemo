@@ -97,7 +97,7 @@
 					}, className: "text-left" },
 					{ "data": "unitPrice", className: "text-right" },
 					{ "data": function(data, type, dataToSet){
-					    return '<div class="cart_quantity_button"><button onclick="addQ('+data.quantity+','+data.product.id+')" class="cart_quantity_up"> + </button><input class="cart_quantity_input" type="text" name="quantity" value="'+data.quantity+'" onkeyup="inputQ('+data.product.id+',this)"><button onclick="subQ('+data.quantity+','+data.product.id+')" class="cart_quantity_down"> - </button></div>';
+					    return '<div class="cart_quantity_button"><button onclick="subQ('+data.quantity+','+data.product.id+')" class="cart_quantity_down"> - </button><input class="cart_quantity_input" type="text" name="quantity" value="'+data.quantity+'" onkeyup="inputQ('+data.product.id+',this)"><button onclick="addQ('+data.quantity+','+data.product.id+')" class="cart_quantity_up"> + </button></div>';
 					}, className: "text-right" },
 					{ "data": function (data, type, dataToSet) {
 					    return data.quantity * data.unitPrice;

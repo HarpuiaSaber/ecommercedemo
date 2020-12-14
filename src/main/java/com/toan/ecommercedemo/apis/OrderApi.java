@@ -93,5 +93,12 @@ public class OrderApi {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SELLER')")
+    @GetMapping("/getById")
+    @ResponseBody
+    public ViewOrderDto getById(@RequestParam Long id) {
+        return orderService.getById(id);
+    }
+
 }
 

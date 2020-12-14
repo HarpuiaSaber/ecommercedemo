@@ -7,6 +7,7 @@ import com.toan.ecommercedemo.enums.OrderStatus;
 import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.model.search.OrderSearch;
 import com.toan.ecommercedemo.services.OrderService;
+import com.toan.ecommercedemo.utils.Constants;
 import com.toan.ecommercedemo.utils.DateTimeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -60,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
             List<String> itemDtos = new ArrayList<>();
             Double totalMoney = 0D;
             for (Item itemEntity : itemEntties) {
-                totalMoney += itemEntity.getPrice() * itemEntity.getQuantity();
+                totalMoney += itemEntity.getUnitPrice() * itemEntity.getQuantity();
                 itemDtos.add(itemEntity.getQuantity() + " × " + itemEntity.getProduct().getName());
             }
             dto.setItems(itemDtos);
@@ -109,7 +110,6 @@ public class OrderServiceImpl implements OrderService {
         dto.setCreatedDate(DateTimeUtils.formatDate(order.getCreatedDate(), DateTimeUtils.DD_MM_YYYY_HH_MM));
         Contact contact = order.getContact();
         ViewContactDto contactDto = new ViewContactDto();
-        dto.setId(contact.getId());
         contactDto.setName(contact.getName());
         contactDto.setAddress(contact.getAddress());
         contactDto.setPhone(contact.getPhone());
@@ -129,6 +129,26 @@ public class OrderServiceImpl implements OrderService {
             historyDtos.add(historyDto);
         }
         dto.setHistories(historyDtos);
+        List<Item> items = order.getItems();
+        List<ViewItemDto> itemDtos = new ArrayList<>();
+        for (Item item : items) {
+            ViewItemDto itemDto = new ViewItemDto();
+            Product product = item.getProduct();
+            itemDto.setId(item.getId());
+            itemDto.setName(product.getName());
+            itemDto.setQuantity(item.getQuantity());
+            itemDto.setUnitPrice(item.getUnitPrice());
+            itemDto.setOrderId(id);
+            itemDto.setProductId(product.getId());
+            ProductImage imageEntity = product.getImages().get(0);
+            if (imageEntity.getFromTiki())
+                itemDto.setImage(imageEntity.getPath());
+            else {
+                itemDto.setImage(Constants.baseUrl + imageEntity.getPath());
+            }
+            itemDtos.add(itemDto);
+        }
+        dto.setItems(itemDtos);
         return dto;
     }
 }

@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
             productDao.update(original);
             Item item = new Item();
             item.setOrder(new Order(dto.getOrderId()));
-            item.setPrice(dto.getUnitPrice());
+            item.setUnitPrice(dto.getUnitPrice());
             item.setQuantity(dto.getQuantity());
             item.setProduct(new Product(dto.getProduct().getId()));
             itemDao.add(item);
@@ -58,7 +57,7 @@ public class ItemServiceImpl implements ItemService {
         double totalIncome = 0;
         for (Item item : entities) {
             totalSoldProduct += item.getQuantity();
-            totalIncome += item.getQuantity() * item.getPrice();
+            totalIncome += item.getQuantity() * item.getUnitPrice();
         }
         ItemStatisticDto dto = new ItemStatisticDto();
         dto.setTotalIncome(totalIncome);

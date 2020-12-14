@@ -48,7 +48,7 @@ public class CustomerController extends BaseController {
     ItemService itemService;
 
     @Autowired
-    private ContactService contactService;
+    ContactService contactService;
 
     @GetMapping("/profile")
     public String getProfile(Model model) throws InternalServerException {
@@ -157,7 +157,7 @@ public class CustomerController extends BaseController {
                                 "USD",
                                 PaypalPaymentMethod.paypal,
                                 PaypalPaymentIntent.sale,
-                                "payment description",
+                                "pay for product from E-Shopper",
                                 Constants.baseUrl + "/customer/cancel-paypal",
                                 Constants.baseUrl + "/customer/success-paypal" + param);
                         for (Links links : payment.getLinks()) {
@@ -180,6 +180,38 @@ public class CustomerController extends BaseController {
     @GetMapping("/cancel-paypal")
     public String cancelPay() {
         return "redirect:/customer/order/not-paid";
+    }
+
+
+    @GetMapping("/order/pay-again")
+    public String payAgain(@RequestParam Long orderId) {
+        ViewOrderDto orderDto = orderService.getById(orderId);
+        String param = "?orders=" + orderId;
+        double price = 0D;
+        for (ViewItemDto itemDto : orderDto.getItems()) {
+            price += itemDto.getUnitPrice();
+        }
+        price = (double) Math.round(price * 0.000043 * 100) / 100;
+        param += "&price=" + price;
+        try {
+            Payment payment = paypalService.createPayment(
+                    new Float(price).floatValue(),
+                    "USD",
+                    PaypalPaymentMethod.paypal,
+                    PaypalPaymentIntent.sale,
+                    "pay again for product from E-Shopper",
+                    Constants.baseUrl + "/customer/cancel-paypal",
+                    Constants.baseUrl + "/customer/success-paypal" + param);
+            for (Links links : payment.getLinks()) {
+                if (links.getRel().equals("approval_url")) {
+                    return "redirect:" + links.getHref();
+                }
+            }
+        } catch (PayPalRESTException e) {
+            e.printStackTrace();
+            return "redirect:/error";
+        }
+        return "redirect:/error";
     }
 
     @GetMapping("/success-paypal")
@@ -215,15 +247,6 @@ public class CustomerController extends BaseController {
             e.printStackTrace();
         }
         return "redirect:/error";
-    }
-
-    @PostMapping("/order/success")
-    public String payOrder(@RequestParam Long order) {
-        if (order == null) {
-            return "redirect:/error";
-        }
-        //check and get order
-        return "customer/order/success";
     }
 
     @GetMapping("/order/success")

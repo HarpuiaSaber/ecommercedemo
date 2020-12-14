@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="store/common/template"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="customer/common/template"
     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
@@ -26,45 +26,6 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-3">
-                        <div class="left-sidebar">
-                            <h2 sec:authentication="principal.name"></h2>
-                            <div class="panel-group category-products" id="accordian">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <ul class="nav nav-pills nav-stacked list-group">
-                                            <a th:href="@{/customer/profile}">
-                                                <li class="list-group-item d-flex justify-content-between align-items-center active">
-                                                    <h4 class="panel-title"><i class="fa fa-user"></i> Thông tin cá nhân</h4>
-                                                </li>
-                                            </a>
-                                            <a th:href="@{/customer/order}">
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    <h4 class="panel-title"><i class="fa fa-crosshairs"></i> Theo dõi đơn hàng</h4>
-                                                </li>
-                                            </a>
-                                            <a th:href="@{/customer/contact}">
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    <h4 class="panel-title"> <i class="fa fa-book"></i> Sổ địa chỉ</h4>
-                                                </li>
-                                            </a>
-                                            <a th:href="@{/customer/comment}">
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    <h4 class="panel-title"> <i class="fa fa-comment"></i> Nhận xét sản phẩm</h4>
-                                                </li>
-                                            </a>
-                                            <a th:href="@{/logout}">
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    <h4 class="panel-title"> <i class="fa fa-sign-out"></i> Đăng xuất</h4>
-                                                </li>
-                                            </a>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="col-sm-9 padding-right">
                         <div class="features_items">
                             <!--features_items-->

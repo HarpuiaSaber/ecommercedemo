@@ -11,7 +11,7 @@ public class ViewOrderDto implements Serializable {
     private String customerName;
     private String customerPhone;
     private ViewContactDto contact;
-    private List<ItemDto> items;
+    private List<ViewItemDto> items;
     private List<OrderHistoryDto> histories;
     private int status;
     private String paymentMethod;
@@ -33,11 +33,11 @@ public class ViewOrderDto implements Serializable {
         this.contact = contact;
     }
 
-    public List<ItemDto> getItems() {
+    public List<ViewItemDto> getItems() {
         return items;
     }
 
-    public void setItems(List<ItemDto> items) {
+    public void setItems(List<ViewItemDto> items) {
         this.items = items;
     }
 
