@@ -1,6 +1,7 @@
 package com.toan.ecommercedemo.apis;
 
 import com.toan.ecommercedemo.model.dto.CategoryDto;
+import com.toan.ecommercedemo.model.dto.ChildCategoryDto;
 import com.toan.ecommercedemo.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +21,7 @@ public class CategoryApi {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SELLER')")
     @GetMapping("/getChildren")
     @ResponseBody
-    public List<CategoryDto> getAll(@RequestParam(required = false) Long parentId) {
+    public List<ChildCategoryDto> getAll(@RequestParam(required = false) Long parentId) {
         return categoryService.getChildren(parentId);
     }
 

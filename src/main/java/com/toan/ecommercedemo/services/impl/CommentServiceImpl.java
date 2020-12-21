@@ -37,7 +37,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setRating(dto.getRating());
         comment.setProduct(new Product(dto.getProduct_id()));
         comment.setCustomer(new User(dto.getCreated_by().getId()));
-        comment.setStatus(CommentStatus.APPROVED);
         comment.setHelpfulNumber(dto.getThank_count());
         if (dto.getThank_count() > 0) {
             comment.setNotHelpfulNumber(RandomUtils.getRandomIntInRange(0, (int) (dto.getThank_count() * 1.5)));
@@ -135,7 +134,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setId(null);
         comment.setCustomer(new User(dto.getCustomerId()));
         comment.setProduct(new Product(dto.getProductId()));
-        comment.setStatus(CommentStatus.WAITTINGFORACCEPT);
         commentDao.add(comment);
         dto.setId(comment.getId());
     }

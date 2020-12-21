@@ -1,5 +1,6 @@
 package com.toan.ecommercedemo.controllers;
 
+import com.toan.ecommercedemo.enums.OrderStatus;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
 import com.toan.ecommercedemo.model.UserPrincipal;
 import com.toan.ecommercedemo.model.dto.ItemStatisticDto;
@@ -46,7 +47,7 @@ public class SellerController {
                 ViewShopDto shopDto = shopService.getOfSeller(principal.getId());
                 search.setShopId(shopDto.getId());
                 model.addAttribute("totalAcceptedProduct", shopDto.getTotalProduct());
-                model.addAttribute("totalSuccessOrder", orderService.getTotalOrderOfShop(shopDto.getId(), 3));
+                model.addAttribute("totalSuccessOrder", orderService.getTotalOrderOfShop(shopDto.getId(), OrderStatus.SUCCESS.getValue()));
                 ItemStatisticDto itemStatisticDto = itemService.getStatisticOfShop(shopDto.getId());
                 model.addAttribute("totalSoldProduct", itemStatisticDto.getTotalSoldProduct());
                 model.addAttribute("totalIncome", itemStatisticDto.getTotalIncome());
@@ -106,16 +107,6 @@ public class SellerController {
         return "redirect:/seller/shop/info";
     }
 
-    @GetMapping("/product/list")
-    public String listProduct(Model model) {
-        return "seller/shop";
-    }
-
-    @GetMapping("/product/add")
-    public String addProduct(Model model) {
-        return "seller/shop";
-    }
-
     @GetMapping("/order/list-waiting-for-accept")
     public String listWaitingForAcceptOrder() {
         return "seller/order/list-waiting-for-accept";
@@ -141,9 +132,14 @@ public class SellerController {
         return "seller/order/list-cancel";
     }
 
-    @GetMapping("/product/list-new")
+    @GetMapping("/product/add")
+    public String addProduct(Model model) {
+        return "seller/product/add";
+    }
+
+    @GetMapping("/product/list-draft")
     public String listNewProduct() {
-        return "seller/product/list-new";
+        return "seller/product/list-draft";
     }
 
     @GetMapping("/product/list-waiting-for-accept")
@@ -156,8 +152,8 @@ public class SellerController {
         return "seller/product/list-accepted";
     }
 
-    @GetMapping("/product/list-deny")
+    @GetMapping("/product/list-denied")
     public String listCancelProduct() {
-        return "seller/product/list-deny";
+        return "seller/product/list-denied";
     }
 }

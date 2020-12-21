@@ -185,11 +185,11 @@
         change:function() {
             $("#fromPrice").val(formatNumber($("#fromPrice").val()));
         },
-        keypress:function(e) {
-            if (e.keyCode >= 48 && e.keyCode <= 57) {
+        keyup:function(e) {
+            if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
                 $("#fromPrice").val(formatNumber($("#fromPrice").val()));
             } else{
-                e.preventDefault();
+                return false;
             }
         },
     });
@@ -197,11 +197,11 @@
         change:function() {
             $("#toPrice").val(formatNumber($("#toPrice").val()));
         },
-        keypress:function(e) {
-           if (e.keyCode >= 48 && e.keyCode <= 57) {
-                $("#toPrice").val(formatNumber($("#fromPrice").val()));
+        keyup:function(e) {
+           if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
+                $("#toPrice").val(formatNumber($("#toPrice").val()));
             } else{
-                e.preventDefault();
+                return false;
             }
         }
     });

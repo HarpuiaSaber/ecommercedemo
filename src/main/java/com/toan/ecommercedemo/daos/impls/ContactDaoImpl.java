@@ -31,6 +31,8 @@ public class ContactDaoImpl extends BaseDaoImpl<Contact, Long> implements Contac
             Predicate predicate = criteriaBuilder.equal(user.get("id"), userId);
             predicates.add(predicate);
         }
+        Predicate predicate = criteriaBuilder.isFalse(root.get("isDeleted"));
+        predicates.add(predicate);
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
 
         // create query

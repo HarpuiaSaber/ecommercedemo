@@ -1,14 +1,13 @@
 package com.toan.ecommercedemo.apis;
 
+import com.toan.ecommercedemo.enums.Role;
 import com.toan.ecommercedemo.exceptions.InternalServerException;
-import com.toan.ecommercedemo.model.dto.UpdateStatusDto;
+import com.toan.ecommercedemo.model.dto.*;
 import com.toan.ecommercedemo.model.UserPrincipal;
-import com.toan.ecommercedemo.model.dto.CommentProductDto;
-import com.toan.ecommercedemo.model.dto.ProductDto;
-import com.toan.ecommercedemo.model.dto.ResponseDto;
 import com.toan.ecommercedemo.model.search.BaseSearch;
 import com.toan.ecommercedemo.model.search.ProductSearch;
 import com.toan.ecommercedemo.services.ProductService;
+import com.toan.ecommercedemo.services.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -25,6 +24,9 @@ public class ProductApi {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ShopService shopService;
 
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PostMapping("/getCustomerProductWithoutComment")
@@ -45,9 +47,21 @@ public class ProductApi {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SELLER')")
     @PostMapping("/getAllPaging")
     @ResponseBody
-    public ResponseDto<ProductDto> getAllProductWithPaging(@RequestBody ProductSearch search) {
-        List<ProductDto> dtos = productService.getAllPaging(search);
-        return new ResponseDto<ProductDto>(dtos.size(), productService.totalRecord(search), dtos);
+    public ResponseDto<ProductDto> getAllProductWithPaging(@RequestBody ProductSearch search) throws InternalServerException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
+            Object obj = authentication.getPrincipal();
+            if (obj instanceof UserPrincipal) {
+                UserPrincipal principal = (UserPrincipal) obj;
+                if (principal.getRole() == Role.SELLER) {
+                    search.setShopId(shopService.getShopIdOfSeller(principal.getId()));
+                }
+                List<ProductDto> dtos = productService.getAllPaging(search);
+                return new ResponseDto<ProductDto>(dtos.size(), productService.totalRecord(search), dtos);
+            }
+        }
+        throw new InternalServerException("Phiên đăng nhập hết hạn");
+
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SELLER')")

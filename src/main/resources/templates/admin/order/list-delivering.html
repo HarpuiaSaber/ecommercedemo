@@ -113,7 +113,7 @@
                 <th></th>
                 <th></th>
                 <th>
-                    <button id="multipleButton" class="btn btn-danger">
+                    <button id="multipleButton" class="btn btn-success">
                         <i class="fa fa-check"></i> Hoàn tất nhiều
                     </button>
                 </th>
@@ -173,10 +173,52 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="confirm2" tabindex="-1"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">Hủy đơn hàng</div>
+                <div class="modal-body">Bạn muốn hủy đơn hàng này? Lý do:
+                    <textarea class="form-control" id="reason"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-ok">Có
+                    </button>
+                    <button class="btn btn-danger" data-dismiss="modal">Không</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="notice2" tabindex="-1"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">Hủy đơn hàng</div>
+                <div class="modal-body">Hủy đơn thành công.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Ok
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="detail" tabindex="-1"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">Chi tiết đơn hàng</div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript" th:inline="javascript">
 		var vietnameseUrl = [[@{/management/vendor/datatables/Vietnamese.json}]];
 		var url = [[@{/api/order/getAllPaging}]];
 		var updateURL = [[@{/api/order/updateStatus}]];
+		var detailUrl = [[@{/api/order/getById}]];
 
 		var id = "";
 		var table;
@@ -249,7 +291,9 @@
 	                 {
 					"render": function ( data, type, row ) {
 						 var content = '<div class="table-data-feature">'
-		                    +'<button class="btn au-btn--block btn-warning" data-placement="top" data-toggle="modal" data-target="#confirm"><i class="fa fa-check"></i> Hoàn tất</button></div>';
+		                    +'<button class="btn au-btn--block btn-warning" data-placement="top" data-toggle="modal" data-target="#detail" onclick="getDetail('+data+')"><i class="fa fa-caret-right"></i> Chi tiết</button>'
+		                    +'&nbsp<button class="btn au-btn--block btn-success" data-placement="top" data-toggle="modal" data-target="#confirm"><i class="fa fa-check"></i> Hoàn tất</button>'
+		                    +'&nbsp<button class="btn au-btn--block btn-danger" data-placement="top" data-toggle="modal" data-target="#confirm2"><i class="fa fa-times"></i> Hủy đơn</button></div>';
 				         return content;
 	                 },
 	                 "orderable": false,
@@ -337,6 +381,141 @@
 					}
 				});
           });
+		$('#confirm2').on('click', '.btn-ok', function(e) {
+			  	var $modalDiv = $(e.delegateTarget);
+			  	rowIds = [];
+			    rowIds.push(id);
+			  	let bodyUpdate ={};
+                bodyUpdate.ids = rowIds;
+			    bodyUpdate.status = 4;
+			    bodyUpdate.content = $modalDiv.find('div.modal-body #reason').val();
+			  	$.ajax({
+					type: "POST",
+					url: updateURL,
+					contentType: "application/json",
+					data: JSON.stringify(bodyUpdate),
+					success: function(){
+                        $modalDiv.modal('hide');
+                        $("#notice").modal("show");
+                         table.draw();
+					},
+					error: function (data) {
+						$modalDiv.find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');
+						 $("#notice").modal("show");
+					}
+				});
+		});
+		function getDetail(orderId){
+            $.ajax({
+                type: "GET",
+                url: detailUrl,
+                contentType: "application/json",
+                data: {"id" : orderId},
+                success: function(data){
+                     $('#detail .modal-header').html("Chi tiết đơn hàng #" + orderId + getStatus(data.status));
+                     $('#detail .modal-body').html(
+                         '<div class="row">'
+                            +'<div class="col-sm-4">'
+                                +'<h4>Khách hàng</h4>'
+                                +'<hr>'
+                                +'<h4>'+data.customerName+'</h4>'
+                                +'<p>Số điện thoại: <span><b>'+data.customerPhone+'</b></span></p>'
+                            +'</div>'
+                            +'<div class="col-sm-4">'
+                                +'<h4>Người nhận</h4>'
+                                +'<hr>'
+                                +'<h4 id="receiverName">'+data.contact.name+'</h4>'
+                                +'<p>Số điện thoại: <span><b>'+data.contact.phone+'</b></span></p>'
+                                +'<p>Địa chỉ: <span><b>'+data.contact.address + ', ' + data.contact.location+'</b></span>'
+                                +'</p>'
+                            +'</div>'
+                            +'<div class="col-sm-4">'
+                                +'<h4>Hình thức thanh toán</h4>'
+                                +'<hr>'
+                                +'<h4>'+data.paymentMethod+'</h4>'
+                                +'<span class="lead"></span>'
+                            +'</div>'
+                        +'</div>'
+                        +'<hr>'
+                        +'<div class="table-responsive table-responsive-data2">'
+                            +'<table class="table table-striped" id="items">'
+                                +'<thead>'
+                                    +'<tr>'
+                                        +'<th>Ảnh</th>'
+                                        +'<th>Sản phẩm</th>'
+                                        +'<th>Giá</th>'
+                                        +'<th>Số lượng</th>'
+                                        +'<th>Tổng tiền</th>'
+                                    +'</tr>'
+                                +'</thead>'
+                                +'<tbody>'
+                                +'</tbody>'
+                            +'</table>'
+                        +'</div>'
+                        +'<hr>'
+                        +'<h4>Theo dõi đơn hàng</h4>'
+                        +'<p>Ngày đặt hàng: <span><b>'+data.createdDate+'</b></span></p>'
+                        +'<div class="table-responsive table-responsive-data2">'
+                            +'<table class="table table-striped" id="histories">'
+                                +'<thead>'
+                                    +'<tr>'
+                                        +'<th>Thời gian</th>'
+                                        +'<th>Trạng thái</th>'
+                                        +'<th>Nội dung</th>'
+                                    +'</tr>'
+                                +'<thead>'
+                                +'<tbody>'
+                                +'</tbody>'
+                            +'</table>'
+                        +'</div>'
+                    );
+                    if (data.status == 5) {
+                        $('#detail .modal-body #paymentStatus').html('<span class="badge badge-danger">Chưa thanh toán</span>');
+                     } else if (data.status == 3) {
+                        $('#detail .modal-body #paymentStatus').html('<span class="badge badge-success">Thanh toán thành công</span></span>');
+                    }
+                    $.each(data.items, function(key, value) {
+                        $('#detail .modal-body #items tbody').html($('#detail .modal-body #items tbody').html() +
+                            '<tr>'
+                                +'<td class="align-middle"><image width="100" src="'+value.image+'"></td>'
+                                +'<td class="align-middle">'+value.name+'</td>'
+                                +'<td class="align-middle">'+formatNumber(value.unitPrice)+'đ</td>'
+                                +'<td class="align-middle">'+value.quantity+'</td>'
+                                +'<td class="align-middle">'+formatNumber(value.unitPrice*value.quantity)+'đ</td>'
+                            +'</tr>'
+                        );
+                    });
+                    $.each(data.histories, function(key, value) {
+                        $('#detail .modal-body #histories tbody').html($('#detail .modal-body #histories tbody').html() +
+                            '<tr>'
+                                +'<td class="align-middle">'+value.createdDate+'</td>'
+                                +'<td class="align-middle">'+getStatus(value.status)+'</td>'
+                                +'<td class="align-middle">'+(value.content == null ? "" : value.content)+'</td>'
+                            +'</tr>'
+                        );
+                    });
+                },
+                error: function (data) {
+                     $("#notice").find('div.modal-body').html('<b>' + data.responseJSON.error + "\n" + data.responseJSON.message + '<b>');
+                     $("#notice").modal("show");
+                }
+            });
+		}
+		function getStatus(status){
+            if (status == 5) {
+                return '<span class="lead"><span class="badge badge-secondary">Chờ thanh toán</span></span>'
+            } else if (status == 0) {
+                return '<span class="lead"><span class="badge badge-warning">Chờ xác nhận</span></span>'
+            } else if (status == 1) {
+                return '<span class="lead"><span class="badge badge-info">Chờ lấy hàng</span></span>'
+            } else if (status == 2) {
+                return '<span class="lead"><span class="badge badge-primary">Đang giao</span></span>'
+            } else if (status == 3) {
+                return '<span class="lead"><span class="badge badge-success">Giao thành công</span></span>'
+            } else if (status == 4) {
+                return '<span class="lead"><span class="badge badge-danger">Đã hủy</span></span>'
+            }
+		}
     </script>
 </div>
 </body>

@@ -51,22 +51,8 @@ public class ContactServiceImpl implements ContactService {
     public void delete(Long id) throws InternalServerException {
         Contact old = contactDao.getById(id);
         if (old != null) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication.isAuthenticated()) {
-                Object obj = authentication.getPrincipal();
-                if (obj instanceof UserPrincipal) {
-                    UserPrincipal principal = (UserPrincipal) obj;
-                    long id1 = old.getCustomer().getId();
-                    long id2 = principal.getId();
-                    if (id1 == id2) {
-                        contactDao.delete(old);
-                    } else {
-                        throw new InternalServerException("Không phải địa chỉ của bạn, không xóa được!!!");
-                    }
-                } else {
-                    throw new InternalServerException("Phiên đăng nhập hết hạn");
-                }
-            }
+            old.setDeleted(true);
+            contactDao.update(old);
         } else {
             throw new InternalServerException("Địa chỉ không tồn tại");
         }

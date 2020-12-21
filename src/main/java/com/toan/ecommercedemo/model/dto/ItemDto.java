@@ -7,6 +7,7 @@ public class ItemDto implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
     private Double unitPrice;
+    private Double unitPriceUSD;
     private Integer quantity;
     private CartProductDto product;
     private Long orderId;
@@ -25,6 +26,14 @@ public class ItemDto implements Serializable {
 
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public Double getUnitPriceUSD() {
+        return unitPriceUSD;
+    }
+
+    public void setUnitPriceUSD(Double unitPriceUSD) {
+        this.unitPriceUSD = unitPriceUSD;
     }
 
     public Integer getQuantity() {

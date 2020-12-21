@@ -21,6 +21,9 @@ public class Contact extends Auditable implements Serializable {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "village_id")
     private Village village;
@@ -66,6 +69,14 @@ public class Contact extends Auditable implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public Village getVillage() {

@@ -11,6 +11,8 @@ public class ChildCategoryDto implements Serializable {
 
     private String name;
 
+    private boolean isLeaf;
+
     public long getId() {
         return id;
     }
@@ -25,5 +27,13 @@ public class ChildCategoryDto implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isLeaf() {
+        return isLeaf;
+    }
+
+    public void setLeaf(boolean leaf) {
+        isLeaf = leaf;
     }
 }

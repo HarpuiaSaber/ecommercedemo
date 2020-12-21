@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="seller/common/template" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Title Page-->
+    <title>Sản phẩm</title>
+
+</head>
+
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <!-- MAIN CONTENT-->
+    <section class="au-breadcrumb m-t-75">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="au-breadcrumb-content">
+                            <div class="au-breadcrumb-left">
+                                <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                    <li class="list-inline-item active">
+                                        <a th:href="@{/seller/home}">Trang chủ</a>
+                                    </li>
+                                    <li class="list-inline-item seprate">
+                                        <span>/</span>
+                                    </li>
+                                    <li class="list-inline-item">Tạo mới sản phẩm</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="main-content">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <form>
+                    <div class="form-group row required">
+                        <label class="control-label"> Tên sản phẩm: </label>
+                        <input type="text" class="form-control" name="name" id="name">
+                    </div>
+                    <div class="form-group row required" id="cateChoice">
+                        <label class="control-label"> Danh mục: </label>
+                        <input onkeydown="return false;" type="text" class="form-control" name="category" id="category" style="cursor: pointer;">
+                    </div>
+                    <div class="form-group row required">
+                        <label class="control-label"> Mô tả sản phẩm: </label>
+                        <textarea rows="10" class="form-control" name="description" id="description"></textarea>
+                    </div>
+                    <div class="form-group row required">
+                        <div class="col-md-3 col-sm-3">
+                            <label class="control-label"> Giá bán: </label>
+                            <input type="text" class="form-control" name="unitPrice" id="unitPrice" placeholder="Tính theo đơn vị đồng">
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <label class="control-label"> Số lượng: </label>
+                            <input type="text" class="form-control" name="quantity" id="quantity">
+                        </div>
+                        <div class="col-md-7 col-sm-3">
+                            <label class="control-label"> Thương hiệu: </label>
+                            <a class="col-md-5" type="button">Tạo thương hiệu mới</a>
+                            <div class="row">
+                                <input type="text" class="form-control col-md-6" name="brandName" id="brandName">
+                                <select class="form-control col-md-6" name="brand" id="brand"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <div class="col-md-6 col-sm-3">
+                            <label class="control-label"> Ảnh sản phẩm: </label>
+                            <div class="row">
+                                <fieldset class="form-group">
+                                    <button class="btn btn-warning" type="button" onclick="$('#pro-image').click()">Tải ảnh lên</button>
+                                    <input type="file" id="pro-image" name="pro-image" style="display: none;" class="form-control" multiple>
+                                </fieldset>
+                                <div class="preview-images-zone">
+                                    <div class="row"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+		var url = [[@{/api/product/add}]];
+		var urlCate = [[@{/api/category/getChildren}]];
+
+		var categoryId;
+		var rootId = 0;
+		var rootCate = "";
+        var childCate1 = "";
+        var childCate2 = "";
+		$(document).ready(function(){
+            $("#category").click(function(e){
+                 $("#cateChoice").append('<select id="rootCategory" class="form-control col-sm-4"></select>'
+                +'<select id="childrenCategory1" class="form-control col-sm-4"></select>'
+                +'<select id="childrenCategory2" class="form-control col-sm-4"></select>');
+                $("#rootCategory").empty();
+                $("#childrenCategory1").empty();
+                $("#childrenCategory2").empty();
+                $.ajax({
+                    url: urlCate,
+                    type: 'GET',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: null,
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            var $option = $("<option/>", {
+                                value: data[i].id,
+                                text: data[i].name,
+                                'data-leaf': data[i].leaf
+                            });
+                            $("#rootCategory").append($option);
+                        }
+                        $("#rootCategory").attr("size", data.length);
+                        if(rootId > 0){
+                            $("#rootCategory").val(rootId);
+                            $.ajax({
+                                url: urlCate,
+                                type: 'GET',
+                                dataType: "json",
+                                contentType: "application/json",
+                                data: {"parentId" :  rootId},
+                                success: function (data) {
+                                    for (var i = 0; i < data.length; i++) {
+                                        var $option = $("<option/>", {
+                                            value: data[i].id,
+                                            text: data[i].name
+                                        });
+                                        $("#childrenCategory1").append($option);
+                                    }
+                                    $("#childrenCategory1").attr("size", data.length);
+                                    $.ajax({
+                                        url: urlCate,
+                                        type: 'GET',
+                                        dataType: "json",
+                                        contentType: "application/json",
+                                        data: {"parentId" :  data[0].id},
+                                        success: function (data) {
+                                            for (var i = 0; i < data.length; i++) {
+                                                var $option = $("<option/>", {
+                                                    value: data[i].id,
+                                                    text: data[i].name
+                                                });
+                                                $("#childrenCategory2").append($option);
+                                            }
+                                            $("#childrenCategory2").attr("size", data.length);
+                                        },
+                                        error: function () {
+                                            alert("Loi xay ra");
+                                        }
+                                    });
+                                },
+                                error: function () {
+                                    alert("Loi xay ra");
+                                }
+			                });
+                        }
+                    },
+                    error: function () {
+                        alert("Loi xay ra");
+                    }
+                });
+                $("#rootCategory").click(function(){
+                    $("#childrenCategory1").empty();
+                    $("#childrenCategory2").empty();
+                    rootId = $("#rootCategory").val();
+                    rootCate = $("#rootCategory :selected").text();
+                    $("#category").val(rootCate);
+                    if ($("#rootCategory :selected").attr('data-leaf') == 'true'){
+                        categoryId = $("#rootCategory :selected").val();
+                        $("#rootCategory").remove();
+                        $("#childrenCategory1").remove();
+                        $("#childrenCategory2").remove();
+                    }
+                    $.ajax({
+                        url: urlCate,
+                        type: 'GET',
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: { "parentId": $("#rootCategory").val() },
+                        success: function (data) {
+                            for (var i = 0; i < data.length; i++) {
+                                var $option = $("<option/>", {
+                                    value: data[i].id,
+                                    text: data[i].name,
+                                    'data-leaf': data[i].leaf
+                                });
+                                $("#childrenCategory1").append($option);
+                            }
+                            $("#childrenCategory1").attr("size", data.length);
+
+                        },
+                        error: function () {
+                            alert("Loi xay ra");
+                        }
+                    });
+                });
+                $("#childrenCategory1").click(function(){
+                    childCate1 = $("#childrenCategory1 :selected").text();
+                    $("#category").val(rootCate + ' / ' + childCate1);
+                    if ($("#childrenCategory1 :selected").attr('data-leaf') == 'true'){
+                            categoryId = $("#childrenCategory2 :selected").val();
+                            $("#rootCategory").remove();
+                            $("#childrenCategory1").remove();
+                            $("#childrenCategory2").remove();
+                    }
+                    $.ajax({
+                        url: urlCate,
+                        type: 'GET',
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: { "parentId": $("#childrenCategory1").val() },
+                        success: function (data) {
+                            $("#childrenCategory2").empty();
+                            for (var i = 0; i < data.length; i++) {
+                                var $option = $("<option/>", {
+                                    value: data[i].id,
+                                    text: data[i].name,
+                                    'data-leaf': data[i].leaf
+                                    });
+                                    $("#childrenCategory2").append($option);
+                                }
+                            $("#childrenCategory2").attr("size", data.length);
+                        },
+                        error: function () {
+                            alert("Loi xay ra");
+                        }
+                    });
+                });
+                 $("#childrenCategory2").click(function(){
+                    childCate2 = $("#childrenCategory2 :selected").text()
+                    $("#category").val(rootCate + ' / ' + childCate1 + ' / ' + childCate2);
+                    if ($("#childrenCategory2 :selected").attr('data-leaf') == 'true'){
+                            categoryId = $("#childrenCategory2 :selected").val();
+                            $("#rootCategory").remove();
+                            $("#childrenCategory1").remove();
+                            $("#childrenCategory2").remove();
+                    }
+                 });
+            });
+		});
+		$("#unitPrice").on({
+            change:function() {
+                $("#unitPrice").val(formatNumber($("#unitPrice").val()));
+            },
+            keyup:function(e) {
+               if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
+               console.log($("#unitPrice").val());
+                    $("#unitPrice").val(formatNumber($("#unitPrice").val()));
+                } else{
+                    return false;
+                }
+            }
+        });
+        $(document).ready(function() {
+        document.getElementById('pro-image').addEventListener('change', readImage, false);
+            $(document).on('click', '.image-cancel', function() {
+                let no = $(this).data('no');
+                $(".preview-image.preview-show-"+no).remove();
+            });
+        });
+        var num = 4;
+        function readImage() {
+            if (window.File && window.FileList && window.FileReader) {
+                var files = event.target.files; //FileList object
+                var output = $(".preview-images-zone .row");
+
+                for (let i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (!file.type.match('image')) continue;
+
+                    var picReader = new FileReader();
+
+                    picReader.addEventListener('load', function (event) {
+                        var picFile = event.target;
+                        var html =  '<div class="preview-image preview-show-' + num + '">' +
+                                    '<div class="image-cancel" data-no="' + num + '">x</div>' +
+                                    '<div class="image-zone"><img id="pro-img-' + num + '" src="' + picFile.result + '" width="150px"></div>' +
+                                    '<div class="tools-edit-image"><a href="javascript:void(0)" data-no="' + num + '" class="btn btn-light btn-edit-image">edit</a></div>' +
+                                    '</div>';
+
+                        output.append(html);
+                        num = num + 1;
+                    });
+                    picReader.readAsDataURL(file);
+                }
+                $("#pro-image").val('');
+            } else {
+                console.log('Browser not support');
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

@@ -19,6 +19,9 @@ public class Item extends Auditable implements Serializable {
     @Column(name = "unit_price")
     private Double unitPrice;
 
+    @Column(name = "unit_price_usd")
+    private Double unitPriceUSD;
+
     @Column(name = "quantity")
     private Integer quantity;
 
@@ -48,6 +51,14 @@ public class Item extends Auditable implements Serializable {
 
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public Double getUnitPriceUSD() {
+        return unitPriceUSD;
+    }
+
+    public void setUnitPriceUSD(Double unitPriceUSD) {
+        this.unitPriceUSD = unitPriceUSD;
     }
 
     public Integer getQuantity() {

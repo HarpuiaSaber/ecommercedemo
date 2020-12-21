@@ -24,9 +24,6 @@ public class Comment extends Auditable implements Serializable {
     @Column(name = "rating")
     private Integer rating;
 
-    @Column(name = "status")
-    private CommentStatus status;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private User customer;
@@ -81,14 +78,6 @@ public class Comment extends Auditable implements Serializable {
 
     public void setRating(Integer rating) {
         this.rating = rating;
-    }
-
-    public CommentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(CommentStatus status) {
-        this.status = status;
     }
 
     public User getCustomer() {

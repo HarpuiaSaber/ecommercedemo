@@ -8,5 +8,5 @@ public interface Constants {
     public static final String folderProduct = "/product";
     public static final String folderComment = "/comment";
     public static final String folderShop = "/shop";
-    public static final String UPLOAD_FOLDER = "/home/harpuiasaber/ecommercedemo/src/main/resources/static";
+    public static final String UPLOAD_FOLDER = "C:\\Users\\ztoan\\IdeaProjects\\ecommercedemo\\src\\main\\resources\\static";
 }

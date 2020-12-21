@@ -61,11 +61,11 @@
                                               enctype="multipart/form-data">
                                             <div class="form-group">
                                                 <input hidden th:value="${shop.id}" name="id">
-                                                <input class="au-input au-input--full" type="file" name="logo">
-                                                <button class="btn au-btn--block btn-warning"><i
-                                                        class="fa fa-update"></i>Cập nhật logo
-                                                </button>
+                                                <input class="form-control-file" type="file" name="logo">
                                             </div>
+                                            <button class="btn au-btn--block btn-warning"><i
+                                                    class="fa fa-update"></i>Cập nhật logo
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
                                     <div class="form-group">
                                         <input hidden th:value="${shop.id}" name="id">
                                         <label>Mô tả: (tối đa 500 kí tự)</label>
-                                        <textarea class="au-input au-input--full" name="description"
+                                        <textarea class="au-input au-input--full" name="description" rows="4"
                                                   th:text="${shop.description}"></textarea>
                                         <button class="btn au-btn--block btn-warning" type="submit"><i
                                                 class="fa fa-update"></i>Cập

@@ -23,11 +23,11 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryDao categoryDao;
 
     @Override
-    public List<CategoryDto> getChildren(Long parentId) {
+    public List<ChildCategoryDto> getChildren(Long parentId) {
         List<Category> entities = categoryDao.getChildrenCategory(parentId);
-        List<CategoryDto> dtos = new ArrayList<CategoryDto>();
+        List<ChildCategoryDto> dtos = new ArrayList<ChildCategoryDto>();
         for (Category entity : entities) {
-            CategoryDto dto = modelMapper.map(entity, CategoryDto.class);
+            ChildCategoryDto dto = modelMapper.map(entity, ChildCategoryDto.class);
             dtos.add(dto);
         }
         return dtos;

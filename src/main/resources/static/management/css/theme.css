@@ -301,7 +301,7 @@ section {
 
 .page-container2 {
     background: #f2f2f2;
-    padding-left: 300px;
+    padding-left: 280px;
 }
 
 @media (max-width: 991px) {
@@ -383,6 +383,13 @@ section {
 
 .login-form .form-group label {
     display: block;
+}
+
+.form-group.required .control-label:before {
+  content:"*";
+  color:#f5222d;
+  display: inline-flex;
+  align-items: center;
 }
 
 .login-content {
@@ -1190,7 +1197,7 @@ section {
     position: fixed;
     top: 0;
     right: 0;
-    left: 300px;
+    left: 280px;
     height: 75px;
     z-index: 3;
 }
@@ -1578,7 +1585,7 @@ section {
 }
 
 .menu-sidebar {
-    width: 300px;
+    width: 280px;
     position: fixed;
     left: 0;
     top: 0;
@@ -2694,7 +2701,7 @@ section {
 
 .header__navbar ul li a {
     display: block;
-    font-size: 16px;
+    font-size: 15px;
     color: #ccc;
     padding: 25px 30px;
     border-left: 1px solid rgba(255, 255, 255, 0.102);
@@ -4565,7 +4572,6 @@ section {
     -webkit-border-bottom-right-radius: 3px;
     -moz-border-radius-bottomright: 3px;
     border-bottom-right-radius: 3px;
-    padding-right: 35px;
 }
 
 .table-data2.table tbody td {
@@ -4725,12 +4731,10 @@ section {
 
 .table-data3 thead tr th:last-child {
     text-align: right;
-    padding-right: 50px;
 }
 
 .table-data3 tbody tr td:last-child {
     text-align: right;
-    padding-right: 50px;
 }
 
 .table-data3 tbody tr {
@@ -4755,8 +4759,7 @@ section {
     background: #fff;
     font-size: 14px;
     color: #131921;
-    padding: 12px 40px;
-    padding-right: 10px;
+    padding: 12px 20px;
 }
 
 .table-data3 tbody td.process {

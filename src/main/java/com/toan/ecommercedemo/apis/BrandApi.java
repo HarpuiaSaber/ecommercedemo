@@ -21,5 +21,11 @@ public class BrandApi {
     public List<BrandDto> getBrandOfProduct(@RequestBody ProductSearch search) {
         return brandService.getBrandOfProduct(search);
     }
+
+//    @GetMapping("/search")
+//    @ResponseBody
+//    public List<BrandDto> search(@RequestBody ProductSearch search) {
+//        return brandService.getBrandOfProduct(search);
+//    }
 }
 
